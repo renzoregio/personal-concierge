@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
-import { ToDoBtn } from "../ToDo"
+import ToDoButton from "./ToDoButton"
 
 export default function Home() {
 
@@ -23,7 +23,7 @@ export default function Home() {
             </span>
             <span className={s.subtitle}>What do you want to do today?</span>
             { arr.map((toDo, i) => (
-                <ToDoBtn key={i} iconName={toDo.icon} title={toDo.title}/>
+                <ToDoButton key={i} iconName={toDo.icon} title={toDo.title}/>
             ))}
         </>
     )

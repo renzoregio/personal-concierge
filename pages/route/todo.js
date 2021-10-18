@@ -1,5 +1,3 @@
-export default function ToDo(){
-    return (
-        <h1>Hello</h1>
-    )
-}
+import { ToDos } from "../../components/ToDo"
+
+export default ToDos;
