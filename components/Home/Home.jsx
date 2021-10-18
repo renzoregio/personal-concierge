@@ -22,8 +22,8 @@ export default function Home() {
             <FontAwesomeIcon className={s.icon} icon={faConciergeBell} />
             </span>
             <span className={s.subtitle}>What do you want to do today?</span>
-            { arr.map(toDo => (
-                <ToDoBtn iconName={toDo.icon} title={toDo.title}/>
+            { arr.map((toDo, i) => (
+                <ToDoBtn key={i} iconName={toDo.icon} title={toDo.title}/>
             ))}
         </>
     )
