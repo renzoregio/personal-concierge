@@ -1,0 +1,27 @@
+.title {
+  font-size: 100px;
+  text-shadow: 1px 4px white, 1px 5px white, 1px 6px white, 2px 7px black;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-size: 80px;
+  margin-bottom: 150px;
+}
+
+.icon {
+  margin-left: 20px;
+  animation: bellAnimation 1s ease-in-out;
+}
+
+@keyframes bellAnimation {
+  0% {
+    transform: rotate(30deg);
+  }
+  50% {
+    transfrom: rotate(90deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
