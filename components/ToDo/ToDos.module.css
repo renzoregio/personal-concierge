@@ -55,6 +55,16 @@
   border: 5px solid white;
   padding: 20px 40px;
   border-radius: 40px;
+  animation: toDoContainerAnimation 0.5s linear forwards;
+}
+
+@keyframes toDoContainerAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 100;
+  }
 }
 
 .toDoText {
@@ -67,4 +77,23 @@
   color: white;
   margin: 0px 20px;
   cursor: pointer;
+}
+
+.checkIcon {
+  transition: color 0.3s ease-in-out;
+}
+
+.checkIcon:hover {
+  color: green;
+}
+.trashIcon {
+  transition: color 0.3s ease-in-out;
+}
+
+.trashIcon:hover {
+  color: red;
+}
+
+.completed {
+  text-decoration: line-through;
 }
