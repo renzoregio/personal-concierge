@@ -1,5 +1,5 @@
 import s from "./home.module.css"
-import { faCheckCircle, faCalendar, faStickyNote, faConciergeBell, faDollarSign } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faCalendar, faStickyNote, faConciergeBell, faDollarSign, faUtensils } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -11,9 +11,10 @@ export default function Home() {
 
     const arr = [
         { icon: faCheckCircle, title: "To Do"},
-        { icon: faCalendar, title: "Weekly Schedule"},
+        { icon: faCalendar, title: "Daily Schedule"},
         { icon: faStickyNote, title: "Quick Note"},
-        { icon: faDollarSign, title: "Budget"}
+        { icon: faDollarSign, title: "Budget"}, 
+        { icon: faUtensils, title: "Restaurant Recommendations"}
     ]
 
     return(
