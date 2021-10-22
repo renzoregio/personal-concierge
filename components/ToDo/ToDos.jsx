@@ -18,19 +18,19 @@ export default function ToDos(){
 
     const onSubmit = (e) => {
         e.preventDefault();
-        setToDos([...toDos, textBox.current.value])
+        setToDos([...toDos, textBox.current.value].sort())
         textBox.current.value = "";
     }
 
     const completeTask = (x) => {
         let currentToDo = x.textContent
-        setCompletedToDos([...completedToDos, currentToDo])
+        setCompletedToDos([...completedToDos, currentToDo].sort())
         const filteredToDos = toDos.filter(toDo => {
             if(toDo !== currentToDo){
                 return toDo
             }
         })
-        setToDos([...filteredToDos])
+        setToDos([...filteredToDos].sort())
     }
 
     const removeTask = (x) => {
@@ -40,7 +40,7 @@ export default function ToDos(){
                 return toDo
             }
         })
-        setCompletedToDos([...filteredCompletedToDos])
+        setCompletedToDos([...filteredCompletedToDos].sort())
     }
 
     const returnTask = (x) => {
@@ -50,40 +50,45 @@ export default function ToDos(){
                 return toDo
             }
         })
-        setCompletedToDos([...filteredCompletedToDos])
-        setToDos([...toDos, currentToDo])
+        setCompletedToDos([...filteredCompletedToDos].sort())
+        setToDos([...toDos, currentToDo].sort())
     }
 
     return (
         <div className={s.container}>
-            <h1 className={s.title}>things you need to do</h1>
-            <form className={s.toDoForm}>
-                <input className={s.textBox} ref={textBox} type="text" />
-                <button className={s.submitBtn} onClick={(e) => onSubmit(e)}>
-                    <FontAwesomeIcon size="2x" icon={faCheckCircle}/>
-                </button>
-            </form>
-            <div className="toDoMainContainer">
-                { toDos.map((toDo, i) => (
-                    <div className={s.toDoContainer} key={i}>
-                        <span ref={refElement => clickedPendingToDos.current[i] = refElement}  className={s.toDoText}>{toDo}</span>
-                        <FontAwesomeIcon onClick={() => completeTask(clickedPendingToDos.current[i])} size="2x" className={`${s.icon} ${s.checkIcon}`} icon={faCheck}/>
-                    </div>
-                ))}
+            <div>
+                <h1 className={s.title}>add a to do</h1>
+                <form className={s.toDoForm}>
+                    <input className={s.textBox} ref={textBox} type="text" />
+                    <button className={s.submitBtn} onClick={(e) => onSubmit(e)}>
+                        <FontAwesomeIcon size="2x" icon={faCheckCircle}/>
+                    </button>
+                </form>
+                <div className="toDoMainContainer">
+                    { toDos.map((toDo, i) => (
+                        <div className={s.toDoContainer} key={i}>
+                            <span ref={refElement => clickedPendingToDos.current[i] = refElement}  className={s.toDoText}>{toDo}</span>
+                            <FontAwesomeIcon onClick={() => completeTask(clickedPendingToDos.current[i])} size="2x" className={`${s.icon} ${s.checkIcon}`} icon={faCheck}/>
+                        </div>
+                    ))}
+                </div>
             </div>
+
+            <div>
+            <h1 className={s.title}>{completedToDos.length > 0 ? "completed tasks" : "no completed tasks"}</h1>
 
             {completedToDos.length > 0 && (
                 <div> 
-                <h1 className={s.title}>completed</h1>
                 { completedToDos.map((toDo, i) => (
                     <div className={s.toDoContainer} key={i}>
                         <span ref={refElement => clickedCompletedToDos.current[i] = refElement} className={`${s.toDoText} ${s.completed}`}>{toDo}</span>
                         <FontAwesomeIcon size="2x" onClick={() => removeTask(clickedCompletedToDos.current[i])} className={`${s.icon} ${s.trashIcon}`} icon={faTrash} />
-                        <FontAwesomeIcon size="2x" onClick={() => returnTask(clickedCompletedToDos.current[i])} className={`${s.icon} ${s.trashIcon}`} icon={faHistory} />
+                        <FontAwesomeIcon size="2x" onClick={() => returnTask(clickedCompletedToDos.current[i])} className={`${s.icon} ${s.historyIcon}`} icon={faHistory} />
                     </div>
                 ))}
                 </div>
             )}
+            </div>
         </div>
     )
 }
