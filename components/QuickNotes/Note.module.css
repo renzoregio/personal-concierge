@@ -23,7 +23,8 @@
   align-items: center;
 }
 
-.viewButton {
+.viewButton,
+.editText {
   padding: 15px;
   border-radius: 20px;
   background: transparent;

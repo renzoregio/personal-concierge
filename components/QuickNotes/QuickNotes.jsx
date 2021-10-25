@@ -15,21 +15,26 @@ const QuickNotes = () => {
     const contentRef = useRef(null);
 
     const addNote = () => {
+        setAddingNote(false)
         const titleValue = titleRef.current.value;
         const contentValue = contentRef.current.value;
-        const noteObj = { title: titleValue, "Content" :contentValue }
+        console.log(contentValue)
+        const noteObj = { title: titleValue, content: contentValue }
         setNotes([...notes, noteObj])
         titleRef.current.value = ""
-        contentRef.current.value =""
+        contentRef.current.value = ""
     }
 
+    const x = () => {
+        setAddingNote(true)
+    }
     return (
         <div className={s.container}>
-            <div onClick={() => setAddingNote(true)} className={s.addNoteBtn}>
+            <div className={s.addNoteBtn}>
                 {!addingNote && 
                 <> 
                     <h1> Add a Note</h1>
-                    <FontAwesomeIcon size="2x" icon={faPenFancy} />
+                    <FontAwesomeIcon onClick={x} size="2x" icon={faPenFancy} />
                 </>
                 }
                 {addingNote && 
