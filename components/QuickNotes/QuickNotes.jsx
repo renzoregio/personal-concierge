@@ -15,9 +15,12 @@ const QuickNotes = () => {
     const contentRef = useRef(null);
 
     const addNote = () => {
-        console.log(titleRef.current.value)
-        const noteObj = { title: "Note", "Content" : "Hello there!" }
+        const titleValue = titleRef.current.value;
+        const contentValue = contentRef.current.value;
+        const noteObj = { title: titleValue, "Content" :contentValue }
         setNotes([...notes, noteObj])
+        titleRef.current.value = ""
+        contentRef.current.value =""
     }
 
     return (
@@ -42,7 +45,7 @@ const QuickNotes = () => {
                 }
             </div>
             {notes.map((note, i) => (
-                <Note key={i} />
+                <Note key={i} title={note.title} content={note.content}/>
             ))}
         </div>
     )
