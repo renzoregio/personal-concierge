@@ -8,9 +8,9 @@ import { useState, useRef } from "react";
 config.autoAddCss = false;
 
 
-const Note = ({title, content}) => {
+const Note = ({title, content, deleteNote}) => {
     const [editingMode, setEditingMode] = useState(false)
-    const [viewingNote, setViewingNote] = useState(false)
+    const [viewingMode, setViewingMode] = useState(false)
     const editTextRef = useRef(content)
     const editNote = () => {
         console.log(editTextRef)
@@ -23,12 +23,25 @@ const Note = ({title, content}) => {
     return (
     <div className={s.noteContainer}>
             { !editingMode && <h1>{title}</h1> }
-            <div className={s.buttonsContainer}>
+            <div className={!viewingMode ? s.buttonsContainer : s.viewingModeContainer}>
+                {viewingMode && 
+                <span className={s.contentTextView}>{content}</span>
+                
+                }
                 {!editingMode ?
                 <>
-                    <FontAwesomeIcon onClick={editNote} size="2x" icon={faPenFancy} />
-                    <button className={s.viewButton}>View Note</button>
-                    <FontAwesomeIcon size="2x" icon={faTrash} />
+                    {!viewingMode ? 
+                    <>
+                        <FontAwesomeIcon onClick={editNote} size="2x" icon={faPenFancy} />
+                        {!viewingMode && <button onClick={() => setViewingMode(true)} className={s.viewButton}>View Note</button>}
+                        <FontAwesomeIcon size="2x" onClick={() => deleteNote(title)} icon={faTrash} />
+                    </> :
+                    <div style={{display: "flex", justifyContent:"space-between"}}>
+                        <FontAwesomeIcon onClick={editNote} size="2x" icon={faPenFancy} />
+                        <FontAwesomeIcon size="2x" onClick={() => deleteNote(title)} icon={faTrash} />
+                        <FontAwesomeIcon className={s.closeBtn} icon={faTimes} size="2x" />
+                    </div>
+                    }
                 </> 
                 :
                 <div className={s.editingContainer}>
@@ -41,13 +54,7 @@ const Note = ({title, content}) => {
                 </div> 
                 }
 
-                {viewingNote && 
                 
-                <>
-                    <span>{content}</span>
-                </>
-                
-                }
                 
             </div>
     </div>

@@ -25,16 +25,22 @@ const QuickNotes = () => {
         contentRef.current.value = ""
     }
 
-    const x = () => {
-        setAddingNote(true)
+    const deleteNote = (title) => {
+        const filteredNotes = notes.filter(note => {
+            if(note.title !== title){
+                return note;
+            }
+        })
+        setNotes([...filteredNotes])
     }
+    
     return (
         <div className={s.container}>
             <div className={s.addNoteBtn}>
                 {!addingNote && 
                 <> 
                     <h1> Add a Note</h1>
-                    <FontAwesomeIcon onClick={x} size="2x" icon={faPenFancy} />
+                    <FontAwesomeIcon onClick={() => setAddingNote(true)} size="2x" icon={faPenFancy} />
                 </>
                 }
                 {addingNote && 
@@ -50,7 +56,7 @@ const QuickNotes = () => {
                 }
             </div>
             {notes.map((note, i) => (
-                <Note key={i} title={note.title} content={note.content}/>
+                <Note key={i} title={note.title} content={note.content} deleteNote={deleteNote}/>
             ))}
         </div>
     )
