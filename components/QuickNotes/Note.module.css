@@ -1,5 +1,5 @@
 .noteContainer {
-  height: 20%;
+  height: auto;
   width: 20%;
   border: 10px solid black;
   border-radius: 20px;
@@ -14,6 +14,16 @@
   text-align: center;
   margin: 0px 10px;
   position: relative;
+  animation: generateNoteAnimation 0.5s linear forwards;
+}
+
+@keyframes generateNoteAnimation {
+  from {
+    opacity: 0%;
+  }
+  to {
+    opacity: 100%;
+  }
 }
 
 .buttonsContainer {
@@ -33,6 +43,12 @@
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.viewButton:hover {
+  box-shadow: 0px 2px 0px;
 }
 
 .editText,
@@ -43,6 +59,24 @@
   border: 4px solid black;
   border-radius: 20px;
   margin-top: 20px;
+}
+
+.passwordField {
+  outline: none;
+  padding: 15px;
+  text-align: center;
+  border: 4px solid black;
+  border-radius: 20px;
+  margin-right: 20px;
+}
+
+.passwordError {
+  padding: 15px;
+  outline: none;
+  border: 2px solid red;
+  box-shadow: 2px 5px 0px red;
+  border-radius: 30px;
+  margin-right: 20px;
 }
 
 .editingContainer {
@@ -64,14 +98,57 @@
   right: 0;
   margin-right: 20px;
   margin-top: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.trashBin {
+  transition: color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.closeBtn:hover,
+.trashBin:hover {
+  color: red;
 }
 
 .viewingModeContainer {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.viewingModeIconsContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 30px;
 }
 
 .contentTextView {
-  margin-bottom: 30px;
-  font-size: 30px;
+  margin: 30px 0x;
+  font-size: 25px;
+  width: 90%;
+  outline: none;
+  text-align: center;
+}
+
+.icon {
+  transition: color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: white;
+}
+
+.checkIcon {
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.checkIcon:hover {
+  color: green;
 }

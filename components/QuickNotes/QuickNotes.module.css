@@ -25,7 +25,54 @@
   }
 }
 
-.addNoteBtn {
+.userSetupForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.passwordField {
+  padding: 15px;
+  outline: none;
+  box-shadow: 2px 5px 0px;
+  border-radius: 30px;
+  margin-right: 20px;
+  text-align: center;
+}
+
+.passwordError {
+  padding: 15px;
+  outline: none;
+  border: 2px solid red;
+  box-shadow: 2px 5px 0px red;
+  border-radius: 30px;
+  margin-right: 20px;
+  text-align: center;
+}
+
+.userSetUpFieldContainer {
+  display: flex;
+}
+.addNoteContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+}
+
+.addNoteContainer > span {
+  font-size: 60px;
+  font-weight: bold;
+  letter-spacing: 5px;
+}
+
+.addNoteContainer:hover {
+  color: white;
+  text-shadow: 2px 5px black;
+}
+
+.noteBtn {
   display: flex;
   align-items: center;
   width: 10%;
@@ -35,6 +82,7 @@
   border: 10px solid black;
   border-radius: 20px;
   box-shadow: 10px 12px 0px;
+  cursor: pointer;
 }
 
 .noteForm {
@@ -56,4 +104,13 @@
   border: 2px solid black;
   outline: none;
   text-align: center;
+}
+
+.checkIcon {
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.checkIcon:hover {
+  color: green;
 }

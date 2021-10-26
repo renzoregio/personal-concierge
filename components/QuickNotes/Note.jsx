@@ -1,6 +1,6 @@
 import s from "./Note.module.css"
 
-import { faPenFancy, faTrash, faTimes, faLock, faUnlock} from '@fortawesome/free-solid-svg-icons'
+import { faPenFancy, faTrash, faTimes, faLock, faUnlock, faCheckCircle} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -8,11 +8,14 @@ import { useState, useRef } from "react";
 config.autoAddCss = false;
 
 
-const Note = ({title, content, deleteNote}) => {
+const Note = ({title, content, deleteNote, password}) => {
     const [editingMode, setEditingMode] = useState(false)
     const [viewingMode, setViewingMode] = useState(false)
     const [unlockMode, setUnlockMode] = useState(true)
+    const [passwordMode, setPasswordMode] = useState(false)
+    const [passwordError, setPasswordError]= useState(false)
     const editTextRef = useRef(content)
+    const enteredPasswordRef = useRef(null)
 
     const editNote = () => {
         setEditingMode(true)
@@ -24,28 +27,39 @@ const Note = ({title, content, deleteNote}) => {
     }
 
     const unlockNote = () => {
-        setUnlockMode(true)
+        setPasswordMode(true)
+    }
+    
+    const handleNoteView = () => {
+        if(enteredPasswordRef.current.value === password) {
+            setUnlockMode(true)
+            setPasswordMode(false)
+        } else {
+            setPasswordError(true)
+        }
+
+        enteredPasswordRef.current.value = ""
     }
 
     return (
     <div className={s.noteContainer}>
-            { !editingMode && <> <h1>{title}</h1> <FontAwesomeIcon size="2x" onClick={unlockMode ? lockNote : unlockNote} icon={unlockMode ? faUnlock : faLock} /> </> }
+            { !editingMode && <> <h1>{title}</h1> <FontAwesomeIcon className={s.icon} size="2x" onClick={unlockMode ? lockNote : unlockNote} icon={unlockMode ? faUnlock : faLock} /> </> }
+            { passwordMode && <> <h2>Enter your password </h2> <div style={{display: "flex", alignItems: "center"}}><input ref={enteredPasswordRef} className={!passwordError ? s.passwordField : s.passwordError} type="password"/> <FontAwesomeIcon className={s.checkIcon} onClick={handleNoteView} icon={faCheckCircle} size="2x" /></div></>}
             <div className={!viewingMode ? s.buttonsContainer : s.viewingModeContainer}>
                 {viewingMode && 
-                <span className={s.contentTextView}>{content}</span>
-                
+                <p className={s.contentTextView}>{content}</p>
                 }
                 {!editingMode ?
                 <>
                     {!viewingMode ? 
                     <>
-                        { unlockMode && <FontAwesomeIcon onClick={editNote} size="2x" icon={faPenFancy} /> }
+                        { unlockMode && <FontAwesomeIcon className={s.icon} onClick={editNote} size="2x" icon={faPenFancy} /> }
                         {!viewingMode && unlockMode && <button onClick={() => setViewingMode(true)} className={s.viewButton}>View Note</button>}
-                        { unlockMode && <FontAwesomeIcon size="2x" onClick={() => deleteNote(title)} icon={faTrash} />}
+                        { unlockMode && <FontAwesomeIcon className={s.trashBin} size="2x" onClick={() => deleteNote(title)} icon={faTrash} />}
                     </> :
-                    <div style={{display: "flex", justifyContent:"space-between"}}>
-                        <FontAwesomeIcon onClick={editNote} size="2x" icon={faPenFancy} />
-                        <FontAwesomeIcon size="2x" onClick={() => deleteNote(title)} icon={faTrash} />
+                    <div className={s.viewingModeIconsContainer}>
+                        <FontAwesomeIcon className={s.icon} onClick={editNote} size="2x" icon={faPenFancy} />
+                        <FontAwesomeIcon className={s.trashBin} size="2x" onClick={() => deleteNote(title)} icon={faTrash} />
                         <FontAwesomeIcon className={s.closeBtn} onClick={() => setViewingMode(false)} icon={faTimes} size="2x" />
                     </div>
                     }
@@ -56,7 +70,7 @@ const Note = ({title, content, deleteNote}) => {
                         <input className={s.editTitle} type="text" value={title} />
                         <textarea className={s.editText} defaultValue={content} ref={editTextRef}></textarea>    
                     </div>
-                    <FontAwesomeIcon icon={faPenFancy} size="3x" />
+                    <FontAwesomeIcon className={s.icon} icon={faPenFancy} size="3x" />
                     <FontAwesomeIcon className={s.closeBtn} onClick={() => setEditingMode(false)} icon={faTimes} size="2x" />
                 </div> 
                 }
