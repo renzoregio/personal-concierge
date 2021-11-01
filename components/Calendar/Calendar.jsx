@@ -1,13 +1,16 @@
 import { BackToMain } from "../Home"
 
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import s from "./Calendar.module.css";
 import  Day from "./Day"
 
 
 export default function Calendar(){
     const dateObj = new Date();
+    
+    const [currentTime, setCurrentTime] = useState(null);
+
     const [existingCalendar, setExistingCalendar] = useState(false);
     const [existingCurrentSchedule, setExistingCurrentSchedule] = useState(false)
     const [currentDay, setCurrentDay] = useState({})
@@ -43,6 +46,14 @@ export default function Calendar(){
         {remove: (title) => setSaturday([...saturday.filter(schedule => schedule.title !== title)])},
     ]
 
+    const getCurrentTime = () => {
+        const currentDate = new Date()
+        const seconds = `${currentDate.getSeconds()}`
+        let time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${seconds.length > 1 ? seconds : "0" + seconds}`
+        setCurrentTime(time)
+    }
+
+    setInterval(getCurrentTime, 1000)
 
     useEffect(() => {
         const currentDayCount = dateObj.getDay();
@@ -68,10 +79,11 @@ export default function Calendar(){
 
     return(
         <div className={s.container}>
+            <span className={s.currentTime}>{currentTime}</span>
             {!existingCalendar && <button onClick={() => setExistingCalendar(true)} className={s.startCalendarBtn}>Start Calendar</button>}
             { existingCalendar && 
-            
             <div className={s.currentDayContainer}>
+            
                 <div className={s.currentDayHeader}>
                     <span className={s.currentDayTitle}>Today is a {daysOfWeek[dateObj.getDay()]}</span>
                     <span className={s.currentDayDate}> {months[dateObj.getMonth()]} {dateObj.getDate()}, {dateObj.getFullYear()}</span>
