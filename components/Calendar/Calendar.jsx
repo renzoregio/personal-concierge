@@ -14,25 +14,33 @@ export default function Calendar(){
     const [monday, setMonday] = useState([]);
     const [tuesday, setTuesday] = useState([]);
     const [wednesday, setWednesday] = useState([]);
+    const [thursday, setThursday] = useState([]);
+    const [friday, setFriday] = useState([]);
+    const [saturday, setSaturday] = useState([])
     const [sunday, setSunday] = useState([])
 
-    const arr = [monday, tuesday, wednesday, sunday]
+    const arr = [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     const setFunctions = [
-        {currentDay:"Monday", setter: (obj) => setMonday([...monday, obj])},
-        {currentDay:"Tuesday", setter: (obj) => setTuesday([...tuesday, obj])},
-        {currentDay:"Wednesday", setter: (obj) => setWednesday([...wednesday, obj])},
-        {currentDay:"Sunday", setter: (obj) => setSunday([...sunday, obj])},
-    ]
+        {setter: (obj) => setSunday([...sunday, obj])},
+        {setter: (obj) => setMonday([...monday, obj])},
+        {setter: (obj) => setTuesday([...tuesday, obj])},
+        {setter: (obj) => setWednesday([...wednesday, obj])},
+        {setter: (obj) => setThursday([...thursday, obj])},
+        {setter: (obj) => setFriday([...friday, obj])},
+        {setter: (obj) => setSaturday([...saturday, obj])},
+        ]
 
     const removeFunctions = [
+        {remove: (title) => setSunday([...sunday.filter(schedule => schedule.title !== title)])},
         {remove: (title) => setMonday([...monday.filter(schedule => schedule.title !== title)])},
         {remove: (title) => setTuesday([...tuesday.filter(schedule => schedule.title !== title)])},
         {remove: (title) => setWednesday([...wednesday.filter(schedule => schedule.title !== title)])},
-        {remove: (title) => setSunday([...sunday.filter(schedule => schedule.title !== title)])},
-
+        {remove: (title) => setThursday([...thursday.filter(schedule => schedule.title !== title)])},
+        {remove: (title) => setFriday([...friday.filter(schedule => schedule.title !== title)])},
+        {remove: (title) => setSaturday([...saturday.filter(schedule => schedule.title !== title)])},
     ]
 
 
@@ -40,6 +48,18 @@ export default function Calendar(){
         const currentDayCount = dateObj.getDay();
         if(currentDayCount === 0){
             setCurrentDay(sunday);
+        } else if (currentDayCount === 1){
+            setCurrentDay(monday);
+        } else if (currentDayCount === 2){
+            setCurrentDay(tuesday);
+        } else if (currentDayCount === 3){
+            setCurrentDay(wednesday);
+        } else if (currentDayCount === 4){
+            setCurrentDay(thursday)
+        } else if(currentDayCount === 5){
+            setCurrentDay(friday)
+        } else if (currentDayCount === 6){
+            setCurrentDay(saturday)
         }
 
         setExistingCurrentSchedule(currentDay.length > 0 ? true : false)
@@ -80,7 +100,7 @@ export default function Calendar(){
                 {existingCalendar && 
                     <>
                         {arr.map((day,i) => (
-                            <Day day={day} key={i} index={i} dayName={setFunctions[i].currentDay} removeFunction={removeFunctions[i].remove} setFunction={setFunctions[i].setter}/>
+                            <Day day={day} key={i} index={i} dayName={daysOfWeek[i]} removeFunction={removeFunctions[i].remove} setFunction={setFunctions[i].setter}/>
                         ))}
                     </>
                 }
