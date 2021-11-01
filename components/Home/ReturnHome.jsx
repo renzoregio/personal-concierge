@@ -4,12 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
-
+import s from "./home.module.css"
 const ReturnHome = () => {
     return(
-        <Link href="/">
+        <div className={s.homeBtn}>
+            <Link href="/">
                 <FontAwesomeIcon icon={faHome} size="3x"/>
-        </Link>
+            </Link>
+        </div>
     )
 }
 

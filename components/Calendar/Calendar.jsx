@@ -9,11 +9,16 @@ import  Day from "./Day"
 export default function Calendar(){
     const dateObj = new Date();
     const [existingCalendar, setExistingCalendar] = useState(false);
-    const [currentDay, setCurrentDay] = useState(null)
+    const [existingCurrentSchedule, setExistingCurrentSchedule] = useState(false)
+    const [currentDay, setCurrentDay] = useState({})
     const [monday, setMonday] = useState([]);
     const [tuesday, setTuesday] = useState([]);
     const [wednesday, setWednesday] = useState([]);
     const [sunday, setSunday] = useState([])
+
+    const arr = [monday, tuesday, wednesday, sunday]
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     const setFunctions = [
         {currentDay:"Monday", setter: (obj) => setMonday([...monday, obj])},
@@ -30,14 +35,14 @@ export default function Calendar(){
 
     ]
 
-    const arr = [monday, tuesday, wednesday, sunday]
-
 
     useEffect(() => {
         const currentDayCount = dateObj.getDay();
         if(currentDayCount === 0){
             setCurrentDay(sunday);
         }
+
+        setExistingCurrentSchedule(currentDay.length > 0 ? true : false)
     })
   
 
@@ -47,15 +52,27 @@ export default function Calendar(){
             { existingCalendar && 
             
             <div className={s.currentDayContainer}>
-                <span className={s.currentDayTitle}>Today is a Sunday</span>
-                <div className={s.currentDayScheduleContainer}>
+                <div className={s.currentDayHeader}>
+                    <span className={s.currentDayTitle}>Today is a {daysOfWeek[dateObj.getDay()]}</span>
+                    <span className={s.currentDayDate}> {months[dateObj.getMonth()]} {dateObj.getDate()}, {dateObj.getFullYear()}</span>
+                </div>
+                <div className={s.currentDayDivider}></div>
+                { existingCurrentSchedule ? 
+                
+                    <div className={s.currentDayScheduleContainer}>
                     { currentDay.map((schedule, i) => (
                         <div className={s.currentScheduleContainer} key={i}>
                             <span className={s.currentScheduleBubble}>{schedule.startTime} - {schedule.endTime}</span>
                             <span className={s.currentScheduleBubble}>{schedule.title}</span>
                         </div>
                     ))}
-                </div>
+                    </div>
+
+                    :
+
+                    <span className={s.currentDayTitle}>No Schedule Set</span>
+                
+                }
             </div>
             
             }
