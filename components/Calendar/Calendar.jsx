@@ -1,5 +1,5 @@
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import s from "./Calendar.module.css";
 import  Day from "./Day"
 
@@ -14,8 +14,14 @@ export default function Calendar(){
         {currentDay:"Monday", setter: (obj) => setMonday([...monday, obj])},
         {currentDay:"Tuesday", setter: (obj) => setTuesday([...tuesday, obj])},
         {currentDay:"Wednesday", setter: (obj) => setWednesday([...wednesday, obj])},
+    ]
 
-]
+    const removeFunctions = [
+        {remove: (title) => setMonday([...monday.filter(schedule => schedule.title !== title)])},
+        {remove: (title) => setTuesday([...tuesday.filter(schedule => schedule.title !== title)])},
+        {remove: (title) => setWednesday([...wednesday.filter(schedule => schedule.title !== title)])},
+
+    ]
 
     const arr = [monday, tuesday, wednesday]
 
@@ -27,7 +33,7 @@ export default function Calendar(){
             {existingCalendar && 
                 <>
                     {arr.map((day,i) => (
-                        <Day day={day} key={i} index={i} dayName={setFunctions[i].currentDay} setFunction={setFunctions[i].setter}/>
+                        <Day day={day} key={i} index={i} dayName={setFunctions[i].currentDay} removeFunction={removeFunctions[i].remove} setFunction={setFunctions[i].setter}/>
                     ))}
                 </>
             }

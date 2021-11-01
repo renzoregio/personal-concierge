@@ -1,18 +1,19 @@
 import { useRef, useState } from "react";
 import s from "./Calendar.module.css"
 
-import { faCalendarCheck, faT, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
-export default function Day({ day, setFunction, dayName }){
+export default function Day({ day, setFunction, removeFunction, dayName }){
     const [addingToDay, setAddingToDay] = useState(false);
     let startTimeRef = useRef(null);
     let endTimeRef = useState(null);
     let titleRef = useRef(null);
-    console.log(setFunction)
+    let scheduleRefs = useRef([]);
+
     const addToDay = (e) => {
         e.preventDefault();
         let startValue = startTimeRef.current.value;
@@ -30,6 +31,12 @@ export default function Day({ day, setFunction, dayName }){
         setAddingToDay(false);
     }
 
+    const removeSchedule = (x) => {
+        const schedule = x.textContent;
+        removeFunction(schedule)
+
+    }
+
     return(
           
                 <div className={s.dayContainer}>
@@ -38,9 +45,9 @@ export default function Day({ day, setFunction, dayName }){
                     <> 
                         {day.map((schedule, i) => (
                             <div key={i} className={s.scheduleContainer}>
-                                <FontAwesomeIcon className={s.removeScheduleIcon} icon={faTimes}/>
+                                <FontAwesomeIcon onClick={() => removeSchedule(scheduleRefs.current[i])} className={s.removeScheduleIcon} icon={faTimes}/>
                                 <span>{schedule.startTime} - {schedule.endTime}</span>
-                                <span>{schedule.title}</span>
+                                <span ref={refElement => scheduleRefs.current[i] = refElement}>{schedule.title}</span>
                             </div>
                         ))}
                     </>
