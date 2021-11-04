@@ -1,25 +1,31 @@
 import s from "./QuickNotes.module.css"
 import Note from "./Note";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { faCheck, faCheckCircle, faPenFancy, faStickyNote } from '@fortawesome/free-solid-svg-icons'
+import fetch from 'isomorphic-unfetch';
+
+import {  faCheckCircle, faStickyNote } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
+import {useRouter} from "next/router"
 
-const QuickNotes = () => {
-    const [notes, setNotes] = useState([])
-    const [noteID, setNoteID] = useState(0)
+const QuickNotes = ({ fetchedNotes }) => {
+    const [notes, setNotes] = useState(fetchedNotes)
     const [addingNote, setAddingNote] = useState(false)
     const [userSetup, setUserSetup] = useState(false)
     const [userPassword, setUserPassword] = useState("")
     const [passwordError, setPasswordError] = useState(false)
 
+
+
     const titleRef = useRef(null)
     const contentRef = useRef(null)
     const passwordRef = useRef(null)
     const confirmPasswordRef = useRef(null)
+
+
 
     const handleUserPassword = () => {
         const password = passwordRef.current.value;
@@ -35,7 +41,7 @@ const QuickNotes = () => {
     const updateNote = (obj) => {
         const updatedNotes = notes.map(note => {
             if(obj.id === note.id){
-                const newNote = { id: note.id, title: obj.updatedTitle, content: obj.updatedContent}
+                const newNote = { id: note.id, title: obj.updatedTitle, description: obj.updatedContent}
                 return newNote;
             }
             return note;
@@ -44,24 +50,49 @@ const QuickNotes = () => {
         setNotes([...updatedNotes]);
     }
 
-    const addNote = () => {
-        setAddingNote(false)
+    
+    const addNote = async () => {
         const titleValue = titleRef.current.value;
         const contentValue = contentRef.current.value;
-        const noteObj = { id: noteID + 1, title: titleValue, content: contentValue }
-        setNoteID(noteID + 1);
-        setNotes([...notes, noteObj])
-        titleRef.current.value = ""
-        contentRef.current.value = ""
+        
+        const form = { title: titleValue, description: contentValue }
+
+        try {
+            await fetch('http://localhost:3000/api/notes', {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(form)
+            });
+
+            setNotes([...notes, form])
+
+        } catch (error) {
+            console.log(error)
+        }
+
+        setAddingNote(false)
     }
 
-    const deleteNote = (title) => {
-        const filteredNotes = notes.filter(note => {
-            if(note.title !== title){
-                return note;
-            }
-        })
-        setNotes([...filteredNotes])
+    const deleteNote = async (id) => {
+        try {
+            await fetch(`http://localhost:3000/api/notes/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                }
+            })
+
+            const res = await fetch('http://localhost:3000/api/notes');
+            const { data } = await res.json();
+
+            setNotes(data)
+        } catch (error) {
+            console.log(error);
+        }
     }
     
     return (
@@ -69,11 +100,12 @@ const QuickNotes = () => {
             {userSetup ? 
             <>
                 <div className={s.noteBtn}>
-                    {!addingNote && 
-                    <div className={s.addNoteContainer} onClick={() => setAddingNote(true)}> 
-                        <span> Add a Note</span>
-                        <FontAwesomeIcon  size="3x" icon={faStickyNote} />
-                    </div>
+                    {!addingNote &&
+                    // TODO: add link 
+                        <div className={s.addNoteContainer} onClick={() => setAddingNote(true)}> 
+                            <span> Add a Note</span>
+                            <FontAwesomeIcon  size="3x" icon={faStickyNote} />
+                        </div>
                     }
                     {addingNote && 
                     <>
@@ -88,7 +120,7 @@ const QuickNotes = () => {
                     }
                 </div>
                 {notes.map((note, i) => (
-                    <Note key={i} id={note.id} title={note.title} content={note.content} deleteNote={deleteNote} password={userPassword} updateNote={updateNote}/>
+                    <Note key={i} id={note._id} title={note.title} content={note.content} deleteNote={deleteNote} password={userPassword} updateNote={updateNote}/>
                 ))}
             </> :  
             <div className={s.userSetupForm}>
@@ -104,5 +136,13 @@ const QuickNotes = () => {
         </div>
     )
 }
+
+QuickNotes.getInitialProps = async () => {
+    const res = await fetch('http://localhost:3000/api/notes');
+    const { data } = await res.json();
+
+    return { fetchedNotes: data};
+}
+
 
 export default QuickNotes;
