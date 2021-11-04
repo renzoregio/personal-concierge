@@ -38,16 +38,34 @@ const QuickNotes = ({ fetchedNotes }) => {
         }
     }
 
-    const updateNote = (obj) => {
-        const updatedNotes = notes.map(note => {
-            if(obj.id === note.id){
-                const newNote = { id: note.id, title: obj.updatedTitle, description: obj.updatedContent}
-                return newNote;
-            }
-            return note;
-        })
+    const updateNote = async (obj) => {
 
-        setNotes([...updatedNotes]);
+        try {
+            await fetch(`http://localhost:3000/api/notes/${obj.id}`,{
+                method: "PUT",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({title: obj.title, description: obj.description})
+            })
+
+            const res = await fetch('http://localhost:3000/api/notes');
+            const { data } = await res.json();
+
+            setNotes(data);
+        } catch (error) {
+            console.log(error)
+        }
+        // const updatedNotes = notes.map(note => {
+        //     if(obj.id === note.id){
+        //         const newNote = { id: note.id, title: obj.updatedTitle, description: obj.updatedContent}
+        //         return newNote;
+        //     }
+        //     return note;
+        // })
+
+        // setNotes([...updatedNotes]);
     }
 
     
@@ -120,7 +138,7 @@ const QuickNotes = ({ fetchedNotes }) => {
                     }
                 </div>
                 {notes.map((note, i) => (
-                    <Note key={i} id={note._id} title={note.title} content={note.content} deleteNote={deleteNote} password={userPassword} updateNote={updateNote}/>
+                    <Note key={i} id={note._id} title={note.title} description={note.description} deleteNote={deleteNote} password={userPassword} updateNote={updateNote}/>
                 ))}
             </> :  
             <div className={s.userSetupForm}>

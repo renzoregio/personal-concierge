@@ -22,7 +22,7 @@ const Note = ({id, title, description, deleteNote, password, updateNote}) => {
     const editNote = () => {
         const updatedTitle = editTitleRef.current.value;
         const updatedContent = editContentRef.current.value;
-        updateNote({id: id, updatedTitle, updatedContent})
+        updateNote({id: id, title: updatedTitle, description: updatedContent})
         setEditingMode(false)
     }
 
