@@ -8,18 +8,22 @@ import { useState, useRef } from "react";
 config.autoAddCss = false;
 
 
-const Note = ({title, content, deleteNote, password}) => {
+const Note = ({id, title, content, deleteNote, password, updateNote}) => {
     const [editingMode, setEditingMode] = useState(false)
     const [viewingMode, setViewingMode] = useState(false)
     const [unlockMode, setUnlockMode] = useState(true)
     const [passwordMode, setPasswordMode] = useState(false)
     const [passwordError, setPasswordError]= useState(false)
-    const editTextRef = useRef(content)
+
+    const editTitleRef = useRef(title)
+    const editContentRef = useRef(content)
     const enteredPasswordRef = useRef(null)
 
     const editNote = () => {
-        setEditingMode(true)
-        editTextRef.current = content;
+        const updatedTitle = editTitleRef.current.value;
+        const updatedContent = editContentRef.current.value;
+        updateNote({id: id, updatedTitle, updatedContent})
+        setEditingMode(false)
     }
 
     const lockNote = () => {
@@ -41,36 +45,37 @@ const Note = ({title, content, deleteNote, password}) => {
         enteredPasswordRef.current.value = ""
     }
 
+
     return (
     <div className={s.noteContainer}>
             { !editingMode && <> <h1>{title}</h1> <FontAwesomeIcon className={s.icon} size="2x" onClick={unlockMode ? lockNote : unlockNote} icon={unlockMode ? faUnlock : faLock} /> </> }
             { passwordMode && <> <h2>Enter your password </h2> <div style={{display: "flex", alignItems: "center"}}><input ref={enteredPasswordRef} className={!passwordError ? s.passwordField : s.passwordError} type="password"/> <FontAwesomeIcon className={s.checkIcon} onClick={handleNoteView} icon={faCheckCircle} size="2x" /></div></>}
             <div className={!viewingMode ? s.buttonsContainer : s.viewingModeContainer}>
-                {viewingMode && 
+                {viewingMode && unlockMode && !editingMode &&
                 <p className={s.contentTextView}>{content}</p>
                 }
                 {!editingMode ?
                 <>
                     {!viewingMode ? 
                     <>
-                        { unlockMode && <FontAwesomeIcon className={s.icon} onClick={editNote} size="2x" icon={faPenFancy} /> }
+                        { unlockMode && <FontAwesomeIcon className={s.icon} onClick={() => setEditingMode(true)} size="2x" icon={faPenFancy} /> }
                         {!viewingMode && unlockMode && <button onClick={() => setViewingMode(true)} className={s.viewButton}>View Note</button>}
                         { unlockMode && <FontAwesomeIcon className={s.trashBin} size="2x" onClick={() => deleteNote(title)} icon={faTrash} />}
                     </> :
                     <div className={s.viewingModeIconsContainer}>
-                        <FontAwesomeIcon className={s.icon} onClick={editNote} size="2x" icon={faPenFancy} />
-                        <FontAwesomeIcon className={s.trashBin} size="2x" onClick={() => deleteNote(title)} icon={faTrash} />
-                        <FontAwesomeIcon className={s.closeBtn} onClick={() => setViewingMode(false)} icon={faTimes} size="2x" />
+                        { unlockMode && <FontAwesomeIcon className={s.icon} onClick={() => setEditingMode(true)} size="2x" icon={faPenFancy} /> }
+                        {!viewingMode && unlockMode && <button onClick={() => setViewingMode(true)} className={s.viewButton}>View Note</button>}
+                        { unlockMode && <FontAwesomeIcon className={s.trashBin} size="2x" onClick={() => deleteNote(title)} icon={faTrash} />}
                     </div>
                     }
                 </> 
                 :
                 <div className={s.editingContainer}>
                     <div className={s.editingContentContainer}>
-                        <input className={s.editTitle} type="text" value={title} />
-                        <textarea className={s.editText} defaultValue={content} ref={editTextRef}></textarea>    
+                        <input className={s.editTitle} type="text" defaultValue={title} ref={editTitleRef} />
+                        <textarea className={s.editText} defaultValue={content} ref={editContentRef}></textarea>    
                     </div>
-                    <FontAwesomeIcon className={s.icon} icon={faPenFancy} size="3x" />
+                    <FontAwesomeIcon className={s.icon} onClick={editNote} icon={faPenFancy} size="3x" />
                     <FontAwesomeIcon className={s.closeBtn} onClick={() => setEditingMode(false)} icon={faTimes} size="2x" />
                 </div> 
                 }

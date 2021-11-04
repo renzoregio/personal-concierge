@@ -4,6 +4,7 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import s from "./Calendar.module.css";
 import  Day from "./Day"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function Calendar(){
@@ -80,7 +81,9 @@ export default function Calendar(){
     return(
         <div className={s.container}>
             <span className={s.currentTime}>{currentTime}</span>
-            {!existingCalendar && <button onClick={() => setExistingCalendar(true)} className={s.startCalendarBtn}>Start Calendar</button>}
+            {!existingCalendar && <button onClick={() => setExistingCalendar(true)} className={s.startCalendarBtn}>Start Calendar 
+            <FontAwesomeIcon style={{marginLeft:"20px"}} icon={faCalendar} />
+            </button>}
             { existingCalendar && 
             <div className={s.currentDayContainer}>
             

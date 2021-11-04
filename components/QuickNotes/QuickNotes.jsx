@@ -10,6 +10,7 @@ config.autoAddCss = false;
 
 const QuickNotes = () => {
     const [notes, setNotes] = useState([])
+    const [noteID, setNoteID] = useState(0)
     const [addingNote, setAddingNote] = useState(false)
     const [userSetup, setUserSetup] = useState(false)
     const [userPassword, setUserPassword] = useState("")
@@ -31,12 +32,24 @@ const QuickNotes = () => {
         }
     }
 
+    const updateNote = (obj) => {
+        const updatedNotes = notes.map(note => {
+            if(obj.id === note.id){
+                const newNote = { id: note.id, title: obj.updatedTitle, content: obj.updatedContent}
+                return newNote;
+            }
+            return note;
+        })
+
+        setNotes([...updatedNotes]);
+    }
+
     const addNote = () => {
         setAddingNote(false)
         const titleValue = titleRef.current.value;
         const contentValue = contentRef.current.value;
-        console.log(contentValue)
-        const noteObj = { title: titleValue, content: contentValue }
+        const noteObj = { id: noteID + 1, title: titleValue, content: contentValue }
+        setNoteID(noteID + 1);
         setNotes([...notes, noteObj])
         titleRef.current.value = ""
         contentRef.current.value = ""
@@ -75,7 +88,7 @@ const QuickNotes = () => {
                     }
                 </div>
                 {notes.map((note, i) => (
-                    <Note key={i} title={note.title} content={note.content} deleteNote={deleteNote} password={userPassword}/>
+                    <Note key={i} id={note.id} title={note.title} content={note.content} deleteNote={deleteNote} password={userPassword} updateNote={updateNote}/>
                 ))}
             </> :  
             <div className={s.userSetupForm}>

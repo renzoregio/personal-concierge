@@ -39,6 +39,12 @@
   font-size: 40px;
   background: transparent;
   cursor: pointer;
+  box-shadow: 0px 4px 8px;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.startCalendarBtn:hover {
+  box-shadow: 0px 2px 5px;
 }
 
 .currentDayContainer {
