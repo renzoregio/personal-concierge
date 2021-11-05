@@ -1,6 +1,7 @@
 import s from "./QuickNotes.module.css"
 import Note from "./Note";
 import { useEffect, useRef, useState } from "react";
+import ReturnHome  from "../Home/ReturnHome"
 
 import fetch from 'isomorphic-unfetch';
 
@@ -9,28 +10,39 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
-import {useRouter} from "next/router"
 
-const QuickNotes = ({ fetchedNotes }) => {
+const QuickNotes = ({ fetchedNotes, password }) => {
     const [notes, setNotes] = useState(fetchedNotes)
     const [addingNote, setAddingNote] = useState(false)
     const [userSetup, setUserSetup] = useState(false)
-    const [userPassword, setUserPassword] = useState("")
+    const [userPassword, setUserPassword] = useState(null)
     const [passwordError, setPasswordError] = useState(false)
-
-
 
     const titleRef = useRef(null)
     const contentRef = useRef(null)
     const passwordRef = useRef(null)
     const confirmPasswordRef = useRef(null)
 
+    useEffect(() => {
+        console.log(password)
+        if(password.length){
+            setUserSetup(true);
+            setUserPassword(password[0].password)
+        }
+    })
 
-
-    const handleUserPassword = () => {
+    const handleUserPassword = async () => {
         const password = passwordRef.current.value;
         const confirmPassword = confirmPasswordRef.current.value;
         if(password === confirmPassword){
+            await fetch("http://localhost:3000/api/notes/password", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ password: password })
+            })
             setUserPassword(password)
             setUserSetup(true)
         } else {
@@ -57,15 +69,6 @@ const QuickNotes = ({ fetchedNotes }) => {
         } catch (error) {
             console.log(error)
         }
-        // const updatedNotes = notes.map(note => {
-        //     if(obj.id === note.id){
-        //         const newNote = { id: note.id, title: obj.updatedTitle, description: obj.updatedContent}
-        //         return newNote;
-        //     }
-        //     return note;
-        // })
-
-        // setNotes([...updatedNotes]);
     }
 
     
@@ -116,10 +119,9 @@ const QuickNotes = ({ fetchedNotes }) => {
     return (
         <div className={s.container}>
             {userSetup ? 
-            <>
+            <div className={s.notesContainer}>
                 <div className={s.noteBtn}>
                     {!addingNote &&
-                    // TODO: add link 
                         <div className={s.addNoteContainer} onClick={() => setAddingNote(true)}> 
                             <span> Add a Note</span>
                             <FontAwesomeIcon  size="3x" icon={faStickyNote} />
@@ -140,7 +142,7 @@ const QuickNotes = ({ fetchedNotes }) => {
                 {notes.map((note, i) => (
                     <Note key={i} id={note._id} title={note.title} description={note.description} deleteNote={deleteNote} password={userPassword} updateNote={updateNote}/>
                 ))}
-            </> :  
+            </div> :  
             <div className={s.userSetupForm}>
                 <h1>Please enter a password for your locked notes</h1>
                 <form className={s.userSetUpFieldContainer}>               
@@ -151,6 +153,7 @@ const QuickNotes = ({ fetchedNotes }) => {
                 { passwordError && <h3 style={{color:"red", fontWeight: "bold"}}>Passwords do not match! Try again</h3>}
             </div>
             }
+            <ReturnHome />
         </div>
     )
 }
@@ -158,8 +161,10 @@ const QuickNotes = ({ fetchedNotes }) => {
 QuickNotes.getInitialProps = async () => {
     const res = await fetch('http://localhost:3000/api/notes');
     const { data } = await res.json();
+    const pass = await fetch("http://localhost:3000/api/notes/password");
+    const { password } = await pass.json();
 
-    return { fetchedNotes: data};
+    return { fetchedNotes: data, password};
 }
 
 
