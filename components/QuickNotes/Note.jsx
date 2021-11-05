@@ -1,48 +1,62 @@
 import s from "./Note.module.css"
-import Link from "next/link"
+import fetch from 'isomorphic-unfetch';
+
 import { faPenFancy, faTrash, faTimes, faLock, faUnlock, faCheckCircle} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 config.autoAddCss = false;
 
 
-const Note = ({id, title, description, deleteNote, password, updateNote}) => {
+const Note = ({id, title, description, deleteNote, password, updateNote, isUnlocked, unlockNoteFn}) => {
+    console.log(title, isUnlocked)
     const [editingMode, setEditingMode] = useState(false)
     const [viewingMode, setViewingMode] = useState(false)
-    const [unlockMode, setUnlockMode] = useState(true)
+    const [unlockMode, setUnlockMode] = useState(isUnlocked)
     const [passwordMode, setPasswordMode] = useState(false)
     const [passwordError, setPasswordError]= useState(false)
-
+    console.log(isUnlocked, unlockMode)
     const editTitleRef = useRef(title)
     const editContentRef = useRef(description)
-    const enteredPasswordRef = useRef(null)
+    const enteredPasswordRef = useRef("")
+    
+    useEffect(() => {
+        setUnlockMode(isUnlocked)
+    }, [isUnlocked])
 
     const editNote = () => {
         const updatedTitle = editTitleRef.current.value;
         const updatedContent = editContentRef.current.value;
-        updateNote({id: id, title: updatedTitle, description: updatedContent})
+        updateNote({_id: id, title: updatedTitle, description: updatedContent, isUnlocked: unlockMode})
         setEditingMode(false)
     }
 
-    const lockNote = () => {
+    const lockNote = async () => {
+        await fetch(`http://localhost:3000/api/notes/${id}`, {
+            method: "PUT",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ title, description, isUnlocked: false})
+        })
         setUnlockMode(false)
     }
 
-    const unlockNote = () => {
+    const unlockNote = async () => {
         setPasswordMode(true)
     }
     
-    const handleNoteView = () => {
+    const handleNoteView = async () => {
         if(enteredPasswordRef.current.value === password) {
+            unlockNoteFn(id)
             setUnlockMode(true)
             setPasswordMode(false)
         } else {
             setPasswordError(true)
         }
 
-        enteredPasswordRef.current.value = ""
     }
 
 
@@ -86,5 +100,6 @@ const Note = ({id, title, description, deleteNote, password, updateNote}) => {
         </div>
     )
 }
+
 
 export default Note;
