@@ -74,6 +74,7 @@
   font-size: 60px;
   font-weight: bold;
   letter-spacing: 5px;
+  margin: 100px 0px;
 }
 
 .addNoteContainer:hover {
@@ -86,7 +87,7 @@
   align-items: center;
   width: 10%;
   justify-content: space-evenly;
-  height: 100%;
+  height: auto;
   width: 20%;
   border: 10px solid black;
   border-radius: 20px;
@@ -123,4 +124,33 @@
 
 .checkIcon:hover {
   color: green;
+}
+
+.noteContainer {
+  height: auto;
+  width: 20%;
+  border: 10px solid black;
+  border-radius: 20px;
+  box-shadow: 10px 12px 0px;
+  whitespace: no-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 0px 10px;
+  position: relative;
+  animation: generateNoteAnimation 0.5s linear forwards;
+  opacity: 0%;
+}
+
+@keyframes generateNoteAnimation {
+  from {
+    opacity: 0%;
+  }
+  to {
+    opacity: 100%;
+  }
 }

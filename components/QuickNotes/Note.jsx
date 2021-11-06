@@ -10,13 +10,14 @@ config.autoAddCss = false;
 
 
 const Note = ({id, title, description, deleteNote, password, updateNote, isUnlocked, unlockNoteFn}) => {
-    console.log(title, isUnlocked)
     const [editingMode, setEditingMode] = useState(false)
     const [viewingMode, setViewingMode] = useState(false)
     const [unlockMode, setUnlockMode] = useState(isUnlocked)
     const [passwordMode, setPasswordMode] = useState(false)
     const [passwordError, setPasswordError]= useState(false)
-    console.log(isUnlocked, unlockMode)
+    const [noteTitle, setNoteTitle] = useState(title);
+    const [noteDescription, setNoteDescription] = useState(description)
+
     const editTitleRef = useRef(title)
     const editContentRef = useRef(description)
     const enteredPasswordRef = useRef("")
@@ -29,6 +30,8 @@ const Note = ({id, title, description, deleteNote, password, updateNote, isUnloc
         const updatedTitle = editTitleRef.current.value;
         const updatedContent = editContentRef.current.value;
         updateNote({_id: id, title: updatedTitle, description: updatedContent, isUnlocked: unlockMode})
+        setNoteTitle(updatedTitle);
+        setNoteDescription(updatedContent)
         setEditingMode(false)
     }
 
@@ -61,12 +64,12 @@ const Note = ({id, title, description, deleteNote, password, updateNote, isUnloc
 
 
     return (
-        <div className={s.noteContainer}>
-            { !editingMode && <> <h1>{title}</h1> <FontAwesomeIcon className={s.icon} size="2x" onClick={unlockMode ? lockNote : unlockNote} icon={unlockMode ? faUnlock : faLock} /> </> }
+        <>
+            { !editingMode && <> <h1>{noteTitle}</h1> <FontAwesomeIcon className={s.icon} size="2x" onClick={unlockMode ? lockNote : unlockNote} icon={unlockMode ? faUnlock : faLock} /> </> }
             { passwordMode && <> <h2>Enter your password </h2> <div style={{display: "flex", alignItems: "center"}}><input ref={enteredPasswordRef} className={!passwordError ? s.passwordField : s.passwordError} type="password"/> <FontAwesomeIcon className={s.checkIcon} onClick={handleNoteView} icon={faCheckCircle} size="2x" /></div></>}
             <div className={!viewingMode ? s.buttonsContainer : s.viewingModeContainer}>
                 {viewingMode && unlockMode && !editingMode &&
-                <p className={s.contentTextView}>{description}</p>
+                <p className={s.contentTextView}>{noteDescription}</p>
                 }
                 {!editingMode ?
                 <>
@@ -97,7 +100,7 @@ const Note = ({id, title, description, deleteNote, password, updateNote, isUnloc
                 
                 
             </div>
-        </div>
+        </>
     )
 }
 

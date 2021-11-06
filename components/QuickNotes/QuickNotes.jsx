@@ -11,24 +11,50 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
+
 const QuickNotes = ({ fetchedNotes, password }) => {
-    const [notes, setNotes] = useState(fetchedNotes)
+
+    console.log(password)
+
     const [addingNote, setAddingNote] = useState(false)
     const [userSetup, setUserSetup] = useState(false)
     const [userPassword, setUserPassword] = useState(null)
     const [passwordError, setPasswordError] = useState(false)
 
+    const [notes, setNotes] = useState(fetchedNotes)
+
     const titleRef = useRef(null)
     const contentRef = useRef(null)
     const passwordRef = useRef(null)
     const confirmPasswordRef = useRef(null)
+    const resetDataRef = useRef(false)
+    const [updating, setUpdating] = useState([]);
 
-    useEffect(() => {
+    useEffect(async () => {
         if(password.length){
             setUserSetup(true);
             setUserPassword(password[0].password)
         }
-    })
+
+        if(resetDataRef.current){
+            const updatedNotes = await getNotes()
+            setNotes([])
+            setNotes(updatedNotes)
+            resetDataRef.current = false;
+        }
+        
+    }, [updating])
+
+    const getNotes = async () => {
+        const res = await fetch('http://localhost:3000/api/notes');
+        const { data } = await res.json();
+        return data;
+    }
+
+    const initiateUpdate = () => {
+        resetDataRef.current = true;
+        setUpdating([])
+    }
 
     const handleUserPassword = async () => {
         const password = passwordRef.current.value;
@@ -50,20 +76,18 @@ const QuickNotes = ({ fetchedNotes, password }) => {
     }
 
     const updateNote = async (obj) => {
+        console.log(obj, "UPDATING")
         try {
-            await fetch(`http://localhost:3000/api/notes/${obj.id}`,{
+            await fetch(`http://localhost:3000/api/notes/${obj._id}`,{
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({title: obj.title, description: obj.description, isUnlocked: obj.isUnlocked})
+                body: JSON.stringify({_id: obj.id, title: obj.title, description: obj.description, isUnlocked: obj.isUnlocked})
             })
 
-            const res = await fetch('http://localhost:3000/api/notes');
-            const { data } = await res.json();
-
-            setNotes(data);
+            initiateUpdate()
         } catch (error) {
             console.log(error)
         }
@@ -78,11 +102,7 @@ const QuickNotes = ({ fetchedNotes, password }) => {
             },
             body: JSON.stringify({ isUnlocked: true})
         })
-
-        const res = await fetch('http://localhost:3000/api/notes');
-            const { data } = await res.json();
-
-        setNotes(data);
+        initiateUpdate()
     }
 
     
@@ -102,7 +122,7 @@ const QuickNotes = ({ fetchedNotes, password }) => {
                 body: JSON.stringify(form)
             });
 
-            setNotes([...notes, form])
+            initiateUpdate()
 
         } catch (error) {
             console.log(error)
@@ -121,12 +141,8 @@ const QuickNotes = ({ fetchedNotes, password }) => {
                 }
             })
 
-            const res = await fetch('http://localhost:3000/api/notes');
-            const { data } = await res.json();
-
-            console.log(data, "HI")
-
-            setNotes(data)
+            initiateUpdate()
+    
         } catch (error) {
             console.log(error);
         }
@@ -156,7 +172,9 @@ const QuickNotes = ({ fetchedNotes, password }) => {
                     }
                 </div>
                 {notes.map((note, i) => (
-                    <Note key={i} id={note._id} title={note.title} description={note.description} deleteNote={deleteNote} password={userPassword} updateNote={updateNote} isUnlocked={note.isUnlocked} unlockNoteFn={unlockNote}/>
+                    <div className={s.noteContainer} style={{animationDelay: `${i}00ms`}}>
+                        <Note key={i} id={note._id} title={note.title} description={note.description} deleteNote={deleteNote} password={userPassword} updateNote={updateNote} isUnlocked={note.isUnlocked} unlockNoteFn={unlockNote}/>
+                    </div>
                 ))}
             </div> :  
             <div className={s.userSetupForm}>
@@ -179,7 +197,6 @@ QuickNotes.getInitialProps = async () => {
     const { data } = await res.json();
     const pass = await fetch("http://localhost:3000/api/notes/password");
     const { password } = await pass.json();
-    console.log(data)
     return { fetchedNotes: data, password};
 }
 
