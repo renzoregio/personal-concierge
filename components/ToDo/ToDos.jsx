@@ -2,6 +2,8 @@ import s from "./ToDos.module.css"
 import {useState, useRef} from "react"
 import { BackToMain } from "../Home"
 
+import fetch from 'isomorphic-unfetch';
+
 
 import { faCheck, faCheckCircle, faTrash, faHistory } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -95,4 +97,8 @@ export default function ToDos(){
             <BackToMain />
         </div>
     )
+}
+
+ToDos.getInitialProps = async() => {
+
 }
