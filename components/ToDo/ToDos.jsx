@@ -11,16 +11,31 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
-const ToDos = ({ fetchedToDos }) => {
-    console.log(fetchedToDos)
-    const [toDos, setToDos] = useState(fetchedToDos)
-    const [completedToDos, setCompletedToDos] = useState([])
+const getToDos = async() => {
+    const res = await fetch("http://localhost:3000/api/todos");
+    const { data } = await res.json();
+    return data
+}
+
+
+const ToDos = ({ initialPending, initialCompleted }) => {
+    console.log(initialPending)
+    const [toDos, setToDos] = useState(initialPending)
+    const [completedToDos, setCompletedToDos] = useState(initialCompleted)
     const textBox = useRef(null)
     const clickedPendingToDos = useRef([])
     const clickedCompletedToDos = useRef([])
 
+    const updateToDos = async() => {
+        const data = await getToDos();
+        const pending = data.filter(toDo => !toDo.isCompleted)
+        const completed = data.filter(toDo => toDo.isCompleted)
 
-    const onSubmit = async(e) => {
+        setToDos(pending)
+        setCompletedToDos(completed)
+    }
+
+    const addTask = async(e) => {
         e.preventDefault();
         try {
             await fetch("http://localhost:3000/api/todos", {
@@ -34,49 +49,58 @@ const ToDos = ({ fetchedToDos }) => {
         } catch (error) {
             console.log(error);
         }
-
-        getToDos();
-      
-        
+        updateToDos();
         textBox.current.value = "";
     }
 
-    const getToDos = async() => {
-        const res = await fetch("http://localhost:3000/api/todos");
-        const { data } = await res.json();
-        setToDos(data);
-    }
-    
-    const completeTask = (x) => {
-        let currentToDo = x.textContent
-        setCompletedToDos([...completedToDos, currentToDo].sort())
-        const filteredToDos = toDos.filter(toDo => {
-            if(toDo !== currentToDo){
-                return toDo
-            }
-        })
-        setToDos([...filteredToDos].sort())
+    const completeTask = async(id) => {
+        try {
+            await fetch(`http://localhost:3000/api/todos/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ isCompleted: true })
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
+        updateToDos();
     }
 
-    const removeTask = (x) => {
-        let currentToDo = x.textContent;
-        const filteredCompletedToDos = completedToDos.filter(toDo => {
-            if(toDo !== currentToDo){
-                return toDo
-            }
-        })
-        setCompletedToDos([...filteredCompletedToDos].sort())
+    const deleteTask = async(id) => {
+        try {
+            await fetch(`http://localhost:3000/api/todos/${id}`,{
+                method: "DELETE",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                }
+            })
+        } catch (error) {
+         console.log(error)   
+        }
+
+        updateToDos();
     }
 
-    const returnTask = (x) => {
-        let currentToDo = x.textContent;
-        const filteredCompletedToDos = completedToDos.filter(toDo => {
-            if(toDo !== currentToDo){
-                return toDo
-            }
-        })
-        setCompletedToDos([...filteredCompletedToDos].sort())
-        setToDos([...toDos, currentToDo].sort())
+    const returnTask = async(id) => {
+        try {
+            await fetch(`http://localhost:3000/api/todos/${id}`,{
+                method: "PUT",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ isCompleted: false })
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
+        updateToDos();
     }
 
     return (
@@ -86,7 +110,7 @@ const ToDos = ({ fetchedToDos }) => {
                     <h1 className={s.title}>add a to do</h1>
                     <form className={s.toDoForm}>
                         <input className={s.textBox} ref={textBox} type="text" />
-                        <button className={s.submitBtn} onClick={(e) => onSubmit(e)}>
+                        <button className={s.submitBtn} onClick={(e) => addTask(e)}>
                             <FontAwesomeIcon size="2x" icon={faCheckCircle}/>
                         </button>
                     </form>
@@ -94,7 +118,7 @@ const ToDos = ({ fetchedToDos }) => {
                         { toDos.map((toDo, i) => (
                             <div className={s.toDoContainer} key={i}>
                                 <span ref={refElement => clickedPendingToDos.current[i] = refElement}  className={s.toDoText}>{toDo.task}</span>
-                                <FontAwesomeIcon onClick={() => completeTask(clickedPendingToDos.current[i])} size="2x" className={`${s.icon} ${s.checkIcon}`} icon={faCheck}/>
+                                <FontAwesomeIcon onClick={() => completeTask(toDo._id)} size="2x" className={`${s.icon} ${s.checkIcon}`} icon={faCheck}/>
                             </div>
                         ))}
                     </div>
@@ -108,8 +132,8 @@ const ToDos = ({ fetchedToDos }) => {
                     { completedToDos.map((toDo, i) => (
                         <div className={s.toDoContainer} key={i}>
                             <span ref={refElement => clickedCompletedToDos.current[i] = refElement} className={`${s.toDoText} ${s.completed}`}>{toDo.task}</span>
-                            <FontAwesomeIcon size="2x" onClick={() => removeTask(clickedCompletedToDos.current[i])} className={`${s.icon} ${s.trashIcon}`} icon={faTrash} />
-                            <FontAwesomeIcon size="2x" onClick={() => returnTask(clickedCompletedToDos.current[i])} className={`${s.icon} ${s.historyIcon}`} icon={faHistory} />
+                            <FontAwesomeIcon size="2x" onClick={() => deleteTask(toDo._id)} className={`${s.icon} ${s.trashIcon}`} icon={faTrash} />
+                            <FontAwesomeIcon size="2x" onClick={() => returnTask(toDo._id)} className={`${s.icon} ${s.historyIcon}`} icon={faHistory} />
                         </div>
                     ))}
                     </div>
@@ -122,9 +146,10 @@ const ToDos = ({ fetchedToDos }) => {
 }
 
 ToDos.getInitialProps = async() => {
-    const res = await fetch("http://localhost:3000/api/todos");
-    const {data} = await res.json();
-    return { fetchedToDos: data }
+    const data = await getToDos();
+    const pending = data.filter(toDo => !toDo.isCompleted)
+    const completed = data.filter(toDo => toDo.isCompleted)
+    return { initialPending: pending, initialCompleted: completed }
 }
 
 export default ToDos;

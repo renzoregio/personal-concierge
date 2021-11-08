@@ -142,15 +142,4 @@
   text-align: center;
   margin: 0px 10px;
   position: relative;
-  animation: generateNoteAnimation 0.5s linear forwards;
-  opacity: 0%;
-}
-
-@keyframes generateNoteAnimation {
-  from {
-    opacity: 0%;
-  }
-  to {
-    opacity: 100%;
-  }
 }
