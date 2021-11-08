@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import s from "./Budget.module.css"
 import { BackToMain } from "../Home";
 
+import fetch from 'isomorphic-unfetch';
+
 
 import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,25 +11,46 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
-const Budget = () => {
-    const [percentage, setPercentage] = useState(null);
-    const [total, setTotal] = useState(null);
-    const [fixedTotal, setFixedTotal] = useState(0)
-    const [startProgram, setStartProgram] = useState(false);
-    const [foodCount, setFoodCount] = useState(0)
-    const [carCount, setCarCount] = useState(0)
-    const [shoppingCount, setShoppingCount] = useState(0)
-    const [groceryCount, setGroceryCount] = useState(0)
-    const [miscCount, setMiscCount] = useState(0)
+const Budget = ({ budget }) => {
+    const { runningFixedTotal, runningTotal, runningPercentage, runningFoodCount, runningCarCount,
+    runningShoppingCount, runningGroceryCount, runningMiscCount
+    } = budget[0];
+
+    const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
+
+    const [percentage, setPercentage] = useState(runningPercentage);
+    const [total, setTotal] = useState(runningTotal);
+    const [fixedTotal, setFixedTotal] = useState(runningFixedTotal)
+    const [startProgram, setStartProgram] = useState(fixedTotal > 0 ? true : false);
+    const [foodCount, setFoodCount] = useState(runningFoodCount)
+    const [carCount, setCarCount] = useState(runningCarCount)
+    const [shoppingCount, setShoppingCount] = useState(runningShoppingCount)
+    const [groceryCount, setGroceryCount] = useState(runningGroceryCount)
+    const [miscCount, setMiscCount] = useState(runningMiscCount)
 
     const totalRef = useRef(null);
     const expenseRef = useRef(null);
     
-    const setBudgetFn = (e) => {
+    const setBudgetFn = async (e) => {
         e.preventDefault()
+
+        try {
+            await fetch("http://localhost:3000/api/budget", {
+                method: "POST",
+                headers: headerObj,
+                body: JSON.stringify({ 
+                    runningFixedTotal: +totalRef.current.value,
+                    runningTotal: +totalRef.current.value
+                 })
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
+
         setTotal(totalRef.current.value)
         setPercentage(100);
-        setFixedTotal(totalRef.current.value)
+        setFixedTotal(total)
     }
 
 
@@ -108,6 +131,12 @@ const Budget = () => {
             <BackToMain />
         </div>
     )
+}
+
+Budget.getInitialProps = async () => {
+    const res = await fetch("http://localhost:3000/api/budget")
+    const { budget } = await res.json()
+    return { budget }
 }
 
 export default Budget;
