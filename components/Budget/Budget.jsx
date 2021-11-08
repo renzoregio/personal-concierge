@@ -22,6 +22,7 @@ const Budget = ({ budget }) => {
     runningShoppingCount, runningGroceryCount, runningMiscCount, _id
     } = budget[0];
 
+    const dynamicUrl = `http://localhost:3000/api/budget/${_id}`
     const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
 
     const [percentage, setPercentage] = useState(runningPercentage);
@@ -33,6 +34,15 @@ const Budget = ({ budget }) => {
     const [shoppingCount, setShoppingCount] = useState(runningShoppingCount)
     const [groceryCount, setGroceryCount] = useState(runningGroceryCount)
     const [miscCount, setMiscCount] = useState(runningMiscCount)
+
+
+    const categories = [
+        { name: "food", badgeCount: foodCount, icon: faPizzaSlice},
+        { name: "grocery", badgeCount: groceryCount, icon: faCartPlus},
+        { name: "car", badgeCount: carCount, icon: faCar},
+        { name: "shopping", badgeCount: shoppingCount, icon: faShoppingBag},
+        { name: "misc", badgeCount: miscCount, icon: faEllipsisH},
+    ]
 
     const totalRef = useRef(null);
     const expenseRef = useRef(null);
@@ -83,7 +93,7 @@ const Budget = ({ budget }) => {
         const calculatedPercentage = (expense / fixedTotal) * 100;
 
         try {
-            await fetch(`http://localhost:3000/api/budget/${_id}`, {
+            await fetch(dynamicUrl, {
                 method: "PUT",
                 headers: headerObj,
                 body: JSON.stringify({ 
@@ -100,25 +110,30 @@ const Budget = ({ budget }) => {
         expenseRef.current.value = "";
     }
 
-    const categories = [
-        { name: "food", badgeCount: foodCount, icon: faPizzaSlice},
-        { name: "grocery", badgeCount: groceryCount, icon: faCartPlus},
-        { name: "car", badgeCount: carCount, icon: faCar},
-        { name: "shopping", badgeCount: shoppingCount, icon: faShoppingBag},
-        { name: "misc", badgeCount: miscCount, icon: faEllipsisH},
-    ]
+    const fetchBadgeCount = async(updateObj) => {
+         try {
+            await fetch(dynamicUrl, {
+                method: "PUT",
+                headers: headerObj,
+                body: JSON.stringify(updateObj)
+            })
+            fetchBudget();
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
-    const incrementCount = (iconName) => {
+    const incrementCategoryBadgeCount = (iconName) => {
         if(iconName === "food"){
-            setFoodCount((prev) => prev += 1)
+            fetchBadgeCount({ runningFoodCount: foodCount + 1})
         } else if (iconName === "grocery"){
-            setGroceryCount((prev) => prev += 1)
+            fetchBadgeCount({ runningGroceryCount: groceryCount + 1})
         } else if (iconName === "car") {
-            setCarCount((prev) => prev += 1)
+            fetchBadgeCount({ runningCarCount: carCount + 1})
         } else if (iconName === "shopping"){
-            setShoppingCount((prev) => prev += 1)
+            fetchBadgeCount({ runningShoppingCount: shoppingCount + 1})
         } else {
-            setMiscCount((prev) => prev += 1)
+            fetchBadgeCount({ runningMiscCount: miscCount + 1})
         }
     }
 
@@ -148,7 +163,7 @@ const Budget = ({ budget }) => {
                         <h1 className={s.title}>What's your expense?</h1>
                         <div className={s.categories}>
                             {categories.map((category, i) => (
-                                <div className={s.categoryContainer} key={i} onClick={() => incrementCount(category.name)}>
+                                <div className={s.categoryContainer} key={i} onClick={() => incrementCategoryBadgeCount(category.name)}>
                                     <FontAwesomeIcon className={s.icon} size="2x" icon={category.icon}/>
                                     <span className={s.badge}>{category.badgeCount}</span>
                                 </div>
