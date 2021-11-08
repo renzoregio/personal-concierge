@@ -5,12 +5,15 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 import s from "./home.module.css"
+import { useRouter } from 'next/router'
+
+
+
 const ReturnHome = () => {
+    const router = useRouter();
     return(
-        <div className={s.homeBtn}>
-            <Link href="/">
+        <div onClick={() => router.push("/")}className={s.homeBtn}>
                 <FontAwesomeIcon icon={faHome} size="3x"/>
-            </Link>
         </div>
     )
 }

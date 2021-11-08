@@ -1,9 +1,9 @@
-import dbConnect from "../../../utils/dbConnect";
-import ToDo from "../../../models/ToDo";
+import dbConnect from "../../../utils/dbConnect"
+import ToDo from "../../../models/ToDo"
 
 dbConnect();
 
-export default async(req, res) => {
+export default async (req, res) => {
     const { method } = req;
 
     switch(method){
@@ -18,7 +18,7 @@ export default async(req, res) => {
         case 'POST':
             try {
                 const note = await ToDo.create(req.body);
-                res.status(201).json({ success: true })
+                res.status(201).json({ success: true, data: note })
             } catch (error) {
                 res.status(400).json({ success: false })
             }

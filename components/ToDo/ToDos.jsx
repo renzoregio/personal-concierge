@@ -1,5 +1,5 @@
 import s from "./ToDos.module.css"
-import {useState, useRef} from "react"
+import {useState, useRef, useEffect} from "react"
 import { BackToMain } from "../Home"
 
 import fetch from 'isomorphic-unfetch';
@@ -11,20 +11,42 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
-export default function ToDos(){
-
-    const [toDos, setToDos] = useState([])
+const ToDos = ({ fetchedToDos }) => {
+    console.log(fetchedToDos)
+    const [toDos, setToDos] = useState(fetchedToDos)
     const [completedToDos, setCompletedToDos] = useState([])
     const textBox = useRef(null)
     const clickedPendingToDos = useRef([])
     const clickedCompletedToDos = useRef([])
 
-    const onSubmit = (e) => {
+
+    const onSubmit = async(e) => {
         e.preventDefault();
-        setToDos([...toDos, textBox.current.value].sort())
+        try {
+            await fetch("http://localhost:3000/api/todos", {
+                method: 'POST',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({task: textBox.current.value, isCompleted: false})
+            })
+        } catch (error) {
+            console.log(error);
+        }
+
+        getToDos();
+      
+        
         textBox.current.value = "";
     }
 
+    const getToDos = async() => {
+        const res = await fetch("http://localhost:3000/api/todos");
+        const { data } = await res.json();
+        setToDos(data);
+    }
+    
     const completeTask = (x) => {
         let currentToDo = x.textContent
         setCompletedToDos([...completedToDos, currentToDo].sort())
@@ -71,7 +93,7 @@ export default function ToDos(){
                     <div className="toDoMainContainer">
                         { toDos.map((toDo, i) => (
                             <div className={s.toDoContainer} key={i}>
-                                <span ref={refElement => clickedPendingToDos.current[i] = refElement}  className={s.toDoText}>{toDo}</span>
+                                <span ref={refElement => clickedPendingToDos.current[i] = refElement}  className={s.toDoText}>{toDo.task}</span>
                                 <FontAwesomeIcon onClick={() => completeTask(clickedPendingToDos.current[i])} size="2x" className={`${s.icon} ${s.checkIcon}`} icon={faCheck}/>
                             </div>
                         ))}
@@ -85,7 +107,7 @@ export default function ToDos(){
                     <div> 
                     { completedToDos.map((toDo, i) => (
                         <div className={s.toDoContainer} key={i}>
-                            <span ref={refElement => clickedCompletedToDos.current[i] = refElement} className={`${s.toDoText} ${s.completed}`}>{toDo}</span>
+                            <span ref={refElement => clickedCompletedToDos.current[i] = refElement} className={`${s.toDoText} ${s.completed}`}>{toDo.task}</span>
                             <FontAwesomeIcon size="2x" onClick={() => removeTask(clickedCompletedToDos.current[i])} className={`${s.icon} ${s.trashIcon}`} icon={faTrash} />
                             <FontAwesomeIcon size="2x" onClick={() => returnTask(clickedCompletedToDos.current[i])} className={`${s.icon} ${s.historyIcon}`} icon={faHistory} />
                         </div>
@@ -100,5 +122,9 @@ export default function ToDos(){
 }
 
 ToDos.getInitialProps = async() => {
-
+    const res = await fetch("http://localhost:3000/api/todos");
+    const {data} = await res.json();
+    return { fetchedToDos: data }
 }
+
+export default ToDos;
