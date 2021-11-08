@@ -7,6 +7,19 @@ export default async(req, res) => {
     const { query: { id }, method } = req;
     switch(method){
         case "PUT":
+            try {
+                const budgetObj = await Budget.findByIdAndUpdate(id, req.body, {
+                    new: true,
+                    runValidators: true
+                })
+
+                if(!budgetObj){
+                    return res.status(400).json({ success: false})
+                }
+                res.status(200).json({ success: true, budget: budgetObj })
+            } catch (error) {
+                console.log(error)
+            }
             break;
         case "DELETE":
             try {

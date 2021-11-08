@@ -11,9 +11,15 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
+const getBudget = async () => {
+    const res = await fetch("http://localhost:3000/api/budget");
+    const { budget } = await res.json();
+    return budget 
+}
+
 const Budget = ({ budget }) => {
     const { runningFixedTotal, runningTotal, runningPercentage, runningFoodCount, runningCarCount,
-    runningShoppingCount, runningGroceryCount, runningMiscCount
+    runningShoppingCount, runningGroceryCount, runningMiscCount, _id
     } = budget[0];
 
     const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
@@ -31,6 +37,22 @@ const Budget = ({ budget }) => {
     const totalRef = useRef(null);
     const expenseRef = useRef(null);
     
+    const fetchBudget = async () => {
+
+        const budgetObj = await getBudget();
+        const { runningTotal, runningPercentage, runningFoodCount, runningCarCount,
+            runningShoppingCount, runningGroceryCount, runningMiscCount
+        } = budgetObj[0];
+
+        setTotal(runningTotal);
+        setPercentage(runningPercentage);
+        setFoodCount(runningFoodCount);
+        setCarCount(runningCarCount);
+        setShoppingCount(runningShoppingCount);
+        setGroceryCount(runningGroceryCount);
+        setMiscCount(runningMiscCount);
+    } 
+
     const setBudgetFn = async (e) => {
         e.preventDefault()
 
@@ -54,12 +76,27 @@ const Budget = ({ budget }) => {
     }
 
 
-    const addExpense = (e) => {
+    const addExpense = async (e) => {
         e.preventDefault()
+
         const expense = parseInt(expenseRef.current.value)
         const calculatedPercentage = (expense / fixedTotal) * 100;
-        setPercentage(percentage - calculatedPercentage)
-        setTotal(total - expense)
+
+        try {
+            await fetch(`http://localhost:3000/api/budget/${_id}`, {
+                method: "PUT",
+                headers: headerObj,
+                body: JSON.stringify({ 
+                    runningPercentage: percentage - calculatedPercentage,
+                    runningTotal: total - expense
+                })
+            })
+            fetchBudget();
+        } catch (error) {
+            console.log(error)
+        }
+
+        
         expenseRef.current.value = "";
     }
 
@@ -134,9 +171,8 @@ const Budget = ({ budget }) => {
 }
 
 Budget.getInitialProps = async () => {
-    const res = await fetch("http://localhost:3000/api/budget")
-    const { budget } = await res.json()
-    return { budget }
+    const budget = await getBudget();
+    return { budget } 
 }
 
 export default Budget;
