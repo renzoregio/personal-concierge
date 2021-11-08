@@ -1,5 +1,5 @@
 import s from "./ToDos.module.css"
-import {useState, useRef, useEffect} from "react"
+import {useState, useRef} from "react"
 import { BackToMain } from "../Home"
 
 import fetch from 'isomorphic-unfetch';
@@ -17,14 +17,38 @@ const getToDos = async() => {
     return data
 }
 
-
 const ToDos = ({ initialPending, initialCompleted }) => {
-    console.log(initialPending)
     const [toDos, setToDos] = useState(initialPending)
     const [completedToDos, setCompletedToDos] = useState(initialCompleted)
     const textBox = useRef(null)
-    const clickedPendingToDos = useRef([])
-    const clickedCompletedToDos = useRef([])
+
+    const fetchToDos = async(method, id, task = "", isCompletedBool = false) => {
+        const url = id === null ? "http://localhost:3000/api/todos" : `http://localhost:3000/api/todos/${id}`;
+        const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
+        try {
+            if(method === "GET" || method === "DELETE"){
+                await fetch(url, {
+                    method: method,
+                    headers: headerObj,
+                })
+            } else if (method === "POST"){
+                await fetch(url, {
+                    method: method,
+                    headers: headerObj,
+                    body: JSON.stringify({ task: task })
+                })
+            } else if (method === "PUT"){
+                await fetch(url, {
+                    method: method,
+                    headers: headerObj,
+                    body: JSON.stringify({ isCompleted : isCompletedBool })
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        updateToDos();
+    }
 
     const updateToDos = async() => {
         const data = await getToDos();
@@ -35,72 +59,22 @@ const ToDos = ({ initialPending, initialCompleted }) => {
         setCompletedToDos(completed)
     }
 
-    const addTask = async(e) => {
+    const addTask = (e) => {
         e.preventDefault();
-        try {
-            await fetch("http://localhost:3000/api/todos", {
-                method: 'POST',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({task: textBox.current.value, isCompleted: false})
-            })
-        } catch (error) {
-            console.log(error);
-        }
-        updateToDos();
+        fetchToDos("POST", null, textBox.current.value);
         textBox.current.value = "";
     }
 
-    const completeTask = async(id) => {
-        try {
-            await fetch(`http://localhost:3000/api/todos/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ isCompleted: true })
-            })
-        } catch (error) {
-            console.log(error)
-        }
-
-        updateToDos();
+    const completeTask = (id) => {
+        fetchToDos("PUT", id, null, true);
     }
 
-    const deleteTask = async(id) => {
-        try {
-            await fetch(`http://localhost:3000/api/todos/${id}`,{
-                method: "DELETE",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                }
-            })
-        } catch (error) {
-         console.log(error)   
-        }
-
-        updateToDos();
+    const deleteTask = (id) => {
+        fetchToDos("DELETE", id, null, null);
     }
 
-    const returnTask = async(id) => {
-        try {
-            await fetch(`http://localhost:3000/api/todos/${id}`,{
-                method: "PUT",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ isCompleted: false })
-            })
-        } catch (error) {
-            console.log(error)
-        }
-
-        updateToDos();
+    const returnTask = (id) => {
+        fetchToDos("PUT", id, null)
     }
 
     return (
@@ -117,7 +91,7 @@ const ToDos = ({ initialPending, initialCompleted }) => {
                     <div className="toDoMainContainer">
                         { toDos.map((toDo, i) => (
                             <div className={s.toDoContainer} key={i}>
-                                <span ref={refElement => clickedPendingToDos.current[i] = refElement}  className={s.toDoText}>{toDo.task}</span>
+                                <span  className={s.toDoText}>{toDo.task}</span>
                                 <FontAwesomeIcon onClick={() => completeTask(toDo._id)} size="2x" className={`${s.icon} ${s.checkIcon}`} icon={faCheck}/>
                             </div>
                         ))}
@@ -131,7 +105,7 @@ const ToDos = ({ initialPending, initialCompleted }) => {
                     <div> 
                     { completedToDos.map((toDo, i) => (
                         <div className={s.toDoContainer} key={i}>
-                            <span ref={refElement => clickedCompletedToDos.current[i] = refElement} className={`${s.toDoText} ${s.completed}`}>{toDo.task}</span>
+                            <span className={`${s.toDoText} ${s.completed}`}>{toDo.task}</span>
                             <FontAwesomeIcon size="2x" onClick={() => deleteTask(toDo._id)} className={`${s.icon} ${s.trashIcon}`} icon={faTrash} />
                             <FontAwesomeIcon size="2x" onClick={() => returnTask(toDo._id)} className={`${s.icon} ${s.historyIcon}`} icon={faHistory} />
                         </div>
