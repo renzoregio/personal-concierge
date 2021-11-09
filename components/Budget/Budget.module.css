@@ -54,6 +54,14 @@
   border: 4px solid black;
 }
 
+.getBudgetForm {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .gradientStyle {
   background-image: linear-gradient(
     to right top,
@@ -185,4 +193,55 @@
 
   font-weight: bold;
   margin-top: 35px;
+}
+
+/* REPORT */
+
+.generateReportBtn {
+  border: 3px solid black;
+  background: transparent;
+  padding: 15px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.reportCloseBtn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin-right: 20px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.reportContainer {
+  width: 100%;
+  height: auto;
+  border: 5px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: white;
+  border-radius: 50px;
+  box-shadow: 0px 18px 22px;
+  position: relative;
+}
+
+.reportContainer > div {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.reportContainer > .reportCategory {
+  font-size: 30px;
+  text-transform: uppercase;
+}
+
+.reportMainText {
+  font-size: 40px;
+  text-transform: uppercase;
+  font-weight: bold;
 }

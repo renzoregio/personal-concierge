@@ -5,7 +5,7 @@ import { BackToMain } from "../Home";
 import fetch from 'isomorphic-unfetch';
 
 
-import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag, faTimes, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -32,8 +32,11 @@ const Budget = ({ budget }) => {
     const [groceryCount, setGroceryCount] = useState(0)
     const [miscCount, setMiscCount] = useState(0)
     const [error, setError] = useState(false)
+    const [generateReport, setGenerateReport] = useState(false)
+    const [badges, setBadges] = useState([]);
     const totalRef = useRef(null);
     const expenseRef = useRef(null);
+    
 
     useEffect(() => {
         if(budget.length){
@@ -72,6 +75,7 @@ const Budget = ({ budget }) => {
             runningShoppingCount, runningGroceryCount, runningMiscCount, _id
         } = budgetObj[0];
         setBudgetId(_id)
+        setFixedTotal(runningFixedTotal);
         setTotal(runningTotal);
         setPercentage(runningPercentage);
         setFoodCount(runningFoodCount);
@@ -175,55 +179,90 @@ const Budget = ({ budget }) => {
 
     }
 
+    const createReport = async() => {
+        await fetchBudget();
+        setBadges([foodCount, groceryCount, carCount, shoppingCount, miscCount])
+        setGenerateReport(true)
+    }
+
+    const removeReport = ()=> {
+        resetBudget();
+        setGenerateReport(false)
+    }
     return(
         <div className={s.container}> 
-            <div>
-                <div className={s.budgetMeterContainer}>
-                    <div className={`${s.budgetMeter} ${percentage && s.gradientStyle}`} style={{ height: `${percentage}%` }}>
-                        <h1 className={s.totalMeter}>${total}</h1>
-                    </div>
-                </div>
-
+            { !generateReport && 
                 <div>
-                    { !startProgram && <button onClick={() => {setStartProgram(true)}}  className={s.startBtn}>Start Budgeting</button>}
-                    { startProgram && !total &&
-                    <> 
-                        <h1 className={s.title}>What's your budget?</h1>
-                        <form className={s.form}>
-                            <input className={s.textBox} type="text" ref={totalRef} />
-                            <button onClick={(e) => setBudgetFn(e)} className={s.submitBtn}>
-                                <FontAwesomeIcon className={s.icon} icon={faCheckCircle} size="2x" />
-                            </button>
-                        </form>
-                    </>}
-                    { total > 0 && 
-                    <div className={s.expenseContainer}>
-                        <h1 className={s.title}>What's your expense?</h1>
-                        <div className={s.categories}>
-                            {categories.map((category, i) => (
-                                <div className={s.categoryContainer} key={i} onClick={() => incrementCategoryBadgeCount(category.name)}>
-                                    <FontAwesomeIcon className={s.icon} size="2x" icon={category.icon}/>
-                                    <span className={s.badge}>{category.badgeCount}</span>
-                                </div>
-                            ))}
+                    <div className={s.budgetMeterContainer}>
+                        <div className={`${s.budgetMeter} ${percentage && s.gradientStyle}`} style={{ height: `${percentage}%` }}>
+                            <h1 className={s.totalMeter}>${total}</h1>
                         </div>
-                        <form className={s.form}>
-                            <div className={s.expense}>
-                                <button className={s.submitBtn} onClick={(e) => addExpense(e)}>
-                                    <FontAwesomeIcon className={s.icon} size="2x" icon={faDollarSign} />
-                                </button>
-                                <input className={s.textBox} ref={expenseRef} type="text"/>
-                            </div>
-                            { error && <div className={s.errorMessage}>
-                                <span>ERROR: You entered a number that is larger than the total</span>
-                            </div>}
-                        </form>
-                        <div onClick={resetBudget} className={s.resetBtn}>reset budget</div>
                     </div>
-                    }
+
+                    <div>
+                        { !startProgram && <button onClick={() => {setStartProgram(true)}}  className={s.startBtn}>Start Budgeting</button>}
+                        { startProgram && !total &&
+                        <> 
+                            <h1 className={s.title}>What's your budget?</h1>
+                            <form className={s.getBudgetForm}>
+                                <input className={s.textBox} type="text" ref={totalRef} />
+                                <button onClick={(e) => setBudgetFn(e)} className={s.submitBtn}>
+                                    <FontAwesomeIcon className={s.icon} icon={faCheckCircle} size="2x" />
+                                </button>
+                            </form>
+                        </>}
+                        { total > 0 && 
+                        <div className={s.expenseContainer}>
+                            <h1 className={s.title}>What's your expense?</h1>
+                            <div className={s.categories}>
+                                {categories.map((category, i) => (
+                                    <div className={s.categoryContainer} key={i} onClick={() => incrementCategoryBadgeCount(category.name)}>
+                                        <FontAwesomeIcon className={s.icon} size="2x" icon={category.icon}/>
+                                        <span className={s.badge}>{category.badgeCount}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <form className={s.form}>
+                                <div className={s.expense}>
+                                    <button className={s.submitBtn} onClick={(e) => addExpense(e)}>
+                                        <FontAwesomeIcon className={s.icon} size="2x" icon={faDollarSign} />
+                                    </button>
+                                    <input className={s.textBox} ref={expenseRef} type="text"/>
+                                </div>
+                                { error && <div className={s.errorMessage}>
+                                    <span>ERROR: You entered a number that is larger than the total</span>
+                                </div>}
+                            </form>
+                            <div onClick={resetBudget} className={s.resetBtn}>reset budget</div>
+                            { !generateReport && <button onClick={createReport} className={s.generateReportBtn}>Generate Report</button>}
+                        </div>
+                        }
+                    </div>
                 </div>
+            }
+            {generateReport && 
+                <div className={s.reportContainer}>
+                        <h1>YOUR BUDGET REPORT</h1>
+                        <div className={s.reportMainText}>
+                            <span>You started with</span>
+                            <span>${fixedTotal}</span>
+                        </div>
+                        { categories.map((category, i) => (
+                            <div key={i} className={s.reportCategory}>
+                                <span>{category.name}</span>
+                                <span>{badges[i]}</span>
+                            </div>
+                        ))}
+                        <div className={s.reportMainText}>
+                            <span>savings</span>
+                            <span>${total}</span>
+                        </div>
+                        <FontAwesomeIcon onClick={() => removeReport()} className={s.reportCloseBtn} icon={faTimesCircle} size="2x" />
+                </div>
+            }
+            <div>
+                <BackToMain />
             </div>
-            <BackToMain />
         </div>
     )
 }
