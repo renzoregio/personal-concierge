@@ -272,6 +272,12 @@
   margin-bottom: 30px;
 }
 
+.reportContainerStart > h1 {
+  letter-spacing: 5px;
+  margin: 100px 0px;
+  font-size: 60px;
+}
+
 .reportContainerStart > .reportCategory {
   font-size: 30px;
   text-transform: uppercase;

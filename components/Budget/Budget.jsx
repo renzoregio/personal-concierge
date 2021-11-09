@@ -5,7 +5,7 @@ import { BackToMain } from "../Home";
 import fetch from 'isomorphic-unfetch';
 
 
-import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag, faTimes, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag, faTimes, faTimesCircle, faCheck, faMoneyBill } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -34,6 +34,7 @@ const Budget = ({ budget }) => {
     const [error, setError] = useState(false)
     const [generateReport, setGenerateReport] = useState(false)
     const [badges, setBadges] = useState([]);
+    const [topExpenses, setTopExpenses] = useState([])
     const totalRef = useRef(null);
     const expenseRef = useRef(null);
     
@@ -176,12 +177,24 @@ const Budget = ({ budget }) => {
         } catch (error) {
             console.log(error)
         }
+    }
 
+    const getTopExpenses = () => {
+        const badges = [foodCount, groceryCount, carCount, shoppingCount, miscCount]
+        const mostExpenses = []
+        const maxNum = Math.max(...badges) 
+        for(let i = 0; i < badges.length; i++){
+            if(badges[i] === maxNum){
+                mostExpenses.push(i);
+            }
+        }
+        setTopExpenses([...mostExpenses]);
     }
 
     const createReport = async() => {
         await fetchBudget();
         setBadges([foodCount, groceryCount, carCount, shoppingCount, miscCount])
+        getTopExpenses()
         setGenerateReport(true)
     }
 
@@ -257,6 +270,14 @@ const Budget = ({ budget }) => {
                             <span>savings</span>
                             <span>${total}</span>
                         </div>
+                        <h1>Top Expenses</h1>
+                        {topExpenses.map((expense, i) => (
+                            <div key={i} className={s.reportMainText} style={{justifyContent: "center", alignItems: "center"}}>
+                                <FontAwesomeIcon icon={faDollarSign} style={{marginRight: "20px"}} />
+                                <span>{categories[expense].name}</span>
+                            </div>
+                        ))}
+                        <div></div>
                         <FontAwesomeIcon onClick={() => removeReport()} className={s.reportCloseBtn} icon={faTimesCircle} size="2x" />
                 </div>
             }
