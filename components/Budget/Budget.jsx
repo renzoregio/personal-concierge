@@ -31,6 +31,7 @@ const Budget = ({ budget }) => {
     const [shoppingCount, setShoppingCount] = useState(0)
     const [groceryCount, setGroceryCount] = useState(0)
     const [miscCount, setMiscCount] = useState(0)
+    const [error, setError] = useState(false)
     const totalRef = useRef(null);
     const expenseRef = useRef(null);
 
@@ -55,10 +56,6 @@ const Budget = ({ budget }) => {
         setMiscCount(runningMiscCount)
         setStartProgram(true)
     }
-
-    console.log(total)
-
-    
 
     const categories = [
         { name: "food", badgeCount: foodCount, icon: faPizzaSlice},
@@ -92,6 +89,7 @@ const Budget = ({ budget }) => {
                 method: "POST",
                 headers: headerObj,
                 body: JSON.stringify({ 
+                    runningPercentage: 100,
                     runningFixedTotal: +totalRef.current.value,
                     runningTotal: +totalRef.current.value
                  })
@@ -106,24 +104,26 @@ const Budget = ({ budget }) => {
 
     const addExpense = async (e) => {
         e.preventDefault()
-
-        const expense = parseInt(expenseRef.current.value)
-        const calculatedPercentage = (expense / fixedTotal) * 100;
-        console.log(calculatedPercentage)
-        try {
-            await fetch(`http://localhost:3000/api/budget/${budgetId}`, {
-                method: "PUT",
-                headers: headerObj,
-                body: JSON.stringify({ 
-                    runningPercentage: percentage - calculatedPercentage,
-                    runningTotal: total - expense
+        const amountEntered = parseInt(expenseRef.current.value);
+        if(amountEntered <= total){
+            const expense = amountEntered
+            const calculatedPercentage = (expense / fixedTotal) * 100;
+            try {
+                await fetch(`http://localhost:3000/api/budget/${budgetId}`, {
+                    method: "PUT",
+                    headers: headerObj,
+                    body: JSON.stringify({ 
+                        runningPercentage: percentage - calculatedPercentage,
+                        runningTotal: total - expense
+                    })
                 })
-            })
-            await fetchBudget()
-        } catch (error) {
-            console.log(error)
+                await fetchBudget()
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
+            setError(true)
         }
-
         expenseRef.current.value = "";
     }
 
@@ -208,10 +208,15 @@ const Budget = ({ budget }) => {
                             ))}
                         </div>
                         <form className={s.form}>
-                            <button className={s.submitBtn} onClick={(e) => addExpense(e)}>
-                                <FontAwesomeIcon className={s.icon} size="2x" icon={faDollarSign} />
-                            </button>
-                            <input className={s.textBox} ref={expenseRef} type="text"/>
+                            <div className={s.expense}>
+                                <button className={s.submitBtn} onClick={(e) => addExpense(e)}>
+                                    <FontAwesomeIcon className={s.icon} size="2x" icon={faDollarSign} />
+                                </button>
+                                <input className={s.textBox} ref={expenseRef} type="text"/>
+                            </div>
+                            { error && <div className={s.errorMessage}>
+                                <span>ERROR: You entered a number that is larger than the total</span>
+                            </div>}
                         </form>
                         <div onClick={resetBudget} className={s.resetBtn}>reset budget</div>
                     </div>
