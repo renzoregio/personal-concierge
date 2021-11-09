@@ -32,6 +32,19 @@
   width: 30%;
 }
 
+.budgetContainer {
+  animation: fadeInAnimation 0.8s linear forwards;
+}
+
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0%;
+  }
+  to {
+    opactiy: 100%;
+  }
+}
+
 .title {
   letter-spacing: 10px;
   text-transform: uppercase;
@@ -215,7 +228,7 @@
   cursor: pointer;
 }
 
-.reportContainer {
+.reportContainerStart {
   width: 100%;
   height: auto;
   border: 5px solid black;
@@ -226,16 +239,40 @@
   border-radius: 50px;
   box-shadow: 0px 18px 22px;
   position: relative;
+  animation: fadeInAnimation 0.5s linear forwards;
 }
 
-.reportContainer > div {
+.reportContainerEnd {
+  width: 100%;
+  height: auto;
+  border: 5px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: white;
+  border-radius: 50px;
+  box-shadow: 0px 18px 22px;
+  position: relative;
+  animation: fadeOutAnimation 0.5s linear forwards;
+}
+
+@keyframes fadeOutAnimation {
+  from {
+    opacity: 100%;
+  }
+  to {
+    opacity: 0%;
+  }
+}
+
+.reportContainerStart > div {
   width: 80%;
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
 }
 
-.reportContainer > .reportCategory {
+.reportContainerStart > .reportCategory {
   font-size: 30px;
   text-transform: uppercase;
 }

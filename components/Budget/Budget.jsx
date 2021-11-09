@@ -185,14 +185,14 @@ const Budget = ({ budget }) => {
         setGenerateReport(true)
     }
 
-    const removeReport = ()=> {
-        resetBudget();
+    const removeReport = async ()=> {
+        await resetBudget();
         setGenerateReport(false)
     }
     return(
         <div className={s.container}> 
             { !generateReport && 
-                <div>
+                <div className={s.budgetContainer}>
                     <div className={s.budgetMeterContainer}>
                         <div className={`${s.budgetMeter} ${percentage && s.gradientStyle}`} style={{ height: `${percentage}%` }}>
                             <h1 className={s.totalMeter}>${total}</h1>
@@ -241,10 +241,10 @@ const Budget = ({ budget }) => {
                 </div>
             }
             {generateReport && 
-                <div className={s.reportContainer}>
+                <div className={generateReport ? s.reportContainerStart : s.reportContainerEnd}>
                         <h1>YOUR BUDGET REPORT</h1>
                         <div className={s.reportMainText}>
-                            <span>You started with</span>
+                            <span>starting budget</span>
                             <span>${fixedTotal}</span>
                         </div>
                         { categories.map((category, i) => (
