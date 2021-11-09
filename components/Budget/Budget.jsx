@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import s from "./Budget.module.css"
 import { BackToMain } from "../Home";
 
@@ -9,6 +9,7 @@ import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsi
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
+
 config.autoAddCss = false;
 
 const getBudget = async () => {
@@ -18,23 +19,46 @@ const getBudget = async () => {
 }
 
 const Budget = ({ budget }) => {
-    const { runningFixedTotal, runningTotal, runningPercentage, runningFoodCount, runningCarCount,
-    runningShoppingCount, runningGroceryCount, runningMiscCount, _id
-    } = budget[0];
-
-    const dynamicUrl = `http://localhost:3000/api/budget/${_id}`
     const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
+    
+    const [budgetId, setBudgetId] = useState(null)
+    const [percentage, setPercentage] = useState(20);
+    const [total, setTotal] = useState(0);
+    const [fixedTotal, setFixedTotal] = useState(0)
+    const [startProgram, setStartProgram] = useState(false);
+    const [foodCount, setFoodCount] = useState(0)
+    const [carCount, setCarCount] = useState(0)
+    const [shoppingCount, setShoppingCount] = useState(0)
+    const [groceryCount, setGroceryCount] = useState(0)
+    const [miscCount, setMiscCount] = useState(0)
+    const totalRef = useRef(null);
+    const expenseRef = useRef(null);
 
-    const [percentage, setPercentage] = useState(runningPercentage);
-    const [total, setTotal] = useState(runningTotal);
-    const [fixedTotal, setFixedTotal] = useState(runningFixedTotal)
-    const [startProgram, setStartProgram] = useState(fixedTotal > 0 ? true : false);
-    const [foodCount, setFoodCount] = useState(runningFoodCount)
-    const [carCount, setCarCount] = useState(runningCarCount)
-    const [shoppingCount, setShoppingCount] = useState(runningShoppingCount)
-    const [groceryCount, setGroceryCount] = useState(runningGroceryCount)
-    const [miscCount, setMiscCount] = useState(runningMiscCount)
+    useEffect(() => {
+        if(budget.length){
+            setInitial()
+        }
+    }, [])
 
+    const setInitial = () => {
+        const { runningTotal, runningFixedTotal, runningPercentage, runningFoodCount, runningCarCount,
+            runningShoppingCount, runningGroceryCount, runningMiscCount, _id
+        } = budget[0];
+        setBudgetId(_id)
+        setTotal(runningTotal)
+        setFixedTotal(runningFixedTotal)
+        setPercentage(runningPercentage)
+        setFoodCount(runningFoodCount)
+        setCarCount(runningCarCount)
+        setShoppingCount(runningShoppingCount)
+        setGroceryCount(runningGroceryCount)
+        setMiscCount(runningMiscCount)
+        setStartProgram(true)
+    }
+
+    console.log(total)
+
+    
 
     const categories = [
         { name: "food", badgeCount: foodCount, icon: faPizzaSlice},
@@ -43,17 +67,14 @@ const Budget = ({ budget }) => {
         { name: "shopping", badgeCount: shoppingCount, icon: faShoppingBag},
         { name: "misc", badgeCount: miscCount, icon: faEllipsisH},
     ]
-
-    const totalRef = useRef(null);
-    const expenseRef = useRef(null);
     
     const fetchBudget = async () => {
 
         const budgetObj = await getBudget();
-        const { runningTotal, runningPercentage, runningFoodCount, runningCarCount,
-            runningShoppingCount, runningGroceryCount, runningMiscCount
+        const { runningTotal, runningFixedTotal, runningPercentage, runningFoodCount, runningCarCount,
+            runningShoppingCount, runningGroceryCount, runningMiscCount, _id
         } = budgetObj[0];
-
+        setBudgetId(_id)
         setTotal(runningTotal);
         setPercentage(runningPercentage);
         setFoodCount(runningFoodCount);
@@ -79,10 +100,7 @@ const Budget = ({ budget }) => {
             console.log(error)
         }
 
-
-        setTotal(totalRef.current.value)
-        setPercentage(100);
-        setFixedTotal(total)
+        fetchBudget();
     }
 
 
@@ -91,9 +109,9 @@ const Budget = ({ budget }) => {
 
         const expense = parseInt(expenseRef.current.value)
         const calculatedPercentage = (expense / fixedTotal) * 100;
-
+        console.log(calculatedPercentage)
         try {
-            await fetch(dynamicUrl, {
+            await fetch(`http://localhost:3000/api/budget/${budgetId}`, {
                 method: "PUT",
                 headers: headerObj,
                 body: JSON.stringify({ 
@@ -101,18 +119,17 @@ const Budget = ({ budget }) => {
                     runningTotal: total - expense
                 })
             })
-            fetchBudget();
+            await fetchBudget()
         } catch (error) {
             console.log(error)
         }
 
-        
         expenseRef.current.value = "";
     }
 
     const fetchBadgeCount = async(updateObj) => {
          try {
-            await fetch(dynamicUrl, {
+            await fetch(`http://localhost:3000/api/budget/${budgetId}`, {
                 method: "PUT",
                 headers: headerObj,
                 body: JSON.stringify(updateObj)
@@ -137,11 +154,32 @@ const Budget = ({ budget }) => {
         }
     }
 
+    const resetBudget = async() => {
+        try {
+            await fetch(`http://localhost:3000/api/budget/${budgetId}`, {
+                method: "DELETE",
+                headers: headerObj
+            })
+            setStartProgram(false)
+            setTotal(0);
+            setBudgetId(null)
+            setPercentage(20);
+            setFoodCount(0);
+            setCarCount(0);
+            setShoppingCount(0);
+            setGroceryCount(0);
+            setMiscCount(0);
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
     return(
         <div className={s.container}> 
             <div>
                 <div className={s.budgetMeterContainer}>
-                    <div className={!percentage ? s.defaultBudgetMeter : s.budgetMeter} style={{ height: `${percentage}%` }}>
+                    <div className={`${s.budgetMeter} ${percentage && s.gradientStyle}`} style={{ height: `${percentage}%` }}>
                         <h1 className={s.totalMeter}>${total}</h1>
                     </div>
                 </div>
@@ -158,7 +196,7 @@ const Budget = ({ budget }) => {
                             </button>
                         </form>
                     </>}
-                    { total && 
+                    { total > 0 && 
                     <div className={s.expenseContainer}>
                         <h1 className={s.title}>What's your expense?</h1>
                         <div className={s.categories}>
@@ -175,7 +213,7 @@ const Budget = ({ budget }) => {
                             </button>
                             <input className={s.textBox} ref={expenseRef} type="text"/>
                         </form>
-                        <div className={s.resetBtn}>reset budget</div>
+                        <div onClick={resetBudget} className={s.resetBtn}>reset budget</div>
                     </div>
                     }
                 </div>

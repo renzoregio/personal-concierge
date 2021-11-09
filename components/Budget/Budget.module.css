@@ -52,6 +52,9 @@
   align-items: center;
   height: 100%;
   border: 4px solid black;
+}
+
+.gradientStyle {
   background-image: linear-gradient(
     to right top,
     #051937,
@@ -64,7 +67,6 @@
 
   animation: gradientBackground 5s linear infinite;
 }
-
 .defaultBudgetMeter {
   background-color: transparent;
   border-radius: 20px;

@@ -27,7 +27,7 @@ export default async(req, res) => {
                 if(!deletedBudgetObj){
                     return res.status(400).json({ success: false })
                 }
-                res.status(400).json({ success: true, data: {}})
+                res.status(200).json({ success: true, data: {}})
             } catch (error) {
                 res.status(400).json({ success: true, data: {}})
             }
