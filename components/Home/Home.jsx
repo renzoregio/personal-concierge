@@ -10,11 +10,11 @@ import ToDoButton from "./ToDoButton"
 export default function Home() {
 
     const arr = [
-        { icon: faCheckCircle, title: "To Do"},
-        { icon: faCalendar, title: "Daily Schedule"},
-        { icon: faStickyNote, title: "Quick Note"},
-        { icon: faDollarSign, title: "Budget"}, 
-        { icon: faUtensils, title: "Restaurant Recommendations"}
+        { icon: faCheckCircle, title: "To Do", slug: "to-do"},
+        { icon: faCalendar, title: "Daily Schedule", slug: "schedule"},
+        { icon: faStickyNote, title: "Quick Note", slug: "quick-notes"},
+        { icon: faDollarSign, title: "Budget", slug: "budget"}, 
+        { icon: faUtensils, title: "Restaurant Recommendations", slug: "restaurant-recommendations"}
     ]
 
     return(
@@ -24,7 +24,7 @@ export default function Home() {
             </span>
             <span className={s.subtitle}>What do you want to do today?</span>
             { arr.map((toDo, i) => (
-                <ToDoButton key={i} iconName={toDo.icon} title={toDo.title}/>
+                <ToDoButton key={i} iconName={toDo.icon} slug={toDo.slug} title={toDo.title}/>
             ))}
         </>
     )

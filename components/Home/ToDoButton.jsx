@@ -2,8 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import s from "./todo.module.css"
 import Link from "next/link"
 
-export default function ToDoButton({iconName, title}){
-    const slug = title.split(" ").join("").toLowerCase();
+export default function ToDoButton({iconName, title, slug}){
     return(
         <Link href={`/route/${slug}`}>
             <div className={s.container}>
