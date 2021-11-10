@@ -97,7 +97,7 @@ const Budget = ({ budget }) => {
                     runningPercentage: 100,
                     runningFixedTotal: +totalRef.current.value,
                     runningTotal: +totalRef.current.value
-                 })
+                 }),
             })
         } catch (error) {
             console.log(error)
