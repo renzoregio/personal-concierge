@@ -5,32 +5,59 @@ import fetch from 'isomorphic-unfetch';
 import { useState } from "react";
 
 
-import { faDollarSign, faSearch, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faStar, faStarHalf } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 
 const Recommendations = () => {
-    const [searchInitiated, setSearchInitiated] = useState(false)
     const cuisines=["burgers", "japanese", "thai", "fish and chips", "american"]
+    const [ratingsArr, setRatingsArr] = useState([])
     const [restaurants, setRestaurants] = useState([])
+
+
     const getRecommendations = async(term) => {
         try {
-            const rawData = await fetch(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=8&location=vancouver&term=${term}`, {
+            const rawData = await fetch(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=12&location=vancouver&term=${term}`, {
                 headers: {
                     Authorization: `Bearer ${process.env.YELP_KEY}`,
                     Origin: "localhost",
                     withCredentials: true,
                 }
             })
-            setSearchInitiated(true)
             const res = await rawData.json();
-            setRestaurants(res.businesses)
-            
+            let businesses = res.businesses;
+
+            setRatingsArr([])
+            const ratings = businesses.map(business => (business.rating))
+            ratings.forEach(rating => getRating(rating))
+
+            setRestaurants(businesses);
+
         } catch (error) {
             console.log(error)
         }
     }
+
+
+    const getRating = (rating) => {
+        const stars = []
+        const ratingArr = rating.toString().split(".")
+        for(let i = 0; i < ratingArr.length; i++){
+            let num = +ratingArr[i]
+            if(i === 0){
+                while(num > 0){
+                    stars.push("star")
+                    num--
+                }
+            } else {
+                stars.push(true);
+            } 
+        }
+        setRatingsArr(prevState => [...prevState, stars])
+    }
+
+
 
     return (
         <div className={s.container}>
@@ -49,30 +76,31 @@ const Recommendations = () => {
             </div>
             <div className={s.restaurantsContainer}>
                 {restaurants.map((restaurant, i) => (
-                    <div className={s.restaurantContainer}>
+                    <a href={restaurant.url} target="_blank" key={i}className={s.restaurantContainer}>
                         <div className={s.restaurantTextContainer}>
                             <span className={s.restaurantName}>{restaurant.name}</span>
                             <div className={s.restaurantRatingsContainer}>
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
+                                { ratingsArr.length === 12 && ratingsArr[i].map((rating, i) => {
+                                    if(rating === true){
+                                        return <FontAwesomeIcon icon={faStarHalf} key={i} />
+                                    } else if (rating === "star") {
+                                        return <FontAwesomeIcon icon={faStar} key={i}/>
+                                    }
+                                })}
                             </div>
                             <div className={s.restaurantRatingsContainer}>
-                                <FontAwesomeIcon icon={faDollarSign} />
-                                <FontAwesomeIcon icon={faDollarSign} />
-                                <FontAwesomeIcon icon={faDollarSign} />
+                                {restaurant.price}
                             </div>
                             <div className={s.restaurantRatingsContainer}>
-                                <span className={s.restaurantTransaction}>Delivery</span>
-                                <span className={s.restaurantTransaction}>Pickup</span>
+                                { restaurant.transactions.map((transaction, i) => (
+                                    <span key={i} className={s.restaurantTransaction}>{transaction}</span>
+                                ))} 
                             </div>
-                            <span className={s.restaurantAddress}>1058 Folsom St, San Francisco, CA 94103</span>
+                            <span className={s.restaurantAddress}>{restaurant.location.address1}, {restaurant.location.city} {restaurant.location.zip_code}</span>
 
                         </div>
                         <img className={s.restaurantImage} src={restaurant.image_url} />
-                    </div>
+                    </a>
                 ))}
             </div>
             <BackToMain />
