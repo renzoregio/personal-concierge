@@ -38,6 +38,13 @@
   box-shadow: 0px 10px 20px;
   margin-right: 30px;
   cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+  animation: fadeIn 0.2s linear forwards;
+}
+
+.searchBtn:hover,
+.utensilsBtn:hover {
+  box-shadow: 0px 5px 10px;
 }
 
 .utensilsBtn {
@@ -48,6 +55,7 @@
   box-shadow: 0px 10px 20px;
   margin-left: 30px;
   cursor: pointer;
+  animation: fadeIn 0.2s linear forwards;
 }
 
 .searchInput {
@@ -56,6 +64,8 @@
   border: 0;
   box-shadow: 0px 10px 20px;
   background: transparent;
+  animation: fadeIn 0.2s linear forwards;
+  outline: none;
 }
 
 .searchCategoriesContainer {
@@ -74,6 +84,7 @@
   cursor: pointer;
   box-shadow: 0px 10px 20px;
   transition: box-shadow 0.2s ease-in-out;
+  animation: fadeIn 0.2s linear forwards;
 }
 
 .categoryBubble:hover {

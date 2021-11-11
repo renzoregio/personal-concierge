@@ -2,7 +2,7 @@ import s from "./recommendations.module.css"
 import { BackToMain } from "../Home";
 
 import fetch from 'isomorphic-unfetch';
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 
 import { faSearch, faStar, faStarHalf, faUtensils } from '@fortawesome/free-solid-svg-icons'
@@ -15,6 +15,7 @@ const Recommendations = () => {
     const [ratingsArr, setRatingsArr] = useState([])
     const [restaurants, setRestaurants] = useState([])
     const [searchInitiated, setSearchInitiated] = useState(false)
+    const searchInputRef = useRef(null);
 
 
     const getRecommendations = async(term) => {
@@ -40,7 +41,13 @@ const Recommendations = () => {
         }
     }
 
-
+    const searchRecommendations = async (e) => {
+        e.preventDefault()
+        const { current: { value }} = searchInputRef;
+        await getRecommendations(value);
+        searchInputRef.current.value = ""
+        setSearchInitiated(false)
+    }
     const getRating = (rating) => {
         const stars = []
         const ratingArr = rating.toString().split(".")
@@ -70,10 +77,10 @@ const Recommendations = () => {
                 }
                 { searchInitiated && 
                     <>
-                        <input className={s.searchInput} type="text" placeholder="Search..." />
-                        <a onClick={() => setSearchInitiated(true)} className={s.utensilsBtn}>
+                        <input ref={searchInputRef} className={s.searchInput} type="text" placeholder="Search..." />
+                        <button onClick={(e) => searchRecommendations(e)} className={s.utensilsBtn}>
                             <FontAwesomeIcon icon={faUtensils} />
-                        </a>
+                        </button>
                     </>
                 }
             </form>
