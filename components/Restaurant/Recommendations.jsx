@@ -5,7 +5,7 @@ import fetch from 'isomorphic-unfetch';
 import { useState } from "react";
 
 
-import { faSearch, faStar, faStarHalf } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faStar, faStarHalf, faUtensils } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -14,6 +14,7 @@ const Recommendations = () => {
     const cuisines=["burgers", "japanese", "thai", "fish and chips", "american"]
     const [ratingsArr, setRatingsArr] = useState([])
     const [restaurants, setRestaurants] = useState([])
+    const [searchInitiated, setSearchInitiated] = useState(false)
 
 
     const getRecommendations = async(term) => {
@@ -62,10 +63,19 @@ const Recommendations = () => {
     return (
         <div className={s.container}>
             <form className={s.searchForm}>
-                <button className={s.searchBtn}>
-                    <FontAwesomeIcon icon={faSearch} size="2x" />
-                </button>
-                <input className={s.searchInput} type="text" placeholder="Search..." />
+                { !searchInitiated && 
+                    <a onClick={() => setSearchInitiated(true)} className={s.searchBtn}>
+                        <FontAwesomeIcon icon={faSearch} size="2x" />
+                    </a>
+                }
+                { searchInitiated && 
+                    <>
+                        <input className={s.searchInput} type="text" placeholder="Search..." />
+                        <a onClick={() => setSearchInitiated(true)} className={s.utensilsBtn}>
+                            <FontAwesomeIcon icon={faUtensils} />
+                        </a>
+                    </>
+                }
             </form>
             <div className={s.searchCategoriesContainer}>
                 { cuisines.map((cuisine, i) => (
@@ -76,7 +86,7 @@ const Recommendations = () => {
             </div>
             <div className={s.restaurantsContainer}>
                 {restaurants.map((restaurant, i) => (
-                    <a href={restaurant.url} target="_blank" key={i}className={s.restaurantContainer}>
+                    <a href={restaurant.url} target="_blank" key={restaurant.id}className={s.restaurantContainer}>
                         <div className={s.restaurantTextContainer}>
                             <span className={s.restaurantName}>{restaurant.name}</span>
                             <div className={s.restaurantRatingsContainer}>
