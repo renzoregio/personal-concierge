@@ -4,12 +4,12 @@ import NotePassword from "../../../../models/NotePassword";
 dbConnect();
 
 export default async (req, res) => {
-    const { method } = req;
+    const { headers: { user }, method } = req;
 
     switch(method){
         case 'GET':
             try {
-                const password = await NotePassword.find({});
+                const password = await NotePassword.find({ user: user });
                 res.status(200).json({success: true, password: password})
             } catch (error) {
                 res.status(400).json({success: false})

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const NotePasswordSchema = new mongoose.Schema({
+    user: String,
     password: {
         type: String,
         required: true,

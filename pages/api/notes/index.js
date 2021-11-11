@@ -4,12 +4,12 @@ import Note from "../../../models/Note";
 dbConnect();
 
 export default async (req, res) => {
-    const { method } = req;
+    const { headers: { user }, method } = req;
 
     switch(method){
         case 'GET':
             try {
-                const notes = await Note.find({})
+                const notes = await Note.find({ user: user })
                 res.status(200).json({success: true, data: notes});
             } catch (error) {
                 res.status(400).json({ success: false })
