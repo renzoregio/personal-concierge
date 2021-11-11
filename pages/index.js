@@ -1,8 +1,45 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { Home } from '../components/Home'
+import {signIn, signOut, useSession} from "next-auth/client"
+import { useEffect, useState } from 'react';
+
+import { faConciergeBell } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import { config } from '@fortawesome/fontawesome-svg-core';
+config.autoAddCss = false;
 
 export default function App() {
+  const [session, loading] = useSession();
+  const [initLogin, setInitLogin] = useState(false)
+
+  useEffect(async() => {   
+    if(session && initLogin){
+      const res = await fetch("http://localhost:3000/api/user")
+      const { data } = await res.json();
+      for(let i = 0; i < data; i++){
+        if(data[i].username !== session.user.username){
+          await fetch("http://localhost:3000/api/user", {
+            method: "POST",
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username: session.user.name || session.user.email })
+          })
+          setInitLogin(false)
+        }
+      }
+      
+    }
+  }, [session])
+
+  const initiateSignIn = async () => {
+    signIn();
+    setInitLogin(true)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -11,9 +48,17 @@ export default function App() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Home />
+      {!session && 
+      <div className={styles.signInBtn}>
+        <FontAwesomeIcon className={styles.conciergeBell} onClick={signIn} icon={faConciergeBell} size="5x" />
+      </div>
+      }
 
+      {session && 
+      <Home />
+      }
       
     </div>
   )
 }
+

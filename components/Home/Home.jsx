@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
-
 import ToDoButton from "./ToDoButton"
+import  { Nav }  from "../Nav"
 
 export default function Home() {
 
@@ -18,7 +18,8 @@ export default function Home() {
     ]
 
     return(
-        <>
+        <div className={s.container}>
+            <Nav />
             <span className={s.title}>Welcome to your Personal Concierge
             <FontAwesomeIcon className={s.icon} icon={faConciergeBell} />
             </span>
@@ -26,6 +27,6 @@ export default function Home() {
             { arr.map((toDo, i) => (
                 <ToDoButton key={i} iconName={toDo.icon} slug={toDo.slug} title={toDo.title}/>
             ))}
-        </>
+        </div>
     )
 }

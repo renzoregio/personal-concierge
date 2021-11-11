@@ -11,7 +11,8 @@ const ToDoSchema = new mongoose.Schema({
     isCompleted: {
         type: Boolean,
         default: false
-    }
+    },
+    user: String
 })
 
 module.exports = mongoose.models.ToDos || mongoose.model('ToDos', ToDoSchema)

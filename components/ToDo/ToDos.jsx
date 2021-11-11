@@ -1,6 +1,7 @@
 import s from "./ToDos.module.css"
-import {useState, useRef} from "react"
+import {useState, useRef, useEffect} from "react"
 import { BackToMain } from "../Home"
+import { getSession } from "next-auth/client";
 
 import fetch from 'isomorphic-unfetch';
 
@@ -11,17 +12,40 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
-const getToDos = async() => {
-    const res = await fetch("http://localhost:3000/api/todos");
-    const { data } = await res.json();
-    return data
-}
 
-const ToDos = ({ initialPending, initialCompleted }) => {
-    const [toDos, setToDos] = useState(initialPending)
-    const [completedToDos, setCompletedToDos] = useState(initialCompleted)
+const ToDos = () => {
+    const [toDos, setToDos] = useState([])
+    const [completedToDos, setCompletedToDos] = useState([])
+    const [username, setUsername] = useState("")
     const textBox = useRef(null)
 
+    useEffect(async() => {
+        const userObj = await getSession();
+        setUsername(userObj.user.name);
+        if(userObj){
+            const data = await getToDos(userObj.user.name)
+            const pending = data.filter(toDo => !toDo.isCompleted)
+            const completed = data.filter(toDo => toDo.isCompleted)
+            setToDos(pending);
+            setCompletedToDos(completed)
+        }
+    }, [])
+
+    const getToDos = async(user) => {
+        const res = await fetch("http://localhost:3000/api/todos", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json", "Content-Type": "application/json", "user": user
+            },
+        });
+        const { data } = await res.json();
+        if(!data){
+            return []
+        }
+        return data
+    }
+
+    
     const fetchToDos = async(method, id, task = "", isCompletedBool = false) => {
         const url = id === null ? "http://localhost:3000/api/todos" : `http://localhost:3000/api/todos/${id}`;
         const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
@@ -29,13 +53,13 @@ const ToDos = ({ initialPending, initialCompleted }) => {
             if(method === "GET" || method === "DELETE"){
                 await fetch(url, {
                     method: method,
-                    headers: headerObj,
+                    headers: {"Accept": "application/json", "Content-Type": "application/json", "User": username},
                 })
             } else if (method === "POST"){
                 await fetch(url, {
                     method: method,
                     headers: headerObj,
-                    body: JSON.stringify({ task: task })
+                    body: JSON.stringify({ task: task, user: username })
                 })
             } else if (method === "PUT"){
                 await fetch(url, {
@@ -51,10 +75,9 @@ const ToDos = ({ initialPending, initialCompleted }) => {
     }
 
     const updateToDos = async() => {
-        const data = await getToDos();
+        const data = await getToDos(username);
         const pending = data.filter(toDo => !toDo.isCompleted)
         const completed = data.filter(toDo => toDo.isCompleted)
-
         setToDos(pending)
         setCompletedToDos(completed)
     }
@@ -119,11 +142,11 @@ const ToDos = ({ initialPending, initialCompleted }) => {
     )
 }
 
-ToDos.getInitialProps = async() => {
-    const data = await getToDos();
-    const pending = data.filter(toDo => !toDo.isCompleted)
-    const completed = data.filter(toDo => toDo.isCompleted)
-    return { initialPending: pending, initialCompleted: completed }
-}
-
 export default ToDos;
+// ToDos.getInitialProps = async() => {
+//     const data = await getToDos();
+//     const pending = data.filter(toDo => !toDo.isCompleted)
+//     const completed = data.filter(toDo => toDo.isCompleted)
+//     return { initialPending: pending, initialCompleted: completed }
+// }
+

@@ -4,12 +4,12 @@ import ToDo from "../../../models/ToDo"
 dbConnect();
 
 export default async (req, res) => {
-    const { method } = req;
-
+    const { headers: { user }, method } = req;
     switch(method){
         case 'GET':
             try {
-                const todos = await ToDo.find({});
+                const todos = await ToDo.find({ user: user });
+                console.log(todos)
                 res.status(200).json({ success: true, data: todos});
             } catch (error) {
                 res.status(400).json({ success: false })
