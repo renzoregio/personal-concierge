@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import s from "./Budget.module.css"
 import { BackToMain } from "../Home";
-
+import {getSession} from "next-auth/client"
 import fetch from 'isomorphic-unfetch';
 
 
@@ -12,13 +12,13 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 
 config.autoAddCss = false;
 
-const getBudget = async () => {
-    const res = await fetch("http://localhost:3000/api/budget");
-    const { budget } = await res.json();
-    return budget 
-}
+// const getBudget = async (user) => {
+//     const res = await fetch("http://localhost:3000/api/budget");
+//     const { budget } = await res.json();
+//     return budget 
+// }
 
-const Budget = ({ budget }) => {
+const Budget = () => {
     const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
     
     const [budgetId, setBudgetId] = useState(null)
@@ -37,15 +37,32 @@ const Budget = ({ budget }) => {
     const [topExpenses, setTopExpenses] = useState([])
     const totalRef = useRef(null);
     const expenseRef = useRef(null);
+    const [username, setUsername]= useState("")
     
 
-    useEffect(() => {
+    useEffect(async () => {
+        const userObj = await getSession();
+        setUsername(userObj.user.name)
+        const budget = await getBudget(userObj.user.name);
         if(budget.length){
-            setInitial()
+            setInitial(budget)
         }
     }, [])
 
-    const setInitial = () => {
+    const getBudget = async (user) => {
+        const res = await fetch("http://localhost:3000/api/budget", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json", 
+                "Content-Type": "application/json",
+                "User": user
+            }
+        });
+        const { budget } = await res.json();
+        return budget 
+    }
+
+    const setInitial = (budget) => {
         const { runningTotal, runningFixedTotal, runningPercentage, runningFoodCount, runningCarCount,
             runningShoppingCount, runningGroceryCount, runningMiscCount, _id
         } = budget[0];
@@ -70,8 +87,7 @@ const Budget = ({ budget }) => {
     ]
     
     const fetchBudget = async () => {
-
-        const budgetObj = await getBudget();
+        const budgetObj = await getBudget(username);
         const { runningTotal, runningFixedTotal, runningPercentage, runningFoodCount, runningCarCount,
             runningShoppingCount, runningGroceryCount, runningMiscCount, _id
         } = budgetObj[0];
@@ -96,7 +112,8 @@ const Budget = ({ budget }) => {
                 body: JSON.stringify({ 
                     runningPercentage: 100,
                     runningFixedTotal: +totalRef.current.value,
-                    runningTotal: +totalRef.current.value
+                    runningTotal: +totalRef.current.value,
+                    user: username
                  }),
             })
         } catch (error) {
@@ -288,9 +305,9 @@ const Budget = ({ budget }) => {
     )
 }
 
-Budget.getInitialProps = async () => {
-    const budget = await getBudget();
-    return { budget } 
-}
+// Budget.getInitialProps = async () => {
+//     const budget = await getBudget();
+//     return { budget } 
+// }
 
 export default Budget;

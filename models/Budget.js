@@ -30,7 +30,8 @@ const BudgetSchema = new mongoose.Schema({
     runningMiscCount: {
         type: Number,
         default: 0
-    }
+    },
+    user: String
 })
 
 module.exports = mongoose.models.Budget || mongoose.model("Budget", BudgetSchema)
