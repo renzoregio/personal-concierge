@@ -2,7 +2,7 @@ import s from "./ToDos.module.css"
 import {useState, useRef, useEffect} from "react"
 import { BackToMain } from "../Home"
 import { getSession } from "next-auth/client";
-
+import { LoadingPage } from "../Loading";
 import fetch from 'isomorphic-unfetch';
 
 
@@ -102,6 +102,7 @@ const ToDos = () => {
 
     return (
         <div className={s.container}>
+            <LoadingPage />
             <div className={s.toDosContainer}>
                 <div>
                     <h1 className={s.title}>add a to do</h1>

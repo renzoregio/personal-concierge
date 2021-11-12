@@ -15,9 +15,9 @@ export default function ToDoButton({iconName, title, slug}){
                 </Link>
             }
             { displayTask && 
-            
-                <span className={s.title}>{title}</span>
-            
+                <Link href={`/route/${slug}`}>
+                    <span className={s.title}>{title}</span>
+                </Link>
             }
         </div>
     )
