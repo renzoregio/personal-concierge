@@ -4,6 +4,7 @@
   cursor: pointer;
   transition: color 0.3s ease-in-out;
   padding: 25px;
+  flex-direction: column;
 }
 
 .container:hover {
@@ -12,15 +13,21 @@
 
 .title {
   font-size: 50px;
-  transition: font-size 0.3s ease-in-out;
+  animation: fadeIn 0.7s linear forwards;
 }
 
-.title:hover {
-  font-size: 70px;
+@keyframes fadeIn {
+  from {
+    opacity: 0%;
+  }
+  to {
+    opacity: 100%;
+    margin: 0px 20px;
+  }
 }
 
 .icon {
-  font-size: 50px;
   cursor: pointer;
   margin-right: 40px;
+  animation: fadeIn 0.8s linear forwards;
 }

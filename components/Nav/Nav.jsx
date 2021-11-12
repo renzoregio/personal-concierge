@@ -13,8 +13,8 @@ export default function Nav (){
 
     return (
         <div className={s.navContainer}>
-            <span>{username}</span>
-            <button onClick={signOut}>Sign Out</button>
+            <span >hello, {username}</span>
+            <button className={s.signOutBtn} onClick={signOut}>Sign Out</button>
         </div>
     )
 }

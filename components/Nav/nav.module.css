@@ -8,4 +8,17 @@
   justify-content: space-between;
   font-size: 50px;
   padding: 35px;
+  text-transform: uppercase;
+}
+
+.navContainer > span {
+  font-weight: bold;
+}
+
+.signOutBtn {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 50px;
+  text-transform: uppercase;
 }
