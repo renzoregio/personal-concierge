@@ -35,11 +35,6 @@ export default function App() {
     }
   }, [session])
 
-  const initiateSignIn = async () => {
-    signIn();
-    setInitLogin(true)
-  }
-
   return (
     <div className={styles.container}>
       <Head>
