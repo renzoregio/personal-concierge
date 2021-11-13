@@ -3,7 +3,7 @@ import s from "./Budget.module.css"
 import { BackToMain } from "../Home";
 import {getSession} from "next-auth/client"
 import fetch from 'isomorphic-unfetch';
-
+import { LoadingPage } from "../Loading";
 
 import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag, faTimes, faTimesCircle, faCheck, faMoneyBill } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -220,6 +220,8 @@ const Budget = () => {
         setGenerateReport(false)
     }
     return(
+        <>
+        <LoadingPage />
         <div className={s.container}> 
             { !generateReport && 
                 <div className={s.budgetContainer}>
@@ -302,6 +304,7 @@ const Budget = () => {
                 <BackToMain />
             </div>
         </div>
+        </>
     )
 }
 

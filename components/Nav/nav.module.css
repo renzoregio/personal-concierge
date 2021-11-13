@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: 50px;
-  padding: 35px;
+  padding: 70px;
   text-transform: uppercase;
 }
 
@@ -21,4 +21,10 @@
   background: transparent;
   font-size: 50px;
   text-transform: uppercase;
+  cursor: pointer;
+  transition: border-bottom 0.3s ease-in-out;
+}
+
+.signOutBtn:hover {
+  border-bottom: 10px solid black;
 }

@@ -11,7 +11,9 @@ export default function ToDoButton({iconName, title, slug}){
         <div className={s.container} onMouseEnter={() => setDisplayTask(true)} onMouseLeave={() => setDisplayTask(false)}>
             { !displayTask && 
                 <Link href={`/route/${slug}`}>
-                    <FontAwesomeIcon className={s.icon} icon={iconName} size="2x"/>
+                    <div>
+                        <FontAwesomeIcon className={s.icon} icon={iconName} size="2x"/>
+                    </div>
                 </Link>
             }
             { displayTask && 

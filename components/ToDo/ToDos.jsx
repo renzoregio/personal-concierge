@@ -102,7 +102,6 @@ const ToDos = () => {
 
     return (
         <div className={s.container}>
-            <LoadingPage />
             <div className={s.toDosContainer}>
                 <div>
                     <h1 className={s.title}>add a to do</h1>
@@ -139,6 +138,7 @@ const ToDos = () => {
                 </div>
             </div>
             <BackToMain />
+            <LoadingPage />
         </div>
     )
 }

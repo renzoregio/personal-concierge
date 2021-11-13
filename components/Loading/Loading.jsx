@@ -11,6 +11,7 @@ const Loading = () => {
 
     const [position, setPosition] = useState(10);
     const [loadingDone, setLoadingDone] = useState(false)
+    
     useEffect(() => {
         setTimeout(() => {
             setLoadingDone(true)

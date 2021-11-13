@@ -3,7 +3,7 @@ import Note from "./Note";
 import { useEffect, useRef, useState } from "react";
 import { getSession } from "next-auth/client"
 import ReturnHome  from "../Home/ReturnHome"
-
+import { LoadingPage } from "../Loading";
 import fetch from 'isomorphic-unfetch';
 
 import {  faCheckCircle, faStickyNote } from '@fortawesome/free-solid-svg-icons'
@@ -220,6 +220,7 @@ const QuickNotes = () => {
             </div>
             }
             <ReturnHome />
+            <LoadingPage />
         </div>
     )
 }
