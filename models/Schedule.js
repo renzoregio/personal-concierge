@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 const ScheduleSchema = new mongoose.Schema({
     user: String,
-    monday: [{
-        type: String
-    }],
+    monday: [
+        {content: { type: String}, time: { type: String }}
+    ],
     tuesday: [{
         type: String
     }],

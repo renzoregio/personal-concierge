@@ -9,7 +9,6 @@ export default async (req, res) => {
         case 'GET':
             try {
                 const todos = await ToDo.find({ user: user });
-                console.log(todos)
                 res.status(200).json({ success: true, data: todos});
             } catch (error) {
                 res.status(400).json({ success: false })
