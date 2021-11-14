@@ -7,7 +7,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
-export default function Day({ user, addToSchedule, day, setFunction, removeFunction, dayName }){
+export default function Day({ day, setFunction, removeFunction, dayName }){
     const [addingToDay, setAddingToDay] = useState(false);
     let startTimeRef = useRef(null);
     let endTimeRef = useState(null);

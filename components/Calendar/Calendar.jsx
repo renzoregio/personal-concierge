@@ -6,6 +6,7 @@ import s from "./Calendar.module.css";
 import  Day from "./Day"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {getSession} from "next-auth/client"
+import { LoadingPage } from "../Loading"
 
 
 export default function Calendar(){
@@ -31,39 +32,69 @@ export default function Calendar(){
 
     const createScheduleProfile = async(user) => {
         try {
-            await fetch("http://localhost:3000/api/schedule",{
+            const defaultSchedule = {
+                title: "Default",
+                startTime: "0:00 PM",
+                endTime: "0:00 PM"
+            }
+            const res = await fetch("http://localhost:3000/api/schedule",{
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ user: user, sunday: {title: "hi", startTime: "10:00", endTime: "11:00"} })
+                body: JSON.stringify({
+                    user: user,
+                    sunday: defaultSchedule,
+                    monday: defaultSchedule,
+                    tuesday: defaultSchedule,
+                    saturday: defaultSchedule
+                })
             })
+
+            setExistingCalendar(true)
+            await getSchedule();
+
+            if(res.status === 400){
+                return false
+            }
+
             return true
+
         } catch (error) {
             console.log(error)
             return false
         }
     }
 
+    const setSchedule = (arr, setter) => {
+        arr.forEach(obj => {
+            setter(prev => [...prev, obj])
+        })
+    }
+
     const getSchedule = async() => {
         const res = await fetch("http://localhost:3000/api/schedule")
         const { data } = await res.json();
-        const { monday: mondayCopy, tuesday, wednesday, thursday, friday, saturday, sunday: sundayCopy} = data[0];
-        mondayCopy.forEach(x => {
-            setMonday(prevState => [...prevState, x])
-        })
-        sundayCopy.forEach(x => {
-            setSunday(prevState => [...prevState, x])
-        })
+        const { 
+            monday: mondayCopy, 
+            tuesday: tuesdayCopy, 
+            wednesday, 
+            thursday, 
+            friday, 
+            saturday: saturdayCopy, 
+            sunday: sundayCopy} = data[0];
+        
+        setSchedule(sundayCopy, setSunday)
+        setSchedule(mondayCopy, setMonday)
+        setSchedule(tuesdayCopy, setTuesday)
+        setSchedule(saturdayCopy, setSaturday)
 
     }
 
-    const addToSchedule = async(obj, user = username) => {
-        console.log(obj)
-        console.log(username, "asd")
+    const addToDay = async(obj, user = username, day) => {
         try {
-            await fetch(`http://localhost:3000/api/schedule/sunday/${user}`, {
+            await fetch(`http://localhost:3000/api/schedule/day/${user}-${day}`, {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -77,7 +108,7 @@ export default function Calendar(){
     }
 
     const setFunctions = [
-        {setter: (obj) => addToSchedule(obj, username)},
+        {setter: (obj) => addToDay(obj, username, "sunday")},
         {setter: (obj) => setMonday([...monday, obj])},
         {setter: (obj) => setTuesday([...tuesday, obj])},
         {setter: (obj) => setWednesday([...wednesday, obj])},
@@ -108,12 +139,7 @@ export default function Calendar(){
     useEffect(async() => {
         const userObj = await getSession();
         setUsername(userObj.user.name);
-        const created = await createScheduleProfile(userObj.user.name)
-        if(created){
-            console.log("user created")
-        }
-        // addToSchedule(userObj.user.name);
-        getSchedule();
+        await createScheduleProfile(userObj.user.name)
         const currentDayCount = dateObj.getDay();
         if(currentDayCount === 0){
             setCurrentDay(sunday);
@@ -137,6 +163,7 @@ export default function Calendar(){
 
     return(
         <div className={s.container}>
+            <LoadingPage />
             <span className={s.currentTime}>{currentTime}</span>
             {!existingCalendar && <button onClick={() => setExistingCalendar(true)} className={s.startCalendarBtn}>Start Calendar 
             <FontAwesomeIcon style={{marginLeft:"20px"}} icon={faCalendar} />
@@ -172,7 +199,7 @@ export default function Calendar(){
                 {existingCalendar && 
                     <>
                         {arr.map((day,i) => (
-                            <Day user={username} addToSchedule={addToSchedule} day={day} key={i} index={i} dayName={daysOfWeek[i]} removeFunction={removeFunctions[i].remove} setFunction={setFunctions[i].setter}/>
+                            <Day day={day} key={i} index={i} dayName={daysOfWeek[i]} removeFunction={removeFunctions[i].remove} setFunction={setFunctions[i].setter}/>
                         ))}
                     </>
                 }

@@ -10,7 +10,7 @@ export default async(req, res) => {
     switch(method){
         case "GET":
             try {
-                const data = await Schedule.find({})
+                const data = await Schedule.find({ user: "miguelrob" })
                 res.status(200).json({ success: true, data: data})
             res.status()
             } catch (error) {
@@ -20,12 +20,13 @@ export default async(req, res) => {
         case "POST":
             try {
                 const data = await Schedule.create(req.body)
-                res.status(200).json({ data: data })
+                res.status(200).json({ success: true, data: data })
             } catch (error) {
                 res.status(400).json({ success: false})
             }
             break;
         default:
             res.status(400).json({ success: false })
+            break;
     }
 }

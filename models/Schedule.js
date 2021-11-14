@@ -6,7 +6,20 @@ const ScheduleSchema = new mongoose.Schema({
         unique: true
     },
     monday: [
-        {startTime: { type: String }, endTime: { type: String }, title: { type: String}}
+        {
+            startTime: {
+                type: String,
+                required: true
+            },
+            endTime: {
+                type: String,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true
+            }
+        }
     ],
     tuesday: [
         { 
@@ -24,14 +37,36 @@ const ScheduleSchema = new mongoose.Schema({
     friday: [{
         type: String
     }],
-    saturday: [{
-        type: String
-    }],
+    saturday: [
+        {
+            startTime: {
+                type: String,
+                required: true
+            },
+            endTime: {
+                type: String,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true
+            }
+        }
+    ],
     sunday: [
         { 
-            startTime: String,
-            endTime: String,
-            title: String
+            startTime: {
+                type: String,
+                required: true
+            },
+            endTime: {
+                type: String,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true
+            }
         }
     ]
 })
