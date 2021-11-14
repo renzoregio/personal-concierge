@@ -1,13 +1,20 @@
 const mongoose = require('mongoose')
 
 const ScheduleSchema = new mongoose.Schema({
-    user: String,
+    user: {
+        type: String,
+        unique: true
+    },
     monday: [
-        {content: { type: String}, time: { type: String }}
+        {startTime: { type: String }, endTime: { type: String }, title: { type: String}}
     ],
-    tuesday: [{
-        type: String
-    }],
+    tuesday: [
+        { 
+            startTime: String,
+            endTime: String,
+            title: String
+        }
+    ],
     wednesday: [{
         type: String
     }],
@@ -20,9 +27,13 @@ const ScheduleSchema = new mongoose.Schema({
     saturday: [{
         type: String
     }],
-    sunday: [{
-        type: String
-    }]
+    sunday: [
+        { 
+            startTime: String,
+            endTime: String,
+            title: String
+        }
+    ]
 })
 
 module.exports = mongoose.models.Schedule || mongoose.model("Schedule", ScheduleSchema)

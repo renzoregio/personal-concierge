@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import s from "./Calendar.module.css";
 import  Day from "./Day"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {getSession} from "next-auth/client"
 
 
 export default function Calendar(){
@@ -22,13 +23,61 @@ export default function Calendar(){
     const [friday, setFriday] = useState([]);
     const [saturday, setSaturday] = useState([])
     const [sunday, setSunday] = useState([])
+    const [username, setUsername] = useState("")
 
     const arr = [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+    const createScheduleProfile = async(user) => {
+        try {
+            await fetch("http://localhost:3000/api/schedule",{
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ user: user, sunday: {title: "hi", startTime: "10:00", endTime: "11:00"} })
+            })
+            return true
+        } catch (error) {
+            console.log(error)
+            return false
+        }
+    }
+
+    const getSchedule = async() => {
+        const res = await fetch("http://localhost:3000/api/schedule")
+        const { data } = await res.json();
+        const { monday: mondayCopy, tuesday, wednesday, thursday, friday, saturday, sunday: sundayCopy} = data[0];
+        mondayCopy.forEach(x => {
+            setMonday(prevState => [...prevState, x])
+        })
+        sundayCopy.forEach(x => {
+            setSunday(prevState => [...prevState, x])
+        })
+
+    }
+
+    const addToSchedule = async(obj, user = username) => {
+        console.log(obj)
+        console.log(username, "asd")
+        try {
+            await fetch(`http://localhost:3000/api/schedule/sunday/${user}`, {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(obj)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const setFunctions = [
-        {setter: (obj) => setSunday([...sunday, obj])},
+        {setter: (obj) => addToSchedule(obj, username)},
         {setter: (obj) => setMonday([...monday, obj])},
         {setter: (obj) => setTuesday([...tuesday, obj])},
         {setter: (obj) => setWednesday([...wednesday, obj])},
@@ -56,7 +105,15 @@ export default function Calendar(){
 
     setInterval(getCurrentTime, 1000)
 
-    useEffect(() => {
+    useEffect(async() => {
+        const userObj = await getSession();
+        setUsername(userObj.user.name);
+        const created = await createScheduleProfile(userObj.user.name)
+        if(created){
+            console.log("user created")
+        }
+        // addToSchedule(userObj.user.name);
+        getSchedule();
         const currentDayCount = dateObj.getDay();
         if(currentDayCount === 0){
             setCurrentDay(sunday);
@@ -75,7 +132,7 @@ export default function Calendar(){
         }
 
         setExistingCurrentSchedule(currentDay.length > 0 ? true : false)
-    })
+    }, [])
   
 
     return(
@@ -115,7 +172,7 @@ export default function Calendar(){
                 {existingCalendar && 
                     <>
                         {arr.map((day,i) => (
-                            <Day day={day} key={i} index={i} dayName={daysOfWeek[i]} removeFunction={removeFunctions[i].remove} setFunction={setFunctions[i].setter}/>
+                            <Day user={username} addToSchedule={addToSchedule} day={day} key={i} index={i} dayName={daysOfWeek[i]} removeFunction={removeFunctions[i].remove} setFunction={setFunctions[i].setter}/>
                         ))}
                     </>
                 }
