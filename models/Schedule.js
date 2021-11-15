@@ -23,20 +23,68 @@ const ScheduleSchema = new mongoose.Schema({
     ],
     tuesday: [
         { 
-            startTime: String,
-            endTime: String,
-            title: String
+            startTime: {
+                type: String,
+                required: true
+            },
+            endTime: {
+                type: String,
+                required: true
+            }, 
+            title: {
+                type: String,
+                required: true
+            }
         }
     ],
-    wednesday: [{
-        type: String
-    }],
-    thursday: [{
-        type: String
-    }],
-    friday: [{
-        type: String
-    }],
+    wednesday: [
+        {
+            startTime: {
+                type: String,
+                required: true
+            },
+            endTime: {
+                type: String,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+    thursday: [
+        {
+            startTime: {
+                type: String,
+                required: true
+            },
+            endTime: {
+                type: String,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+    friday: [
+        {
+            startTime: {
+                type: String,
+                required: true
+            },
+            endTime: {
+                type: String,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true
+            }
+        }
+    ],
     saturday: [
         {
             startTime: {

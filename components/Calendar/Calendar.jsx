@@ -33,7 +33,7 @@ export default function Calendar(){
         try {
             const defaultSchedule = {
                 title: "Default",
-                startTime: "0:00 PM",
+                startTime: "0:00 AM",
                 endTime: "0:00 PM"
             }
             const res = await fetch("http://localhost:3000/api/schedule",{
