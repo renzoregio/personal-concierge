@@ -10,7 +10,7 @@ config.autoAddCss = false;
 export default function Day({ day, setFunction, removeFunction, dayName }){
     const [addingToDay, setAddingToDay] = useState(false);
     let startTimeRef = useRef(null);
-    let endTimeRef = useState(null);
+    let endTimeRef = useRef(null);
     let titleRef = useRef(null);
     let scheduleRefs = useRef([]);
 
@@ -31,12 +31,6 @@ export default function Day({ day, setFunction, removeFunction, dayName }){
         setAddingToDay(false);
     }
 
-    const removeSchedule = (x) => {
-        const schedule = x.textContent;
-        removeFunction(schedule)
-
-    }
-
     return(
           
                 <div className={s.dayContainer}>
@@ -45,7 +39,7 @@ export default function Day({ day, setFunction, removeFunction, dayName }){
                     <> 
                         {day.map((schedule, i) => (
                             <div key={i} className={s.scheduleContainer}>
-                                <FontAwesomeIcon onClick={() => removeSchedule(scheduleRefs.current[i])} className={s.removeScheduleIcon} icon={faTimes}/>
+                                <FontAwesomeIcon onClick={() => removeFunction(schedule._id, dayName)} className={s.removeScheduleIcon} icon={faTimes}/>
                                 <span>{schedule.startTime} - {schedule.endTime}</span>
                                 <span ref={refElement => scheduleRefs.current[i] = refElement}>{schedule.title}</span>
                             </div>

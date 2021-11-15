@@ -15,8 +15,7 @@ export default function Calendar(){
     const [currentTime, setCurrentTime] = useState(null);
 
     const [existingCalendar, setExistingCalendar] = useState(false);
-    const [existingCurrentSchedule, setExistingCurrentSchedule] = useState(false)
-    const [currentDay, setCurrentDay] = useState({})
+    const [currentDay, setCurrentDay] = useState([])
     const [monday, setMonday] = useState([]);
     const [tuesday, setTuesday] = useState([]);
     const [wednesday, setWednesday] = useState([]);
@@ -72,7 +71,6 @@ export default function Calendar(){
             setter(prev => [...prev, obj])
         })
     }
-
     const getSchedule = async() => {
         const res = await fetch("http://localhost:3000/api/schedule")
         const { data } = await res.json();
@@ -84,12 +82,34 @@ export default function Calendar(){
             friday, 
             saturday: saturdayCopy, 
             sunday: sundayCopy} = data[0];
-        
+        reset();
         setSchedule(sundayCopy, setSunday)
         setSchedule(mondayCopy, setMonday)
         setSchedule(tuesdayCopy, setTuesday)
         setSchedule(saturdayCopy, setSaturday)
 
+        const currentDayCount = dateObj.getDay();
+        if(currentDayCount === 0){
+            setCurrentDay(sundayCopy);
+        } else if (count === 1){
+            setCurrentDay(mondayCopy);
+        } else if (count === 2){
+            setCurrentDay(tuesdayCopy);
+        } else if (count === 3){
+            setCurrentDay(arr);
+        } else if (count === 4){
+            setCurrentDay(arr)
+        } else if(count === 5){
+            setCurrentDay(arr)
+        } else if (count === 6){
+            setCurrentDay(saturdayCopy)
+        }
+    }
+
+    const reset = () => {
+        setSunday([])
+        setMonday([])
+        setTuesday([])
     }
 
     const addToDay = async(obj, user = username, day) => {
@@ -102,6 +122,24 @@ export default function Calendar(){
                 },
                 body: JSON.stringify(obj)
             })
+            getSchedule();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const removeFromDay = async(id, day) => {
+        
+        try {
+            await fetch(`http://localhost:3000/api/schedule/remove-task/${id}-${username}-${day.toLowerCase()}`, {
+                method: "DELETE",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({})
+            })
+            getSchedule()
         } catch (error) {
             console.log(error)
         }
@@ -109,7 +147,7 @@ export default function Calendar(){
 
     const setFunctions = [
         {setter: (obj) => addToDay(obj, username, "sunday")},
-        {setter: (obj) => setMonday([...monday, obj])},
+        {setter: (obj) => addToDay(obj, username, "monday")},
         {setter: (obj) => setTuesday([...tuesday, obj])},
         {setter: (obj) => setWednesday([...wednesday, obj])},
         {setter: (obj) => setThursday([...thursday, obj])},
@@ -118,7 +156,7 @@ export default function Calendar(){
         ]
 
     const removeFunctions = [
-        {remove: (title) => setSunday([...sunday.filter(schedule => schedule.title !== title)])},
+        {remove: (id, day) => removeFromDay(id, day)},
         {remove: (title) => setMonday([...monday.filter(schedule => schedule.title !== title)])},
         {remove: (title) => setTuesday([...tuesday.filter(schedule => schedule.title !== title)])},
         {remove: (title) => setWednesday([...wednesday.filter(schedule => schedule.title !== title)])},
@@ -140,24 +178,6 @@ export default function Calendar(){
         const userObj = await getSession();
         setUsername(userObj.user.name);
         await createScheduleProfile(userObj.user.name)
-        const currentDayCount = dateObj.getDay();
-        if(currentDayCount === 0){
-            setCurrentDay(sunday);
-        } else if (currentDayCount === 1){
-            setCurrentDay(monday);
-        } else if (currentDayCount === 2){
-            setCurrentDay(tuesday);
-        } else if (currentDayCount === 3){
-            setCurrentDay(wednesday);
-        } else if (currentDayCount === 4){
-            setCurrentDay(thursday)
-        } else if(currentDayCount === 5){
-            setCurrentDay(friday)
-        } else if (currentDayCount === 6){
-            setCurrentDay(saturday)
-        }
-
-        setExistingCurrentSchedule(currentDay.length > 0 ? true : false)
     }, [])
   
 
@@ -176,7 +196,7 @@ export default function Calendar(){
                     <span className={s.currentDayDate}> {months[dateObj.getMonth()]} {dateObj.getDate()}, {dateObj.getFullYear()}</span>
                 </div>
                 <div className={s.currentDayDivider}></div>
-                { existingCurrentSchedule ? 
+                { currentDay.length > 0 ? 
                 
                     <div className={s.currentDayScheduleContainer}>
                     { currentDay.map((schedule, i) => (
