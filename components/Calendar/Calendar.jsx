@@ -23,46 +23,41 @@ export default function Calendar(){
     const [friday, setFriday] = useState([]);
     const [saturday, setSaturday] = useState([])
     const [sunday, setSunday] = useState([])
-    const [username, setUsername] = useState("")
+    let username = ""
 
     const arr = [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+
+    useEffect(async() => {
+        const userObj = await getSession();
+        username = userObj.user.name
+        await createScheduleProfile(userObj.user.name)
+    }, [])
+  
+
     const createScheduleProfile = async(user) => {
         try {
-            const defaultSchedule = {
-                title: "Default",
-                startTime: "0:00 AM",
-                endTime: "0:00 PM"
-            }
+            // const defaultSchedule = {
+            //     title: "Default",
+            //     startTime: "0:00 AM",
+            //     endTime: "0:00 PM"
+            // }
             const res = await fetch("http://localhost:3000/api/schedule",{
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    user: user,
-                    sunday: defaultSchedule,
-                    monday: defaultSchedule,
-                    tuesday: defaultSchedule,
-                    saturday: defaultSchedule
-                })
+                body: JSON.stringify({ user: user })
             })
 
             setExistingCalendar(true)
             await getSchedule();
 
-            if(res.status === 400){
-                return false
-            }
-
-            return true
-
         } catch (error) {
             console.log(error)
-            return false
         }
     }
 
@@ -72,20 +67,31 @@ export default function Calendar(){
         })
     }
     const getSchedule = async() => {
-        const res = await fetch("http://localhost:3000/api/schedule")
+        console.log(username)
+        const res = await fetch("http://localhost:3000/api/schedule",{
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "User": username
+            }
+        })
         const { data } = await res.json();
         const { 
             monday: mondayCopy, 
             tuesday: tuesdayCopy, 
-            wednesday, 
-            thursday, 
-            friday, 
+            wednesday: wednesdayCopy, 
+            thursday: thursdayCopy, 
+            friday: fridayCopy, 
             saturday: saturdayCopy, 
             sunday: sundayCopy} = data[0];
         reset();
         setSchedule(sundayCopy, setSunday)
         setSchedule(mondayCopy, setMonday)
         setSchedule(tuesdayCopy, setTuesday)
+        setSchedule(wednesdayCopy, setWednesday)
+        setSchedule(thursdayCopy, setThursday)
+        setSchedule(fridayCopy, setFriday)
         setSchedule(saturdayCopy, setSaturday)
 
         const currentDayCount = dateObj.getDay();
@@ -133,7 +139,6 @@ export default function Calendar(){
     }
 
     const removeFromDay = async(id, day) => {
-        
         try {
             await fetch(`http://localhost:3000/api/schedule/remove-task/${id}-${username}-${day.toLowerCase()}`, {
                 method: "DELETE",
@@ -152,11 +157,11 @@ export default function Calendar(){
     const setFunctions = [
         {setter: (obj) => addToDay(obj, username, "sunday")},
         {setter: (obj) => addToDay(obj, username, "monday")},
-        {setter: (obj) => setTuesday([...tuesday, obj])},
-        {setter: (obj) => setWednesday([...wednesday, obj])},
-        {setter: (obj) => setThursday([...thursday, obj])},
-        {setter: (obj) => setFriday([...friday, obj])},
-        {setter: (obj) => setSaturday([...saturday, obj])},
+        {setter: (obj) => addToDay(obj, username, "tuesday")},
+        {setter: (obj) => addToDay(obj, username, "wednesday")},
+        {setter: (obj) => addToDay(obj, username, "thursday")},
+        {setter: (obj) => addToDay(obj, username, "friday")},
+        {setter: (obj) => addToDay(obj, username, "saturday")},
         ]
 
     const removeFunctions = [
@@ -177,13 +182,6 @@ export default function Calendar(){
     }
 
     setInterval(getCurrentTime, 1000)
-
-    useEffect(async() => {
-        const userObj = await getSession();
-        setUsername(userObj.user.name);
-        await createScheduleProfile(userObj.user.name)
-    }, [])
-  
 
     return(
         <div className={s.container}>

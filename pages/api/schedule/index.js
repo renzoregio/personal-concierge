@@ -5,12 +5,12 @@ dbConnect();
 
 
 export default async(req, res) => {
-    const { method } = req;
+    const { headers: { user }, method } = req;
 
     switch(method){
         case "GET":
             try {
-                const data = await Schedule.find({ user: "miguelrob" })
+                const data = await Schedule.find({ user: user })
                 res.status(200).json({ success: true, data: data})
             res.status()
             } catch (error) {
