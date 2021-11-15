@@ -16,6 +16,8 @@ export default async(req, res) => {
         obj = {$push: { monday: { $each: [req.body]}}}
     } else if (day === "tuesday"){
         obj = {$push: { tuesday: { $each: [req.body]}}}
+    } else if(day === "wednesday"){
+        obj = {$push: {wednesday: { $each: [req.body]}}}
     }
 
     switch(method){

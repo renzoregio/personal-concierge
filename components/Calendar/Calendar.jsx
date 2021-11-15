@@ -110,6 +110,10 @@ export default function Calendar(){
         setSunday([])
         setMonday([])
         setTuesday([])
+        setWednesday([])
+        setThursday([])
+        setFriday([])
+        setSaturday([])
     }
 
     const addToDay = async(obj, user = username, day) => {
@@ -157,12 +161,12 @@ export default function Calendar(){
 
     const removeFunctions = [
         {remove: (id, day) => removeFromDay(id, day)},
-        {remove: (title) => setMonday([...monday.filter(schedule => schedule.title !== title)])},
-        {remove: (title) => setTuesday([...tuesday.filter(schedule => schedule.title !== title)])},
-        {remove: (title) => setWednesday([...wednesday.filter(schedule => schedule.title !== title)])},
-        {remove: (title) => setThursday([...thursday.filter(schedule => schedule.title !== title)])},
-        {remove: (title) => setFriday([...friday.filter(schedule => schedule.title !== title)])},
-        {remove: (title) => setSaturday([...saturday.filter(schedule => schedule.title !== title)])},
+        {remove: (id, day) => removeFromDay(id, day)},
+        {remove: (id, day) => removeFromDay(id, day)},
+        {remove: (id, day) => removeFromDay(id, day)},
+        {remove: (id, day) => removeFromDay(id, day)},
+        {remove: (id, day) => removeFromDay(id, day)},
+        {remove: (id, day) => removeFromDay(id, day)},
     ]
 
     const getCurrentTime = () => {
