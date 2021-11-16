@@ -57,8 +57,22 @@ export default function Calendar(){
     }
 
     const setSchedule = (arr, setter) => {
-        arr.sort((a,b) => a - b)
-        arr.forEach(obj => {
+        const am = []
+        const pm = []
+        for(let i = 0; i < arr.length; i++){
+            if(parseInt(arr[i].startTime) >= 13){
+                pm.push(arr[i])
+            } else {
+                am.push(arr[i])
+            }
+        }
+
+        am.sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))
+        pm.sort((a, b) => parseInt(a.startTime) - parseInt(b.startTime))
+        
+        const sortedSchedule = [...am, ...pm]
+
+        sortedSchedule.forEach(obj => {
             setter(prev => [...prev, obj])
         })
     }
