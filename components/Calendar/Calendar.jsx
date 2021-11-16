@@ -23,7 +23,7 @@ export default function Calendar(){
     const [friday, setFriday] = useState([]);
     const [saturday, setSaturday] = useState([])
     const [sunday, setSunday] = useState([])
-    let username = ""
+    const [username, setUsername] = useState("")
 
     const arr = [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -32,19 +32,14 @@ export default function Calendar(){
 
     useEffect(async() => {
         const userObj = await getSession();
-        username = userObj.user.name
+        setUsername(userObj.user.name)
         await createScheduleProfile(userObj.user.name)
     }, [])
   
 
     const createScheduleProfile = async(user) => {
         try {
-            // const defaultSchedule = {
-            //     title: "Default",
-            //     startTime: "0:00 AM",
-            //     endTime: "0:00 PM"
-            // }
-            const res = await fetch("http://localhost:3000/api/schedule",{
+             await fetch("http://localhost:3000/api/schedule",{
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -54,7 +49,7 @@ export default function Calendar(){
             })
 
             setExistingCalendar(true)
-            await getSchedule();
+            await getSchedule(user);
 
         } catch (error) {
             console.log(error)
@@ -62,21 +57,23 @@ export default function Calendar(){
     }
 
     const setSchedule = (arr, setter) => {
+        arr.sort((a,b) => a - b)
         arr.forEach(obj => {
             setter(prev => [...prev, obj])
         })
     }
-    const getSchedule = async() => {
+    const getSchedule = async(user) => {
         console.log(username)
         const res = await fetch("http://localhost:3000/api/schedule",{
             method: "GET",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "User": username
+                "User": username || user
             }
         })
         const { data } = await res.json();
+        console.log(data)
         const { 
             monday: mondayCopy, 
             tuesday: tuesdayCopy, 
@@ -97,17 +94,17 @@ export default function Calendar(){
         const currentDayCount = dateObj.getDay();
         if(currentDayCount === 0){
             setCurrentDay(sundayCopy);
-        } else if (count === 1){
+        } else if (currentDayCount === 1){
             setCurrentDay(mondayCopy);
-        } else if (count === 2){
+        } else if (currentDayCount === 2){
             setCurrentDay(tuesdayCopy);
-        } else if (count === 3){
+        } else if (currentDayCount === 3){
             setCurrentDay(arr);
-        } else if (count === 4){
+        } else if (currentDayCount === 4){
             setCurrentDay(arr)
-        } else if(count === 5){
+        } else if(currentDayCount === 5){
             setCurrentDay(arr)
-        } else if (count === 6){
+        } else if (currentDayCount === 6){
             setCurrentDay(saturdayCopy)
         }
     }
@@ -132,7 +129,7 @@ export default function Calendar(){
                 },
                 body: JSON.stringify(obj)
             })
-            getSchedule();
+            getSchedule(user);
         } catch (error) {
             console.log(error)
         }
@@ -148,7 +145,7 @@ export default function Calendar(){
                 },
                 body: JSON.stringify({})
             })
-            getSchedule()
+            getSchedule(username)
         } catch (error) {
             console.log(error)
         }

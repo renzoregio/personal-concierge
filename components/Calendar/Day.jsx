@@ -24,6 +24,7 @@ export default function Day({ day, setFunction, removeFunction, dayName }){
             endTime: endValue,
             title: titleValue
         }
+        console.log(scheduleObj)
         setFunction(scheduleObj);
         startTimeRef.current.value = "";
         endTimeRef.current.value = "";
@@ -48,8 +49,10 @@ export default function Day({ day, setFunction, removeFunction, dayName }){
                     }
                     {addingToDay && 
                         <form className={s.addToDayForm}>
-                            <input ref={startTimeRef} type="text" placeholder="Start Time" />
-                            <input ref={endTimeRef} type="text" placeholder="End Time" />
+                            <label for="startTime">Start</label>
+                            <input id="startTime" ref={startTimeRef} type="time"  />
+                            <label for="endTime">End</label>
+                            <input id="endTime" ref={endTimeRef} type="time" />
                             <input ref={titleRef} type="text" placeholder="Title"/>
                             <FontAwesomeIcon className={s.addToDayIcon} icon={faCalendarCheck} onClick={(e) => addToDay(e)} size="2x" />
                         </form>
