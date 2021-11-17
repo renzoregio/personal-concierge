@@ -17,7 +17,7 @@ const QuickNotes = () => {
 
     const [addingNote, setAddingNote] = useState(false)
     const [userSetup, setUserSetup] = useState(false)
-    const [userPassword, setUserPassword] = useState(null)
+    const [userPassword, setUserPassword] = useState("")
     const [passwordError, setPasswordError] = useState(false)
     const [username, setUsername] = useState("")
 
@@ -36,10 +36,12 @@ const QuickNotes = () => {
             const userObj = await getSession();
             setUsername(userObj.user.name)
             const fetchedNotes = await getNotes(userObj.user.name);
-            const password = await getPassword(userObj.user.name);
-            if(password.length){
+            const passwordObj = await getPassword(userObj.user.name);
+            console.log(passwordObj)
+            if(passwordObj.length){
                 setUserSetup(true)
-                setUserPassword(password)
+                setUserPassword(passwordObj[0].password)
+                console.log(userPassword)
             }
 
             if(fetchedNotes.length){

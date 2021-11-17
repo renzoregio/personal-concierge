@@ -77,7 +77,6 @@ export default function Calendar(){
         })
     }
     const getSchedule = async(user) => {
-        console.log(username)
         const res = await fetch("http://localhost:3000/api/schedule",{
             method: "GET",
             headers: {
@@ -87,7 +86,6 @@ export default function Calendar(){
             }
         })
         const { data } = await res.json();
-        console.log(data)
         const { 
             monday: mondayCopy, 
             tuesday: tuesdayCopy, 

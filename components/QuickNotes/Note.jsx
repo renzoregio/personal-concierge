@@ -52,6 +52,7 @@ const Note = ({id, title, description, deleteNote, password, updateNote, isUnloc
     }
     
     const handleNoteView = async () => {
+        console.log(password)
         if(enteredPasswordRef.current.value === password) {
             unlockNoteFn(id)
             setUnlockMode(true)
