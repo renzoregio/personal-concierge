@@ -38,3 +38,10 @@
   font-weight: bold;
   width: 20%;
 }
+
+.clockContainer {
+  display: flex;
+  width: 10%;
+  justify-content: space-evenly;
+  align-items: center;
+}

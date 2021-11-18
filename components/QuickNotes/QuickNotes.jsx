@@ -37,7 +37,6 @@ const QuickNotes = () => {
             setUsername(userObj.user.name)
             const fetchedNotes = await getNotes(userObj.user.name);
             const passwordObj = await getPassword(userObj.user.name);
-            console.log(passwordObj)
             if(passwordObj.length){
                 setUserSetup(true)
                 setUserPassword(passwordObj[0].password)

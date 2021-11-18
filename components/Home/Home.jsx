@@ -6,10 +6,9 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 import ToDoButton from "./ToDoButton"
 import  { Nav }  from "../Nav"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-
     const arr = [
         { icon: faList, title: "To Do", slug: "to-do"},
         { icon: faCalendar, title: "Daily Schedule", slug: "schedule"},
@@ -17,7 +16,6 @@ export default function Home() {
         { icon: faDollarSign, title: "Budget", slug: "budget"}, 
         { icon: faUtensils, title: "Restaurant Recommendations", slug: "restaurant-recommendations"}
     ]
-
     return(
         <div className={s.container}>
             <Nav />

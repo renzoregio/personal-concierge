@@ -3,17 +3,28 @@ import { getSession } from "next-auth/client"
 import { useEffect, useState } from "react"
 import { signOut } from "next-auth/client"
 
-import { faCloud, faCloudRain, faSnowflake, faSun } from '@fortawesome/free-solid-svg-icons'
+import { faCloud, faCloudRain, faSnowflake, faSun,faClock } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
 export default function Nav (){
+    const [time, setTime] = useState('')
+    const [message, setMessage] = useState("")
     const [username, setUsername] = useState("")
     const [temperature, setTemperature] = useState(0)
     const [weatherIcon, setWeatherIcon] = useState("")
     const [weatherDescription, setWeatherDescription] = useState([])
+
+    const getCurrentTime = () => {
+        const currentDate = new Date()
+        const seconds = `${currentDate.getSeconds()}`
+        let time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${seconds.length > 1 ? seconds : "0" + seconds}`
+        setTime(time)
+    }
+
+    setInterval(getCurrentTime, 1000)
 
     useEffect(async() => {
         const userObj = await getSession()
@@ -45,7 +56,11 @@ export default function Nav (){
 
     return (
         <div className={s.navContainer}>
-            <span >hello, {username}</span>
+            <span>{username}</span>
+            <div className={s.clockContainer}>
+                <FontAwesomeIcon icon={faClock} />
+                <span>{time}</span>
+            </div>
             <div className={s.weatherContainer}>
                 <span>{weatherDescription} at {temperature}&deg;C</span>
                 <FontAwesomeIcon icon={getWeatherIcon()} /> 
