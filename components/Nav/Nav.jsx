@@ -20,8 +20,16 @@ export default function Nav (){
     const getCurrentTime = () => {
         const currentDate = new Date()
         const seconds = `${currentDate.getSeconds()}`
-        let time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${seconds.length > 1 ? seconds : "0" + seconds}`
+        const hour = currentDate.getHours();
+        let time = `${hour}:${currentDate.getMinutes()}:${seconds.length > 1 ? seconds : "0" + seconds}`
         setTime(time)
+        if(hour >= 12 && hour <= 18){
+            setMessage("good afternoon")
+        } else if (hour > 18 && hour <= 24){
+            setMessage("good evening")
+        } else {
+            setMessage("good morning")
+        }
     }
 
     setInterval(getCurrentTime, 1000)
@@ -56,7 +64,7 @@ export default function Nav (){
 
     return (
         <div className={s.navContainer}>
-            <span>{username}</span>
+            <span>{message}, {username}</span>
             <div className={s.clockContainer}>
                 <FontAwesomeIcon icon={faClock} />
                 <span>{time}</span>
