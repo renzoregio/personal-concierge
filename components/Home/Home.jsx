@@ -7,6 +7,7 @@ config.autoAddCss = false;
 import ToDoButton from "./ToDoButton"
 import  { Nav }  from "../Nav"
 import { useEffect, useState } from "react";
+import { LoadingPage } from "../Loading";
 
 export default function Home() {
     const arr = [
@@ -18,6 +19,7 @@ export default function Home() {
     ]
     return(
         <div className={s.container}>
+            <LoadingPage title={"Bringing you back home"}/>
             <Nav />
             <span className={s.title}>Welcome to your Personal Concierge
             </span>
