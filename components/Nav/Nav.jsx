@@ -3,7 +3,7 @@ import { getSession } from "next-auth/client"
 import { useEffect, useState } from "react"
 import { signOut } from "next-auth/client"
 
-import { faCloud, faCloudRain, faSnowflake, faSun,faClock } from '@fortawesome/free-solid-svg-icons'
+import { faCloud, faCloudRain, faSnowflake, faSun,faClock, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -21,7 +21,8 @@ export default function Nav (){
         const currentDate = new Date()
         const seconds = `${currentDate.getSeconds()}`
         const hour = currentDate.getHours();
-        let time = `${hour}:${currentDate.getMinutes()}:${seconds.length > 1 ? seconds : "0" + seconds}`
+        const minutes = `${currentDate.getMinutes()}`;
+        let time = `${hour}:${minutes.length > 1 ? minutes : "0" + minutes }:${seconds.length > 1 ? seconds : "0" + seconds}`
         setTime(time)
         if(hour >= 12 && hour <= 18){
             setMessage("good afternoon")
@@ -73,7 +74,10 @@ export default function Nav (){
                 <span>{weatherDescription} at {temperature}&deg;C</span>
                 <FontAwesomeIcon icon={getWeatherIcon()} /> 
             </div>
-            <button className={s.signOutBtn} onClick={signOut}>Sign Out</button>
+            <div>
+                <button className={s.signOutBtn} onClick={signOut}>Sign Out</button>
+                <FontAwesomeIcon icon={faSignOutAlt} /> 
+            </div>
         </div>
     )
 }

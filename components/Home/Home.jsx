@@ -19,7 +19,7 @@ export default function Home() {
     ]
     return(
         <div className={s.container}>
-            <LoadingPage title={"Bringing you back home"}/>
+            <LoadingPage title={"Bringing you home"}/>
             <Nav />
             <span className={s.title}>Welcome to your Personal Concierge
             </span>
