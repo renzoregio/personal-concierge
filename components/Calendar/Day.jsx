@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import s from "./Calendar.module.css"
 
-import { faCalendarCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarCheck, faCheckCircle, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -9,6 +9,9 @@ config.autoAddCss = false;
 
 export default function Day({ day, setFunction, removeFunction, dayName }){
     const [addingToDay, setAddingToDay] = useState(false);
+    const [startErr, setStartErr] = useState(false);
+    const [endErr, setEndErr] = useState(false);
+    const [titleErr, setTitleErr] = useState(false);
     let startTimeRef = useRef(null);
     let endTimeRef = useRef(null);
     let titleRef = useRef(null);
@@ -19,16 +22,37 @@ export default function Day({ day, setFunction, removeFunction, dayName }){
         let startValue = startTimeRef.current.value;
         let endValue = endTimeRef.current.value;
         let titleValue = titleRef.current.value;
-        const scheduleObj = {
-            startTime: startValue,
-            endTime: endValue,
-            title: titleValue
+        
+        if(startValue === ""){
+            setStartErr(true)
+        } else {
+            setStartErr(false)
+        } 
+
+        if(endValue === ""){
+            setEndErr(true)
+        } else {
+            setEndErr(false)
         }
-        setFunction(scheduleObj);
-        startTimeRef.current.value = "";
-        endTimeRef.current.value = "";
-        titleRef.current.value = "";
-        setAddingToDay(false);
+
+        if(titleValue === ""){
+            setTitleErr(true)
+        } else {
+            setTitleErr(false)
+        }
+
+        if(startValue !== "" && endValue !== "" && titleValue !== ""){
+            const scheduleObj = {
+                startTime: startValue,
+                endTime: endValue,
+                title: titleValue
+            }
+            setFunction(scheduleObj);
+            startTimeRef.current.value = "";
+            endTimeRef.current.value = "";
+            titleRef.current.value = "";
+            setAddingToDay(false);
+        }
     }
 
     return(
@@ -48,12 +72,15 @@ export default function Day({ day, setFunction, removeFunction, dayName }){
                     }
                     {addingToDay && 
                         <form className={s.addToDayForm}>
-                            <label htmlFor="startTime">Start</label>
+                            <label className={startErr && s.error} htmlFor="startTime">{!startErr ? "Start Time" : "Start Time cannot be empty!"}</label>
                             <input id="startTime" ref={startTimeRef} type="time"  />
-                            <label fohtmlForr="endTime">End</label>
+                            <label className={endErr && s.error} htmlFor="endTime">{!endErr ? "End Time" : "End Time cannot be empty!"}</label>
                             <input id="endTime" ref={endTimeRef} type="time" />
-                            <input ref={titleRef} type="text" placeholder="Title"/>
-                            <FontAwesomeIcon className={s.addToDayIcon} icon={faCalendarCheck} onClick={(e) => addToDay(e)} size="2x" />
+                            <label className={titleErr && s.error} htmlFor="title">{!titleErr ? "Title" : "Title cannot be empty!"}</label> 
+                            <input id="title" ref={titleRef} type="text" />
+                            <button className={s.addToDayIconContainer} onClick={(e) => addToDay(e)}>
+                                <FontAwesomeIcon className={s.addToDayIcon} icon={faCheckCircle} size="2x" />
+                            </button>
                         </form>
                     }
                     {!addingToDay && <button onClick={() => setAddingToDay(true)} className={s.addToDayBtn}>Add to Schedule</button>}

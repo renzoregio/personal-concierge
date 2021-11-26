@@ -1,7 +1,7 @@
 import { BackToMain } from "../Home"
 
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import s from "./Calendar.module.css";
 import  Day from "./Day"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -111,11 +111,11 @@ export default function Calendar(){
         } else if (currentDayCount === 2){
             setCurrentDay(tuesdayCopy);
         } else if (currentDayCount === 3){
-            setCurrentDay(arr);
+            setCurrentDay(wednesdayCopy);
         } else if (currentDayCount === 4){
-            setCurrentDay(arr)
+            setCurrentDay(thursdayCopy)
         } else if(currentDayCount === 5){
-            setCurrentDay(arr)
+            setCurrentDay(fridayCopy)
         } else if (currentDayCount === 6){
             setCurrentDay(saturdayCopy)
         }
@@ -129,6 +129,7 @@ export default function Calendar(){
         setThursday([])
         setFriday([])
         setSaturday([])
+        setCurrentDay([])
     }
 
     const addToDay = async(obj, user = username, day) => {

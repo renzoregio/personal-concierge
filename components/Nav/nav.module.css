@@ -12,8 +12,12 @@
   padding-top: 60px;
 }
 
-.navContainer > span {
-  font-weight: bold;
+.signOutContainer {
+  transition: border-bottom 0.3s ease-in-out;
+}
+
+.signOutContainer:hover {
+  border-bottom: 10px solid black;
 }
 
 .signOutBtn {
@@ -23,20 +27,13 @@
   font-size: 50px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: border-bottom 0.3s ease-in-out;
-  font-weight: bold;
   margin-right: 20px;
-}
-
-.signOutBtn:hover {
-  border-bottom: 10px solid black;
 }
 
 .weatherContainer {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  font-weight: bold;
   width: 20%;
 }
 

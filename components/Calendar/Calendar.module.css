@@ -156,8 +156,10 @@
   border-radius: 30px;
 }
 
-.addToDayForm > input[type="text"] {
-  margin-top: 20px;
+.addToDayIconContainer {
+  background: transparent;
+  border: 0;
+  outline: none;
 }
 
 .addToDayIcon {
@@ -211,4 +213,11 @@
 .removeScheduleIcon:hover {
   color: red;
   cursor: pointer;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin: 0px 20px;
+  margin-bottom: 10px;
 }
