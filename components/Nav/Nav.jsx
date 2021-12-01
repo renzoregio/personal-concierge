@@ -24,9 +24,10 @@ export default function Nav (){
         const minutes = `${currentDate.getMinutes()}`;
         let time = `${hour}:${minutes.length > 1 ? minutes : "0" + minutes }:${seconds.length > 1 ? seconds : "0" + seconds}`
         setTime(time)
-        if(hour >= 12 && hour <= 18){
+        if(hour >= 12 && hour < 18){
+            console.log(hour)
             setMessage("good afternoon")
-        } else if (hour > 18 && hour <= 24){
+        } else if (hour >= 18 && hour < 24){
             setMessage("good evening")
         } else {
             setMessage("good morning")
