@@ -26,13 +26,6 @@
   }
 }
 
-.currentTime {
-  font-size: 100px;
-  letter-spacing: 20px;
-  margin-top: 50px;
-  margin-bottom: 100px;
-}
-
 .startCalendarBtn {
   border-radius: 20px;
   padding: 20px;
@@ -54,6 +47,7 @@
   justify-content: space-evenly;
   align-items: center;
   width: 70%;
+  height: 40%;
 }
 
 .currentDayHeader {
@@ -63,7 +57,7 @@
 }
 
 .currentDayDivider {
-  height: 100%;
+  height: 30%;
   border: 5px solid black;
 }
 
@@ -108,6 +102,7 @@
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+  height: 60%;
 }
 
 .dayContainer {

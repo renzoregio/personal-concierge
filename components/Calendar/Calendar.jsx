@@ -7,13 +7,11 @@ import  Day from "./Day"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {getSession} from "next-auth/client"
 import { LoadingPage } from "../Loading"
-
+import { Nav } from "../Nav";
 
 export default function Calendar(){
     const dateObj = new Date();
     
-    const [currentTime, setCurrentTime] = useState(null);
-
     const [existingCalendar, setExistingCalendar] = useState(false);
     const [currentDay, setCurrentDay] = useState([])
     const [monday, setMonday] = useState([]);
@@ -184,19 +182,13 @@ export default function Calendar(){
         {remove: (id, day) => removeFromDay(id, day)},
     ]
 
-    const getCurrentTime = () => {
-        const currentDate = new Date()
-        const seconds = `${currentDate.getSeconds()}`
-        let time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${seconds.length > 1 ? seconds : "0" + seconds}`
-        setCurrentTime(time)
-    }
+    
 
-    setInterval(getCurrentTime, 1000)
 
     return(
         <div className={s.container}>
+            <Nav />
             <LoadingPage />
-            <span className={s.currentTime}>{currentTime}</span>
             {!existingCalendar && <button onClick={() => setExistingCalendar(true)} className={s.startCalendarBtn}>Start Calendar 
             <FontAwesomeIcon style={{marginLeft:"20px"}} icon={faCalendar} />
             </button>}

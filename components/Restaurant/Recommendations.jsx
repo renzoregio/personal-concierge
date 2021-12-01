@@ -4,7 +4,6 @@ import { Nav } from "../Nav";
 import fetch from 'isomorphic-unfetch';
 import { useRef, useState } from "react";
 
-
 import { faSearch, faStar, faStarHalf, faUtensils } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
