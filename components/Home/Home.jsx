@@ -6,7 +6,6 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 import ToDoButton from "./ToDoButton"
 import  { Nav }  from "../Nav"
-import { useEffect, useState } from "react";
 import { LoadingPage } from "../Loading";
 
 export default function Home() {

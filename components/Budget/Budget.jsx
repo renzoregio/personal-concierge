@@ -4,19 +4,16 @@ import { BackToMain } from "../Home";
 import {getSession} from "next-auth/client"
 import fetch from 'isomorphic-unfetch';
 import { LoadingPage } from "../Loading";
+import  { Nav }  from "../Nav"
 
-import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag, faTimes, faTimesCircle, faCheck, faMoneyBill } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 
 config.autoAddCss = false;
 
-// const getBudget = async (user) => {
-//     const res = await fetch("http://localhost:3000/api/budget");
-//     const { budget } = await res.json();
-//     return budget 
-// }
+
 
 const Budget = () => {
     const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
@@ -221,7 +218,9 @@ const Budget = () => {
     }
     return(
         <>
+        
         <LoadingPage />
+        <Nav />
         <div className={s.container}> 
             { !generateReport && 
                 <div className={s.budgetContainer}>

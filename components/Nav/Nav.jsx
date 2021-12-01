@@ -3,6 +3,7 @@ import { getSession } from "next-auth/client"
 import { useEffect, useState } from "react"
 import { signOut } from "next-auth/client"
 
+
 import { faUser, faCloud, faCloudRain, faSnowflake, faSun,faClock, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';

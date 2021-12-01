@@ -1,6 +1,6 @@
 import s from "./recommendations.module.css"
 import { BackToMain } from "../Home";
-
+import { Nav } from "../Nav";
 import fetch from 'isomorphic-unfetch';
 import { useRef, useState } from "react";
 
@@ -8,7 +8,6 @@ import { useRef, useState } from "react";
 import { faSearch, faStar, faStarHalf, faUtensils } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
 
 const Recommendations = () => {
     const cuisines=["burgers", "japanese", "thai", "fish and chips", "american"]
@@ -69,6 +68,7 @@ const Recommendations = () => {
 
     return (
         <div className={s.container}>
+        <Nav />
             <form className={s.searchForm}>
                 { !searchInitiated && 
                     <a onClick={() => setSearchInitiated(true)} className={s.searchBtn}>
@@ -79,7 +79,7 @@ const Recommendations = () => {
                     <>
                         <input ref={searchInputRef} className={s.searchInput} type="text" placeholder="Search..." />
                         <button onClick={(e) => searchRecommendations(e)} className={s.utensilsBtn}>
-                            <FontAwesomeIcon icon={faUtensils} />
+                            <FontAwesomeIcon icon={faUtensils}  />
                         </button>
                     </>
                 }

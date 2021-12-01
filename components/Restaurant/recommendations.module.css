@@ -28,6 +28,8 @@
 .searchForm {
   display: flex;
   align-items: center;
+  margin-top: 200px;
+  margin-bottom: 80px;
 }
 
 .searchBtn {

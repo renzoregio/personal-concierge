@@ -5,6 +5,7 @@ import { getSession } from "next-auth/client"
 import ReturnHome  from "../Home/ReturnHome"
 import { LoadingPage } from "../Loading";
 import fetch from 'isomorphic-unfetch';
+import  { Nav }  from "../Nav"
 
 import {  faCheckCircle, faStickyNote } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -183,6 +184,7 @@ const QuickNotes = () => {
     
     return (
         <div className={s.container}>
+        <Nav />
             {userSetup ? 
             <div className={s.notesContainer}>
                 <div className={s.noteBtn}>

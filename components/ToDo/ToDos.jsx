@@ -4,6 +4,7 @@ import { BackToMain } from "../Home"
 import { getSession } from "next-auth/client";
 import { LoadingPage } from "../Loading";
 import fetch from 'isomorphic-unfetch';
+import  { Nav }  from "../Nav"
 
 
 import { faCheck, faCheckCircle, faTrash, faHistory } from '@fortawesome/free-solid-svg-icons'
@@ -102,6 +103,7 @@ const ToDos = () => {
 
     return (
         <div className={s.container}>
+        <Nav />
             <div className={s.toDosContainer}>
                 <div>
                     <h1 className={s.title}>add a to do</h1>
