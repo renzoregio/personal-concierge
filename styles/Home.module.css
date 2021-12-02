@@ -128,6 +128,21 @@
   }
 }
 
+.signInContainer {
+  width: 80%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.signInContainer > span {
+  font-size: 90px;
+  letter-spacing: 10px;
+  border-bottom: 3px solid black;
+  padding-bottom: 30px;
+}
+
 .signInBtn {
   border: 5px solid black;
   border-radius: 50%;

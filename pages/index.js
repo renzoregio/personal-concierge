@@ -44,8 +44,11 @@ export default function App() {
       </Head>
 
       {!session && 
-      <div className={styles.signInBtn}>
-        <FontAwesomeIcon className={styles.conciergeBell} onClick={signIn} icon={faConciergeBell} size="5x" />
+      <div className={styles.signInContainer}>
+        <span>WELCOME, CLICK THE BELL TO CALL THE CONCIERGE</span>
+        <div className={styles.signInBtn}>
+          <FontAwesomeIcon className={styles.conciergeBell} onClick={signIn} icon={faConciergeBell} size="3x" />
+        </div>
       </div>
       }
 
