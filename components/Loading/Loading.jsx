@@ -1,10 +1,5 @@
 import s from "./loading.module.css"
-
-
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState } from "react";
-config.autoAddCss = false;
 
 const Loading = ({ title = "We are preparing everything for you"}) => {
 

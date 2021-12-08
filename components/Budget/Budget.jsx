@@ -7,8 +7,6 @@ import  { Nav }  from "../Nav"
 import icons from "../../icons";
 
 
-
-
 const Budget = () => {
     const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
     

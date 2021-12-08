@@ -1,12 +1,11 @@
 
-import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import s from "./Calendar.module.css";
 import  Day from "./Day"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {getSession} from "next-auth/client"
 import { LoadingPage } from "../Loading"
 import { Nav } from "../Nav";
+import icons from "../../icons"
 
 export default function Calendar(){
     const dateObj = new Date();
@@ -189,7 +188,9 @@ export default function Calendar(){
             <Nav hide={false}/>
             <LoadingPage />
             {!existingCalendar && <button onClick={() => setExistingCalendar(true)} className={s.startCalendarBtn}>Start Calendar 
-            <FontAwesomeIcon style={{marginLeft:"20px"}} icon={faCalendar} />
+            <div style={{marginLeft:"20px"}}>
+                { icons.calendar }
+            </div>
             </button>}
             { existingCalendar && 
             <div className={s.currentDayContainer}>

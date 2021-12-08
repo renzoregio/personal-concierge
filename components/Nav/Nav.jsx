@@ -3,13 +3,7 @@ import { getSession } from "next-auth/client"
 import { useEffect, useState } from "react"
 import { signOut } from "next-auth/client"
 import {BackToMain} from "../Home"
-
-
-import { faUser, faCloud, faCloudRain, faSnowflake, faSun,faClock, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
-config.autoAddCss = false;
+import icons from "../../icons"
 
 export default function Nav({hide = true }){
     const [time, setTime] = useState('')
@@ -54,36 +48,36 @@ export default function Nav({hide = true }){
 
     const getWeatherIcon = () => {
         if(weatherIcon === "clouds"){
-            return faCloud
+            return icons.cloud
         } else if (weatherIcon === "rain" || weatherIcon === "drizzle"){
-            return faCloudRain
+            return icons.cloudRain
         } else if (weatherIcon === "clear"){
-            return faSun
+            return icons.sun
         } else if(weatherIcon === "snow"){
-            return faSnowflake
+            return icons.snowflake
         } else {
-            return faCloud
+            return icons.cloud
         }
     }
 
     return (
         <div className={s.navContainer}>
             <div>
-                <FontAwesomeIcon icon={faUser}/>
+                { icons.user }
                 <span style={{ marginLeft: "20px"}}>{message}, {username}</span>
             </div>
             <div className={s.clockContainer}>
-                <FontAwesomeIcon icon={faClock} />
-                <span>{time}</span>
+                { icons.clock }
+                <span style={{ marginLeft: "20px"}}>{time}</span>
             </div>
             { !hide && <BackToMain />}
             <div className={s.weatherContainer}>
-                <span>{weatherDescription} at {temperature}&deg;C</span>
-                <FontAwesomeIcon icon={getWeatherIcon()} /> 
+                <span style={{ marginRight: "20px"}}>{weatherDescription} at {temperature}&deg;C</span>
+                {getWeatherIcon()}
             </div>
             <div className={s.signOutContainer}>
                 <button className={s.signOutBtn} onClick={signOut}>Sign Out</button>
-                <FontAwesomeIcon icon={faSignOutAlt} /> 
+                { icons.signOut }
             </div>
         </div>
     )

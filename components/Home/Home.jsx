@@ -7,7 +7,7 @@ import { LoadingPage } from "../Loading";
 export default function Home() {
     const arr = [
         { icon: icons.homeList, title: "To Do", slug: "to-do"},
-        { icon: icons.homeCalendar, title: "Daily Schedule", slug: "schedule"},
+        { icon: icons.homeCalendar, title: "Calendar", slug: "schedule"},
         { icon: icons.homeStickyNote, title: "Quick Note", slug: "quick-notes"},
         { icon: icons.dollarSign2x, title: "Budget", slug: "budget"}, 
         { icon: icons.homeUtensils, title: "Restaurant Recommendations", slug: "restaurant-recommendations"}

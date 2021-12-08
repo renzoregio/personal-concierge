@@ -1,11 +1,6 @@
 import { useRef, useState } from "react";
 import s from "./Calendar.module.css"
-
-import { faCalendarCheck, faCheckCircle, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
-config.autoAddCss = false;
+import icons from "../../icons"
 
 export default function Day({ day, setFunction, removeFunction, dayName }){
     const [addingToDay, setAddingToDay] = useState(false);
@@ -63,7 +58,9 @@ export default function Day({ day, setFunction, removeFunction, dayName }){
                     <> 
                         {day.map((schedule, i) => (
                             <div key={i} className={s.scheduleContainer}>
-                                <FontAwesomeIcon onClick={() => removeFunction(schedule._id, dayName)} className={s.removeScheduleIcon} icon={faTimes}/>
+                                <div onClick={() => removeFunction(schedule._id, dayName)} className={s.removeScheduleIcon}>
+                                    { icons.times }
+                                </div>
                                 <span>{schedule.startTime} - {schedule.endTime}</span>
                                 <span ref={refElement => scheduleRefs.current[i] = refElement}>{schedule.title}</span>
                             </div>
@@ -79,7 +76,9 @@ export default function Day({ day, setFunction, removeFunction, dayName }){
                             <label className={titleErr && s.error} htmlFor="title">{!titleErr ? "Title" : "Title cannot be empty!"}</label> 
                             <input id="title" ref={titleRef} type="text" />
                             <button className={s.addToDayIconContainer} onClick={(e) => addToDay(e)}>
-                                <FontAwesomeIcon className={s.addToDayIcon} icon={faCheckCircle} size="2x" />
+                                <div className={s.addToDayIcon}>
+                                    { icons.checkCircle2x }
+                                </div>
                             </button>
                         </form>
                     }
