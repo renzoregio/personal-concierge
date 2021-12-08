@@ -1,5 +1,4 @@
 import s from "./recommendations.module.css"
-import { BackToMain } from "../Home";
 import { Nav } from "../Nav";
 import fetch from 'isomorphic-unfetch';
 import { useRef, useState } from "react";
@@ -67,29 +66,35 @@ const Recommendations = () => {
 
     return (
         <div className={s.container}>
-        <Nav />
-            <form className={s.searchForm}>
-                { !searchInitiated && 
-                    <a onClick={() => setSearchInitiated(true)} className={s.searchBtn}>
-                        <FontAwesomeIcon icon={faSearch} size="2x" />
-                    </a>
-                }
-                { searchInitiated && 
-                    <>
-                        <input ref={searchInputRef} className={s.searchInput} type="text" placeholder="Search..." />
-                        <button onClick={(e) => searchRecommendations(e)} className={s.utensilsBtn}>
-                            <FontAwesomeIcon icon={faUtensils}  />
-                        </button>
-                    </>
-                }
-            </form>
+        <Nav hide={false}/>
+            
             <div className={s.searchCategoriesContainer}>
-                { cuisines.map((cuisine, i) => (
-                    <div onClick={() => getRecommendations(cuisines[i])} key={i} className={s.categoryBubble}>
-                        <span>{cuisine}</span>
+                { !searchInitiated && 
+                    <div className={s.categoriesContainer}>
+                        { cuisines.map((cuisine, i) => (
+                        <div onClick={() => getRecommendations(cuisines[i])} key={i} className={s.categoryBubble}>
+                            <span>{cuisine}</span>
+                        </div>
+                        ))}
                     </div>
-                ))}
+                }
+                <form className={`${s.searchForm} ${searchInitiated && s.searchInitiated}`}>
+                    { !searchInitiated && 
+                        <a onClick={() => setSearchInitiated(true)} className={s.searchBtn}>
+                            <FontAwesomeIcon icon={faSearch} size="2x" />
+                        </a>
+                    }
+                    { searchInitiated && 
+                        <>
+                            <input ref={searchInputRef} className={s.searchInput} type="text" placeholder="Search..." />
+                            <button onClick={(e) => searchRecommendations(e)} className={s.utensilsBtn}>
+                                <FontAwesomeIcon icon={faUtensils}  size="2x"/>
+                            </button>
+                        </>
+                    }
+                </form>
             </div>
+            
             <div className={s.restaurantsContainer}>
                 {restaurants.map((restaurant, i) => (
                     <a href={restaurant.url} target="_blank" key={restaurant.id}className={s.restaurantContainer}>
@@ -119,7 +124,6 @@ const Recommendations = () => {
                     </a>
                 ))}
             </div>
-            <BackToMain />
         </div>
     )
 }

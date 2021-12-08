@@ -9,7 +9,7 @@
   font-size: 50px;
   text-transform: uppercase;
   padding: 0px 30px;
-  padding-top: 60px;
+  padding-top: 100px;
 }
 
 .signOutContainer {
@@ -32,7 +32,7 @@
 
 .weatherContainer {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   width: 20%;
 }

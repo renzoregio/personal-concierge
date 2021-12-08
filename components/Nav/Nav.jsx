@@ -2,6 +2,7 @@ import s from "./nav.module.css"
 import { getSession } from "next-auth/client"
 import { useEffect, useState } from "react"
 import { signOut } from "next-auth/client"
+import {BackToMain} from "../Home"
 
 
 import { faUser, faCloud, faCloudRain, faSnowflake, faSun,faClock, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
@@ -10,7 +11,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
-export default function Nav (){
+export default function Nav({hide = true }){
     const [time, setTime] = useState('')
     const [message, setMessage] = useState("")
     const [username, setUsername] = useState("")
@@ -75,6 +76,7 @@ export default function Nav (){
                 <FontAwesomeIcon icon={faClock} />
                 <span>{time}</span>
             </div>
+            { !hide && <BackToMain />}
             <div className={s.weatherContainer}>
                 <span>{weatherDescription} at {temperature}&deg;C</span>
                 <FontAwesomeIcon icon={getWeatherIcon()} /> 

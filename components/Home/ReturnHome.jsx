@@ -1,18 +1,15 @@
-import { faHome } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
-config.autoAddCss = false;
 import s from "./home.module.css"
+import icons from "../../icons"
 import { useRouter } from 'next/router'
 
 
 
 const ReturnHome = () => {
     const router = useRouter();
+    console.log("hi")
     return(
         <div onClick={() => router.push("/")}className={s.homeBtn}>
-                <FontAwesomeIcon icon={faHome} size="3x"/>
+            {icons.home}
         </div>
     )
 }

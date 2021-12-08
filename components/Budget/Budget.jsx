@@ -1,17 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import s from "./Budget.module.css"
-import { BackToMain } from "../Home";
 import {getSession} from "next-auth/client"
 import fetch from 'isomorphic-unfetch';
 import { LoadingPage } from "../Loading";
 import  { Nav }  from "../Nav"
+import icons from "../../icons";
 
-import { faCheckCircle, faDollarSign, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
-
-config.autoAddCss = false;
 
 
 
@@ -76,11 +70,11 @@ const Budget = () => {
     }
 
     const categories = [
-        { name: "food", badgeCount: foodCount, icon: faPizzaSlice},
-        { name: "grocery", badgeCount: groceryCount, icon: faCartPlus},
-        { name: "car", badgeCount: carCount, icon: faCar},
-        { name: "shopping", badgeCount: shoppingCount, icon: faShoppingBag},
-        { name: "misc", badgeCount: miscCount, icon: faEllipsisH},
+        { name: "food", badgeCount: foodCount, icon: icons.pizzaSlice2x},
+        { name: "grocery", badgeCount: groceryCount, icon: icons.cartPlus2x},
+        { name: "car", badgeCount: carCount, icon: icons.car2x},
+        { name: "shopping", badgeCount: shoppingCount, icon: icons.shoppingBag2x},
+        { name: "misc", badgeCount: miscCount, icon: icons.ellipsisH2x},
     ]
     
     const fetchBudget = async () => {
@@ -218,9 +212,8 @@ const Budget = () => {
     }
     return(
         <>
-        
         <LoadingPage />
-        <Nav />
+        <Nav hide={false}/>
         <div className={s.container}> 
             { !generateReport && 
                 <div className={s.budgetContainer}>
@@ -238,7 +231,7 @@ const Budget = () => {
                             <form className={s.getBudgetForm}>
                                 <input className={s.textBox} type="text" ref={totalRef} />
                                 <button onClick={(e) => setBudgetFn(e)} className={s.submitBtn}>
-                                    <FontAwesomeIcon className={s.icon} icon={faCheckCircle} size="2x" />
+                                    { icons.checkCircle2x }
                                 </button>
                             </form>
                         </>}
@@ -248,7 +241,7 @@ const Budget = () => {
                             <div className={s.categories}>
                                 {categories.map((category, i) => (
                                     <div className={s.categoryContainer} key={i} onClick={() => incrementCategoryBadgeCount(category.name)}>
-                                        <FontAwesomeIcon className={s.icon} size="2x" icon={category.icon}/>
+                                        { category.icon }
                                         <span className={s.badge}>{category.badgeCount}</span>
                                     </div>
                                 ))}
@@ -256,7 +249,7 @@ const Budget = () => {
                             <form className={s.form}>
                                 <div className={s.expense}>
                                     <button className={s.submitBtn} onClick={(e) => addExpense(e)}>
-                                        <FontAwesomeIcon className={s.icon} size="2x" icon={faDollarSign} />
+                                        { icons.dollarSign2x }
                                     </button>
                                     <input className={s.textBox} ref={expenseRef} type="text"/>
                                 </div>
@@ -291,25 +284,21 @@ const Budget = () => {
                         <h1>Top Expenses</h1>
                         {topExpenses.map((expense, i) => (
                             <div key={i} className={s.reportMainText} style={{justifyContent: "center", alignItems: "center"}}>
-                                <FontAwesomeIcon icon={faDollarSign} style={{marginRight: "20px"}} />
+                                <div style={{marginRight: "20px"}}>
+                                 { icons.dollarSign }
+                                </div>
                                 <span>{categories[expense].name}</span>
                             </div>
                         ))}
                         <div></div>
-                        <FontAwesomeIcon onClick={() => removeReport()} className={s.reportCloseBtn} icon={faTimesCircle} size="2x" />
+                        <div onClick={() => removeReport()} className={s.reportCloseBtn}>
+                            { icons.timesCircle2x }
+                        </div>
                 </div>
             }
-            <div>
-                <BackToMain />
-            </div>
         </div>
         </>
     )
 }
-
-// Budget.getInitialProps = async () => {
-//     const budget = await getBudget();
-//     return { budget } 
-// }
 
 export default Budget;

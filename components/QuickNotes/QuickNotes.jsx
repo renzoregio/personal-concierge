@@ -2,7 +2,6 @@ import s from "./QuickNotes.module.css"
 import Note from "./Note";
 import { useEffect, useRef, useState } from "react";
 import { getSession } from "next-auth/client"
-import ReturnHome  from "../Home/ReturnHome"
 import { LoadingPage } from "../Loading";
 import fetch from 'isomorphic-unfetch';
 import  { Nav }  from "../Nav"
@@ -184,7 +183,7 @@ const QuickNotes = () => {
     
     return (
         <div className={s.container}>
-        <Nav />
+        <Nav hide={false}/>
             {userSetup ? 
             <div className={s.notesContainer}>
                 <div className={s.noteBtn}>
@@ -222,7 +221,6 @@ const QuickNotes = () => {
                 { passwordError && <h3 style={{color:"red", fontWeight: "bold"}}>Passwords do not match! Try again</h3>}
             </div>
             }
-            <ReturnHome />
             <LoadingPage />
         </div>
     )

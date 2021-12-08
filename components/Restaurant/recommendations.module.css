@@ -28,8 +28,9 @@
 .searchForm {
   display: flex;
   align-items: center;
-  margin-top: 200px;
-  margin-bottom: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .searchBtn {
@@ -53,7 +54,7 @@
   background-color: transparent;
   border: 0;
   border-radius: 50%;
-  padding: 20px;
+  padding: 30px;
   box-shadow: 0px 10px 20px;
   margin-left: 30px;
   cursor: pointer;
@@ -61,19 +62,31 @@
 }
 
 .searchInput {
-  padding: 15px;
+  padding: 25px;
   border-radius: 50px;
   border: 0;
   box-shadow: 0px 10px 20px;
   background: transparent;
   animation: fadeIn 0.2s linear forwards;
   outline: none;
+  width: 30%;
+}
+
+.searchInitiated {
+  width: 100%;
 }
 
 .searchCategoriesContainer {
   display: flex;
   justify-content: space-evenly;
-  width: 50%;
+  width: 70%;
+  margin-top: 300px;
+}
+
+.categoriesContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
 }
 
 .categoryBubble {
@@ -83,6 +96,9 @@
   font-weight: bold;
   text-transform: uppercase;
   font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   box-shadow: 0px 10px 20px;
   transition: box-shadow 0.2s ease-in-out;

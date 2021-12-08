@@ -1,9 +1,8 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import s from "./todo.module.css"
 import Link from "next/link"
 import { useState } from 'react'
 
-export default function ToDoButton({iconName, title, slug}){
+export default function ToDoButton({icon, title, slug}){
 
     const [displayTask, setDisplayTask] = useState(false)
 
@@ -12,7 +11,7 @@ export default function ToDoButton({iconName, title, slug}){
             { !displayTask && 
                 <Link href={`/route/${slug}`}>
                     <div>
-                        <FontAwesomeIcon className={s.icon} icon={iconName} size="2x"/>
+                        { icon }
                     </div>
                 </Link>
             }

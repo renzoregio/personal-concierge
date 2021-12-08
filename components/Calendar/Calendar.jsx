@@ -1,4 +1,3 @@
-import { BackToMain } from "../Home"
 
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
@@ -187,7 +186,7 @@ export default function Calendar(){
 
     return(
         <div className={s.container}>
-            <Nav />
+            <Nav hide={false}/>
             <LoadingPage />
             {!existingCalendar && <button onClick={() => setExistingCalendar(true)} className={s.startCalendarBtn}>Start Calendar 
             <FontAwesomeIcon style={{marginLeft:"20px"}} icon={faCalendar} />
@@ -228,7 +227,6 @@ export default function Calendar(){
                     </>
                 }
             </div>
-            <BackToMain />
         </div>
     )
 }
