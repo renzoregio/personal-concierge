@@ -146,10 +146,3 @@ const ToDos = () => {
 }
 
 export default ToDos;
-// ToDos.getInitialProps = async() => {
-//     const data = await getToDos();
-//     const pending = data.filter(toDo => !toDo.isCompleted)
-//     const completed = data.filter(toDo => toDo.isCompleted)
-//     return { initialPending: pending, initialCompleted: completed }
-// }
-

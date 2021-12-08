@@ -103,19 +103,19 @@ export default function Calendar(){
 
         const currentDayCount = dateObj.getDay();
         if(currentDayCount === 0){
-            setCurrentDay(sundayCopy);
+            setSchedule(sundayCopy, setCurrentDay)
         } else if (currentDayCount === 1){
-            setCurrentDay(mondayCopy);
+            setSchedule(mondayCopy, setCurrentDay)
         } else if (currentDayCount === 2){
-            setCurrentDay(tuesdayCopy);
+            setSchedule(tuesdayCopy, setCurrentDay);
         } else if (currentDayCount === 3){
-            setCurrentDay(wednesdayCopy);
+            setSchedule(wednesdayCopy, setCurrentDay);
         } else if (currentDayCount === 4){
-            setCurrentDay(thursdayCopy)
+            setSchedule(thursdayCopy, setCurrentDay)
         } else if(currentDayCount === 5){
-            setCurrentDay(fridayCopy)
+            setSchedule(fridayCopy, setCurrentDay)
         } else if (currentDayCount === 6){
-            setCurrentDay(saturdayCopy)
+            setSchedule(saturdayCopy, setCurrentDay)
         }
     }
 
