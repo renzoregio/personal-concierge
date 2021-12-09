@@ -2,10 +2,7 @@ import s from "./recommendations.module.css"
 import { Nav } from "../Nav";
 import fetch from 'isomorphic-unfetch';
 import { useRef, useState } from "react";
-
-import { faSearch, faStar, faStarHalf, faUtensils } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import '@fortawesome/fontawesome-svg-core/styles.css';
+import icons from "../../icons"
 
 const Recommendations = () => {
     const cuisines=["burgers", "japanese", "thai", "fish and chips", "american"]
@@ -81,14 +78,14 @@ const Recommendations = () => {
                 <form className={`${s.searchForm} ${searchInitiated && s.searchInitiated}`}>
                     { !searchInitiated && 
                         <a onClick={() => setSearchInitiated(true)} className={s.searchBtn}>
-                            <FontAwesomeIcon icon={faSearch} size="2x" />
+                            { icons.search2x }
                         </a>
                     }
                     { searchInitiated && 
                         <>
                             <input ref={searchInputRef} className={s.searchInput} type="text" placeholder="Search..." />
                             <button onClick={(e) => searchRecommendations(e)} className={s.utensilsBtn}>
-                                <FontAwesomeIcon icon={faUtensils}  size="2x"/>
+                                { icons.homeUtensils }
                             </button>
                         </>
                     }
@@ -103,9 +100,9 @@ const Recommendations = () => {
                             <div className={s.restaurantRatingsContainer}>
                                 { ratingsArr.length === 12 && ratingsArr[i].map((rating, i) => {
                                     if(rating === true){
-                                        return <FontAwesomeIcon icon={faStarHalf} key={i} />
+                                        return <div key={i}> {icons.starHalf} </div>
                                     } else if (rating === "star") {
-                                        return <FontAwesomeIcon icon={faStar} key={i}/>
+                                        return <div key={i}> {icons.star} </div>
                                     }
                                 })}
                             </div>

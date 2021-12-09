@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 
 const ReturnHome = () => {
     const router = useRouter();
-    console.log("hi")
     return(
         <div onClick={() => router.push("/")}className={s.homeBtn}>
             {icons.home}

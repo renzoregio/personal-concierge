@@ -8,7 +8,7 @@ import icons from "../../icons"
 export default function Nav({hide = true }){
     const [time, setTime] = useState('')
     const [message, setMessage] = useState("")
-    const [username, setUsername] = useState("")
+    const [username, setUsername] = useState(null)
     const [temperature, setTemperature] = useState(0)
     const [weatherIcon, setWeatherIcon] = useState("")
     const [weatherDescription, setWeatherDescription] = useState([])
@@ -21,7 +21,6 @@ export default function Nav({hide = true }){
         let time = `${hour}:${minutes.length > 1 ? minutes : "0" + minutes }:${seconds.length > 1 ? seconds : "0" + seconds}`
         setTime(time)
         if(hour >= 12 && hour < 18){
-            console.log(hour)
             setMessage("good afternoon")
         } else if (hour >= 18 && hour < 24){
             setMessage("good evening")
@@ -30,21 +29,23 @@ export default function Nav({hide = true }){
         }
     }
 
-    setInterval(getCurrentTime, 1000)
 
     useEffect(async() => {
-        const userObj = await getSession()
-        setUsername(userObj.user.name);
-        try {
-            const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Vancouver&appid=${process.env.WEATHER_KEY}&units=metric`)
-            const data = await res.json()
-            setTemperature(Math.round(data.main.temp))
-            setWeatherIcon(data.weather[0].main.toLowerCase())
-            setWeatherDescription(data.weather[0].description)
-        } catch (error) {
-            console.log(error)
+        if(!username){
+            const userObj = await getSession()
+            setUsername(userObj.user.name);
+            try {
+                const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Vancouver&appid=${process.env.WEATHER_KEY}&units=metric`)
+                const data = await res.json()
+                setTemperature(Math.round(data.main.temp))
+                setWeatherIcon(data.weather[0].main.toLowerCase())
+                setWeatherDescription(data.weather[0].description)
+            } catch (error) {
+                console.log(error)
+            }
         }
-    }, [])
+        setInterval(getCurrentTime, 1000)
+    }, [time])
 
     const getWeatherIcon = () => {
         if(weatherIcon === "clouds"){

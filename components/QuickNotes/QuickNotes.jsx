@@ -5,13 +5,7 @@ import { getSession } from "next-auth/client"
 import { LoadingPage } from "../Loading";
 import fetch from 'isomorphic-unfetch';
 import  { Nav }  from "../Nav"
-
-import {  faCheckCircle, faStickyNote } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
-config.autoAddCss = false;
-
+import icons from "../../icons"
 
 const QuickNotes = () => {
 
@@ -40,7 +34,6 @@ const QuickNotes = () => {
             if(passwordObj.length){
                 setUserSetup(true)
                 setUserPassword(passwordObj[0].password)
-                console.log(userPassword)
             }
 
             if(fetchedNotes.length){
@@ -108,7 +101,6 @@ const QuickNotes = () => {
     }
 
     const updateNote = async (obj) => {
-        console.log(obj, "UPDATING")
         try {
             await fetch(`http://localhost:3000/api/notes/${obj._id}`,{
                 method: "PUT",
@@ -190,7 +182,7 @@ const QuickNotes = () => {
                     {!addingNote &&
                         <div className={s.addNoteContainer} onClick={() => setAddingNote(true)}> 
                             <span> Add a Note</span>
-                            <FontAwesomeIcon  size="3x" icon={faStickyNote} />
+                            { icons.stickyNote3x }
                         </div>
                     }
                     {addingNote && 
@@ -201,7 +193,9 @@ const QuickNotes = () => {
                             <span>Content</span>
                             <textarea ref={contentRef} type="text" required ></textarea>
                         </form>
-                        <FontAwesomeIcon className={s.checkIcon} onClick={addNote} size="3x" icon={faCheckCircle} />
+                        <div className={s.checkIcon} onClick={addNote}>
+                            { icons.checkCircle3x }
+                        </div>
                     </>
                     }
                 </div>
@@ -216,7 +210,9 @@ const QuickNotes = () => {
                 <form className={s.userSetUpFieldContainer}>               
                     <input ref={passwordRef} className={!passwordError ? s.passwordField : s.passwordError} type="password" placeholder="Password" />
                     <input ref={confirmPasswordRef} className={!passwordError ? s.passwordField : s.passwordError} type="password" placeholder="Confirm Password" />
-                    <FontAwesomeIcon className={s.checkIcon} onClick={handleUserPassword} icon={faCheckCircle} size="3x" />
+                    <div className={s.checkIcon} onClick={handleUserPassword}>
+                        { icons.checkCircle3x }
+                    </div>
                 </form>
                 { passwordError && <h3 style={{color:"red", fontWeight: "bold"}}>Passwords do not match! Try again</h3>}
             </div>
