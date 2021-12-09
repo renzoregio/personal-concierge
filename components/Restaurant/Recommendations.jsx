@@ -1,5 +1,7 @@
 import s from "./recommendations.module.css"
 import { Nav } from "../Nav";
+import { LoadingPage } from "../Loading"
+
 import fetch from 'isomorphic-unfetch';
 import { useRef, useState } from "react";
 import icons from "../../icons"
@@ -121,6 +123,7 @@ const Recommendations = () => {
                     </a>
                 ))}
             </div>
+            <LoadingPage />
         </div>
     )
 }

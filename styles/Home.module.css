@@ -137,7 +137,7 @@
 }
 
 .signInContainer > span {
-  font-size: 90px;
+  font-size: 50px;
   letter-spacing: 10px;
   border-bottom: 3px solid black;
   padding-bottom: 30px;
@@ -147,7 +147,7 @@
   border: 5px solid black;
   border-radius: 50%;
   box-shadow: 0px 10px 18px;
-  padding: 70px;
+  padding: 50px;
   cursor: pointer;
 }
 

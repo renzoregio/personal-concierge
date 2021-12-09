@@ -9,10 +9,14 @@
   font-size: 35px;
   text-transform: uppercase;
   padding: 0px 30px;
-  padding-top: 100px;
+  padding: 70px;
+  background-color: black;
+  box-shadow: 0px 1px 20px;
+  z-index: 2;
 }
 
 .signOutContainer {
+  color: white;
   transition: border-bottom 0.3s ease-in-out;
 }
 
@@ -21,6 +25,7 @@
 }
 
 .signOutBtn {
+  color: white;
   border: none;
   outline: none;
   background: transparent;
@@ -31,12 +36,14 @@
 }
 
 .weatherContainer {
+  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .clockContainer {
+  color: white;
   display: flex;
   justify-content: space-evenly;
   align-items: center;

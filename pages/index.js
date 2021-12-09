@@ -47,7 +47,7 @@ export default function App() {
       <div className={styles.signInContainer}>
         <span>WELCOME, CLICK THE BELL TO CALL THE CONCIERGE</span>
         <div className={styles.signInBtn} onClick={signIn}>
-          <FontAwesomeIcon className={styles.conciergeBell} icon={faConciergeBell} size="3x" />
+          <FontAwesomeIcon className={styles.conciergeBell} icon={faConciergeBell} size="2x" />
         </div>
       </div>
       }
