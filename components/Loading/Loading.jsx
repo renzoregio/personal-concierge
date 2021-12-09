@@ -4,18 +4,12 @@ import { useEffect, useState } from "react";
 const Loading = ({ title = "We are preparing everything for you"}) => {
 
     const [position, setPosition] = useState(10);
-    const [loadingDone, setLoadingDone] = useState(false)
     
     useEffect(() => {
         setTimeout(() => {
-            setLoadingDone(true)
-        }, 2500)
-
-        if(loadingDone){
             setPosition(-1)
-        }
-
-    }, [loadingDone])
+        }, 2500)
+    }, [])
 
     return (
         <div  className={s.container} style={{ zIndex: position}}>

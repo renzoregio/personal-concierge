@@ -8,12 +8,13 @@
   font-size: 100px;
   margin-bottom: 100px;
   letter-spacing: 10px;
+  text-align: center;
 }
 
 .homeBtn {
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-  padding: 30px;
+  padding: 20px;
   border-radius: 50%;
   background-color: white;
 }

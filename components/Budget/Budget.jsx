@@ -264,7 +264,7 @@ const Budget = () => {
             }
             {generateReport && 
                 <div className={generateReport ? s.reportContainerStart : s.reportContainerEnd}>
-                        <h1>YOUR BUDGET REPORT</h1>
+                        <h2>YOUR BUDGET REPORT</h2>
                         <div className={s.reportMainText}>
                             <span>starting budget</span>
                             <span>${fixedTotal}</span>
@@ -279,16 +279,16 @@ const Budget = () => {
                             <span>savings</span>
                             <span>${total}</span>
                         </div>
-                        <h1>Top Expenses</h1>
+                        <h2>Top Expenses</h2>
                         {topExpenses.map((expense, i) => (
-                            <div key={i} className={s.reportMainText} style={{justifyContent: "center", alignItems: "center"}}>
+                            <div key={i} style={{justifyContent: "center", alignItems: "center"}}>
                                 <div style={{marginRight: "20px"}}>
                                  { icons.dollarSign }
                                 </div>
-                                <span>{categories[expense].name}</span>
+                                <span style={{ textTransform: "uppercase"}}>{categories[expense].name}</span>
                             </div>
                         ))}
-                        <div></div>
+                        <div style={{ marginBottom: "40px"}}></div>
                         <div onClick={() => removeReport()} className={s.reportCloseBtn}>
                             { icons.timesCircle2x }
                         </div>

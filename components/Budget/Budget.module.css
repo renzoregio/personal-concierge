@@ -29,10 +29,12 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 30%;
 }
 
 .budgetContainer {
+  width: 80%;
+  display: flex;
+  justify-content: space-evenly;
   animation: fadeInAnimation 0.8s linear forwards;
 }
 
@@ -47,6 +49,7 @@
 
 .title {
   letter-spacing: 10px;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -223,14 +226,13 @@
   top: 0;
   bottom: 0;
   left: 0;
-
   margin-left: 20px;
   margin-top: 20px;
   cursor: pointer;
 }
 
 .reportContainerStart {
-  width: 100%;
+  width: 70%;
   height: auto;
   border: 5px solid black;
   display: flex;
@@ -270,7 +272,6 @@
   width: 80%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 30px;
 }
 
 .reportContainerStart > h1 {
@@ -280,12 +281,12 @@
 }
 
 .reportContainerStart > .reportCategory {
-  font-size: 30px;
-  text-transform: uppercase;
+  text-transform: capitalize;
+  margin: 10px 0px;
 }
 
 .reportMainText {
-  font-size: 40px;
+  font-size: 30px;
   text-transform: uppercase;
   font-weight: bold;
 }

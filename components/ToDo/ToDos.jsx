@@ -4,14 +4,7 @@ import { getSession } from "next-auth/client";
 import { LoadingPage } from "../Loading";
 import fetch from 'isomorphic-unfetch';
 import  { Nav }  from "../Nav"
-
-
-import { faCheck, faCheckCircle, faTrash, faHistory } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
-config.autoAddCss = false;
-
+import icons from "../../icons"
 
 const ToDos = () => {
     const [toDos, setToDos] = useState([])
@@ -109,14 +102,16 @@ const ToDos = () => {
                     <form className={s.toDoForm}>
                         <input className={s.textBox} ref={textBox} type="text" />
                         <button className={s.submitBtn} onClick={(e) => addTask(e)}>
-                            <FontAwesomeIcon size="2x" icon={faCheckCircle}/>
+                            { icons.checkCircle2x }
                         </button>
                     </form>
-                    <div className="toDoMainContainer">
+                    <div>
                         { toDos.map((toDo, i) => (
                             <div className={s.toDoContainer} key={i}>
                                 <span  className={s.toDoText}>{toDo.task}</span>
-                                <FontAwesomeIcon onClick={() => completeTask(toDo._id)} size="2x" className={`${s.icon} ${s.checkIcon}`} icon={faCheck}/>
+                                <div onClick={() => completeTask(toDo._id)} className={`${s.icon} ${s.checkIcon}`}> 
+                                    { icons.check2x }
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -130,8 +125,8 @@ const ToDos = () => {
                     { completedToDos.map((toDo, i) => (
                         <div className={s.toDoContainer} key={i}>
                             <span className={`${s.toDoText} ${s.completed}`}>{toDo.task}</span>
-                            <FontAwesomeIcon size="2x" onClick={() => deleteTask(toDo._id)} className={`${s.icon} ${s.trashIcon}`} icon={faTrash} />
-                            <FontAwesomeIcon size="2x" onClick={() => returnTask(toDo._id)} className={`${s.icon} ${s.historyIcon}`} icon={faHistory} />
+                            <div onClick={() => deleteTask(toDo._id)} className={`${s.icon} ${s.trashIcon}`}> {icons.trash2x} </div>
+                            <div onClick={() => returnTask(toDo._id)} className={`${s.icon} ${s.historyIcon}`}> {icons.history2x} </div>
                         </div>
                     ))}
                     </div>

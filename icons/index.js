@@ -3,7 +3,8 @@ import {
     faCheckCircle, faCar, faCartPlus, faPizzaSlice, faEllipsisH, faShoppingBag, faTimesCircle,
     faTimes, faUser, faCloud, faCloudRain, faSnowflake, faSun,faClock, faSignOutAlt,
     faPenFancy, faTrash, faLock, faUnlock,
-    faSearch, faStar, faStarHalf
+    faSearch, faStar, faStarHalf,
+    faCheck, faHistory
     
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,6 +13,8 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
 const icons = {
+    "history2x":<FontAwesomeIcon icon={faHistory} size="2x"/>,
+    "check2x": <FontAwesomeIcon icon={faCheck} size="2x" />,
     "star": <FontAwesomeIcon icon={faStar} />,
     "starHalf": <FontAwesomeIcon icon={faStarHalf} />,
     "search2x": <FontAwesomeIcon icon={faSearch} size="2x" />,
