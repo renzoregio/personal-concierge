@@ -4,7 +4,7 @@ import {
     faTimes, faUser, faCloud, faCloudRain, faSnowflake, faSun,faClock, faSignOutAlt,
     faPenFancy, faTrash, faLock, faUnlock,
     faSearch, faStar, faStarHalf,
-    faCheck, faHistory
+    faCheck, faHistory, faConciergeBell
     
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -49,8 +49,7 @@ const icons = {
     "sun": <FontAwesomeIcon icon={faSun} />,
     "clock": <FontAwesomeIcon icon={faClock} />,
     "signOut": <FontAwesomeIcon icon={faSignOutAlt} />,
-
-
+    "conciergeBell2x": <FontAwesomeIcon icon={faConciergeBell} size="2x" />
 }
 
 

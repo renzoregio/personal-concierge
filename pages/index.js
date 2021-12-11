@@ -1,14 +1,9 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { Home } from '../components/Home'
-import {signIn, signOut, useSession} from "next-auth/client"
+import {signIn, useSession} from "next-auth/client"
 import { useEffect, useState } from 'react';
-
-import { faConciergeBell } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
-config.autoAddCss = false;
+import icons from "../icons"
 
 export default function App() {
   const [session, loading] = useSession();
@@ -47,7 +42,9 @@ export default function App() {
       <div className={styles.signInContainer}>
         <span>WELCOME, CLICK THE BELL TO CALL THE CONCIERGE</span>
         <div className={styles.signInBtn} onClick={signIn}>
-          <FontAwesomeIcon className={styles.conciergeBell} icon={faConciergeBell} size="2x" />
+          <div className={styles.conciergeBell}>
+            { icons.conciergeBell2x }
+          </div>
         </div>
       </div>
       }
