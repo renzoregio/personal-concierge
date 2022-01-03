@@ -10,8 +10,9 @@ export default function Home() {
         { icon: icons.homeCalendar, title: "Calendar", slug: "schedule"},
         { icon: icons.homeStickyNote, title: "Quick Note", slug: "quick-notes"},
         { icon: icons.dollarSign2x, title: "Budget", slug: "budget"}, 
-        { icon: icons.homeUtensils, title: "Restaurant Recommendations", slug: "restaurant-recommendations"}
+        // { icon: icons.homeUtensils, title: "Restaurant Recommendations", slug: "restaurant-recommendations"}
     ]
+
     return(
         <div className={s.container}>
             <LoadingPage title={"Bringing you home"}/>
