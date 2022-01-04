@@ -26,7 +26,7 @@ const ToDos = () => {
     }, [])
 
     const getToDos = async(user) => {
-        const res = await fetch("http://localhost:3000/api/todos", {
+        const res = await fetch("https://personal-concierge.vercel.app/api/todos", {
             method: "GET",
             headers: {
                 "Accept": "application/json", "Content-Type": "application/json", "user": user
@@ -41,7 +41,7 @@ const ToDos = () => {
 
     
     const fetchToDos = async(method, id, task = "", isCompletedBool = false) => {
-        const url = id === null ? "http://localhost:3000/api/todos" : `http://localhost:3000/api/todos/${id}`;
+        const url = id === null ? "https://personal-concierge.vercel.app/api/todos" : `https://personal-concierge.vercel.app/api/todos/${id}`;
         const headerObj = { "Accept": "application/json", "Content-Type": "application/json" }
         try {
             if(method === "GET" || method === "DELETE"){
