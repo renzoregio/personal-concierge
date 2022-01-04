@@ -30,7 +30,7 @@ const Note = ({id, title, description, deleteNote, password, updateNote, isUnloc
     }
 
     const lockNote = async () => {
-        await fetch(`https://personal-concierge.vercel.app/api/notes/${id}`, {
+        await fetch(`http://localhost:3000/api/notes/${id}`, {
             method: "PUT",
             headers: {
                 "Accept": "application/json",

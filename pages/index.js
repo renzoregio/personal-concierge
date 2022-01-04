@@ -11,11 +11,11 @@ export default function App() {
 
   useEffect(async() => {  
     if(session && initLogin){
-      const res = await fetch("https://personal-concierge.vercel.app/api/user")
+      const res = await fetch("http://localhost:3000/api/user")
       const { data } = await res.json();
       for(let i = 0; i < data; i++){
         if(data[i].username !== session.user.username){
-          await fetch("https://personal-concierge.vercel.app/api/user", {
+          await fetch("http://localhost:3000/api/user", {
             method: "POST",
             headers: {
               "Accept": "application/json",

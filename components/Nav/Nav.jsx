@@ -64,7 +64,6 @@ export default function Nav({ hide = true }){
     return (
         <div className={s.navContainer}>
             <div style={{ color: "white" }}>
-                { icons.user }
                 <span style={{ marginLeft: "20px"}}>{message}, {username}</span>
             </div>
             <div className={s.clockContainer}>
@@ -73,11 +72,11 @@ export default function Nav({ hide = true }){
             </div>
             { !hide && <BackToMain />}
             <div className={s.weatherContainer}>
-                <span style={{ marginRight: "20px"}}>{weatherDescription} at {temperature}&deg;C</span>
+                <span style={{ marginRight: "20px"}}>{weatherDescription} {temperature}&deg;C</span>
                 { getWeatherIcon() }
             </div>
             <div className={s.signOutContainer} >
-                <button className={s.signOutBtn} onClick={signOut}>Sign Out</button>
+                <button className={s.signOutBtn} onClick={signOut}></button>
                 { icons.signOut }
             </div>
         </div>

@@ -6,10 +6,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 35px;
+  font-size: 20px;
   text-transform: uppercase;
-  padding: 0px 30px;
-  padding: 70px;
+  padding: 50px 30px;
   background-color: black;
   box-shadow: 0px 1px 20px;
   z-index: 2;
@@ -29,10 +28,8 @@
   border: none;
   outline: none;
   background: transparent;
-  font-size: 35px;
   text-transform: uppercase;
   cursor: pointer;
-  margin-right: 20px;
 }
 
 .weatherContainer {
@@ -48,3 +45,34 @@
   justify-content: space-evenly;
   align-items: center;
 }
+
+@media (max-width: 580px) {
+  .navContainer {
+    font-size: 20px;
+    height: 30px;
+  }
+
+  .weatherContainer > span,
+  .clockContainer > svg,
+  .navContainer > div:first-child {
+    display: none;
+  }
+}
+
+@media (min-width: 581px) and (max-width: 850px) {
+  .navContainer {
+    font-size: 20px;
+    height: 30px;
+  }
+
+  .clockContainer > svg,
+  .navContainer > div:first-child {
+    display: none;
+  }
+}
+
+/* @media (min-width: 501px) and (max-width: 1200px) {
+  .navContainer {
+    font-size: 20px;
+  }
+} */

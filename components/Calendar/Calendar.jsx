@@ -35,7 +35,7 @@ export default function Calendar(){
 
     const createScheduleProfile = async(user) => {
         try {
-             await fetch("https://personal-concierge.vercel.app/api/schedule",{
+             await fetch("http://localhost:3000/api/schedule",{
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -73,7 +73,7 @@ export default function Calendar(){
         })
     }
     const getSchedule = async(user) => {
-        const res = await fetch("https://personal-concierge.vercel.app/api/schedule",{
+        const res = await fetch("http://localhost:3000/api/schedule",{
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -130,7 +130,7 @@ export default function Calendar(){
 
     const addToDay = async(obj, user = username, day) => {
         try {
-            await fetch(`https://personal-concierge.vercel.app/api/schedule/day/${user}-${day}`, {
+            await fetch(`http://localhost:3000/api/schedule/day/${user}-${day}`, {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -146,7 +146,7 @@ export default function Calendar(){
 
     const removeFromDay = async(id, day) => {
         try {
-            await fetch(`https://personal-concierge.vercel.app/api/schedule/remove-task/${id}-${username}-${day.toLowerCase()}`, {
+            await fetch(`http://localhost:3000/api/schedule/remove-task/${id}-${username}-${day.toLowerCase()}`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
