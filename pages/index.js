@@ -9,13 +9,14 @@ export default function App() {
   const [session, loading] = useSession();
   const [initLogin, setInitLogin] = useState(false)
 
-  useEffect(async() => {   
+  useEffect(async() => {  
+    console.log(process.env.GITHUB_ID)
     if(session && initLogin){
-      const res = await fetch("http://concierge.renzoregio.com/api/user")
+      const res = await fetch("http://localhost:3000/api/user")
       const { data } = await res.json();
       for(let i = 0; i < data; i++){
         if(data[i].username !== session.user.username){
-          await fetch("http://concierge.renzoregio.com/api/user", {
+          await fetch("http://localhost:3000/api/user", {
             method: "POST",
             headers: {
               "Accept": "application/json",
@@ -41,7 +42,7 @@ export default function App() {
       {!session && 
       <div className={styles.signInContainer}>
         <span>WELCOME, CLICK THE BELL TO CALL THE CONCIERGE</span>
-        <div className={styles.signInBtn} onClick={signIn({callbackUrl: "https://concierge.renzoregio.com/api/auth/callback/github"})}>
+        <div className={styles.signInBtn} onClick={() => signIn()}>
           <div className={styles.conciergeBell}>
             { icons.conciergeBell2x }
           </div>
