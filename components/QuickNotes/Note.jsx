@@ -46,13 +46,14 @@ const Note = ({id, title, description, deleteNote, password, updateNote, isUnloc
     }
     
     const handleNoteView = async () => {
-        console.log(password)
         if(enteredPasswordRef.current.value === password) {
             unlockNoteFn(id)
             setUnlockMode(true)
             setPasswordMode(false)
         } else {
             setPasswordError(true)
+            enteredPasswordRef.current.value = ""
+
         }
 
     }
@@ -71,7 +72,7 @@ const Note = ({id, title, description, deleteNote, password, updateNote, isUnloc
                     {!viewingMode ? 
                     <>
                         { unlockMode && <div className={s.icon} onClick={() => setEditingMode(true)}> {icons.penFancy2x} </div>  }
-                        {!viewingMode && unlockMode && <button onClick={() => setViewingMode(true)} className={s.viewButton}>View Note</button>}
+                        {!viewingMode && unlockMode && <button onClick={() => setViewingMode(true)} className={s.viewButton}>View</button>}
                         { unlockMode && <div className={s.trashBin} onClick={() => deleteNote(id)}> {icons.trash2x} </div>}
                     </> :
                     <div className={s.viewingModeIconsContainer}>

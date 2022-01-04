@@ -28,7 +28,7 @@
 
 .buttonsContainer {
   margin-top: 30px;
-  width: 50%;
+  width: 80%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -60,13 +60,17 @@
   border-radius: 20px;
   margin-top: 20px;
   margin-bottom: 30px;
+  width: 100%;
+}
+
+.icon > svg {
+  font-size: 50px;
 }
 
 .passwordField {
   outline: none;
   padding: 15px;
   text-align: center;
-  border: 4px solid black;
   border-radius: 20px;
   margin-right: 20px;
 }
@@ -75,8 +79,7 @@
   padding: 15px;
   outline: none;
   text-align: center;
-  border: 2px solid red;
-  box-shadow: 2px 5px 0px red;
+  border-color: red;
   border-radius: 30px;
   margin-right: 20px;
 }
@@ -84,6 +87,7 @@
 .editingContainer {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .editingContentContainer {
@@ -153,4 +157,33 @@
 
 .checkIcon:hover {
   color: green;
+}
+
+@media (max-width: 1500px) {
+  .buttonsContainer {
+    width: 80%;
+  }
+
+  .passwordField,
+  .passwordError {
+    width: 70%;
+    margin-left: 20px;
+  }
+
+  .checkIcon {
+    margin-right: 20px;
+  }
+  .viewButton {
+    font-size: 20px;
+  }
+
+  .editText,
+  .editTitle {
+    font-size: 20px;
+    width: 100%;
+  }
+
+  .icon > svg {
+    font-size: 40px;
+  }
 }
