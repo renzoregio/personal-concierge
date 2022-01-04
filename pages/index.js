@@ -40,7 +40,7 @@ export default function App() {
 
       {!session && 
       <div className={styles.signInContainer}>
-        <span>WELCOME, CLICK THE BELL TO CALL THE CONCIERGE</span>
+        <span>welcome, click the bell to call the concierge</span>
         <div className={styles.signInBtn} onClick={() => signIn()}>
           <div className={styles.conciergeBell}>
             { icons.conciergeBell2x }
