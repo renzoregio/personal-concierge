@@ -51,7 +51,7 @@ const QuickNotes = () => {
     }, [updating])
 
     const getPassword = async (user) => {
-        const pass = await fetch("http://localhost:3000/api/notes/password", {
+        const pass = await fetch("https://personal-concierge.vercel.app/api/notes/password", {
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -64,7 +64,7 @@ const QuickNotes = () => {
     }
 
     const getNotes = async (user) => {
-        const res = await fetch('http://localhost:3000/api/notes', {
+        const res = await fetch('https://personal-concierge.vercel.app/api/notes', {
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -85,7 +85,7 @@ const QuickNotes = () => {
         const password = passwordRef.current.value;
         const confirmPassword = confirmPasswordRef.current.value;
         if(password === confirmPassword){
-            await fetch("http://localhost:3000/api/notes/password", {
+            await fetch("https://personal-concierge.vercel.app/api/notes/password", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -102,7 +102,7 @@ const QuickNotes = () => {
 
     const updateNote = async (obj) => {
         try {
-            await fetch(`http://localhost:3000/api/notes/${obj._id}`,{
+            await fetch(`https://personal-concierge.vercel.app/api/notes/${obj._id}`,{
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
@@ -118,7 +118,7 @@ const QuickNotes = () => {
     }
 
     const unlockNote = async (id) => {
-        await fetch(`http://localhost:3000/api/notes/${id}`, {
+        await fetch(`https://personal-concierge.vercel.app/api/notes/${id}`, {
             method: "PUT",
             headers: {
                 "Accept": "application/json",
@@ -137,7 +137,7 @@ const QuickNotes = () => {
         const form = { user: username, title: titleValue, description: contentValue, isUnlocked: true }
 
         try {
-            await fetch('http://localhost:3000/api/notes', {
+            await fetch('https://personal-concierge.vercel.app/api/notes', {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -158,7 +158,7 @@ const QuickNotes = () => {
 
     const deleteNote = async (id) => {
         try {
-            await fetch(`http://localhost:3000/api/notes/${id}`, {
+            await fetch(`https://personal-concierge.vercel.app/api/notes/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",

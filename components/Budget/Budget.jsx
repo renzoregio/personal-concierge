@@ -39,7 +39,7 @@ const Budget = () => {
     }, [])
 
     const getBudget = async (user) => {
-        const res = await fetch("http://localhost:3000/api/budget", {
+        const res = await fetch("https://personal-concierge.vercel.app/api/budget", {
             method: "GET",
             headers: {
                 "Accept": "application/json", 
@@ -95,7 +95,7 @@ const Budget = () => {
         e.preventDefault()
 
         try {
-            await fetch("http://localhost:3000/api/budget", {
+            await fetch("https://personal-concierge.vercel.app/api/budget", {
                 method: "POST",
                 headers: headerObj,
                 body: JSON.stringify({ 
@@ -120,7 +120,7 @@ const Budget = () => {
             const expense = amountEntered
             const calculatedPercentage = (expense / fixedTotal) * 100;
             try {
-                await fetch(`http://localhost:3000/api/budget/${budgetId}`, {
+                await fetch(`https://personal-concierge.vercel.app/api/budget/${budgetId}`, {
                     method: "PUT",
                     headers: headerObj,
                     body: JSON.stringify({ 
@@ -140,7 +140,7 @@ const Budget = () => {
 
     const fetchBadgeCount = async(updateObj) => {
          try {
-            await fetch(`http://localhost:3000/api/budget/${budgetId}`, {
+            await fetch(`https://personal-concierge.vercel.app/api/budget/${budgetId}`, {
                 method: "PUT",
                 headers: headerObj,
                 body: JSON.stringify(updateObj)
@@ -167,7 +167,7 @@ const Budget = () => {
 
     const resetBudget = async() => {
         try {
-            await fetch(`http://localhost:3000/api/budget/${budgetId}`, {
+            await fetch(`https://personal-concierge.vercel.app/api/budget/${budgetId}`, {
                 method: "DELETE",
                 headers: headerObj
             })
