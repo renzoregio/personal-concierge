@@ -10,13 +10,12 @@ export default function App() {
   const [initLogin, setInitLogin] = useState(false)
 
   useEffect(async() => {  
-    console.log(process.env.GITHUB_ID)
     if(session && initLogin){
-      const res = await fetch("http://localhost:3000/api/user")
+      const res = await fetch("https://personal-concierge.vercel.app/api/user")
       const { data } = await res.json();
       for(let i = 0; i < data; i++){
         if(data[i].username !== session.user.username){
-          await fetch("http://localhost:3000/api/user", {
+          await fetch("https://personal-concierge.vercel.app/api/user", {
             method: "POST",
             headers: {
               "Accept": "application/json",
