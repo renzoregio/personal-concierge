@@ -281,7 +281,7 @@ const Budget = () => {
                         </div>
                         <h2>Top Expenses</h2>
                         {topExpenses.map((expense, i) => (
-                            <div key={i} style={{justifyContent: "center", alignItems: "center"}}>
+                            <div className={s.topExpenseReportContainer} key={i} style={{justifyContent: "center", alignItems: "center"}}>
                                 <div style={{marginRight: "20px"}}>
                                  { icons.dollarSign }
                                 </div>

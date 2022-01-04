@@ -114,6 +114,7 @@
   background-color: transparent;
   border: 4px solid black;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .form {
@@ -165,6 +166,7 @@
   display: flex;
   width: 100%;
   justify-content: space-evenly;
+  flex-wrap: wrap;
   margin: 55px 0px;
 }
 
@@ -294,5 +296,99 @@
 @media (max-width: 900px) {
   .budgetContainer {
     flex-direction: column;
+  }
+
+  .budgetMeterContainer {
+    width: 40%;
+    font-size: 15px;
+    margin-bottom: 30px;
+  }
+
+  .startBtn {
+    font-size: 20px;
+    width: 200px;
+  }
+
+  .title {
+    font-size: 30px;
+    padding-bottom: 20px;
+  }
+
+  .reportCloseBtn {
+    font-size: 15px;
+  }
+
+  .categoryContainer {
+    font-size: 20px;
+    margin: 25px;
+  }
+
+  .reportContainerStart > h2 {
+    font-size: 20px;
+    margin-top: 120px;
+    text-align: center;
+  }
+
+  .reportMainText {
+    font-size: 15px;
+  }
+
+  .reportCategory > span {
+    font-size: 13px;
+  }
+
+  .topExpenseReportContainer {
+    font-size: 17px;
+    margin-top: 20px;
+  }
+}
+
+@media (min-width: 535px) {
+  .reportCloseBtn {
+    font-size: 15px;
+  }
+
+  .reportContainerStart > h2 {
+    font-size: 25px;
+    margin-top: 120px;
+    text-align: center;
+  }
+
+  .reportMainText {
+    font-size: 20px;
+  }
+
+  .reportCategory > span {
+    font-size: 18px;
+  }
+
+  .topExpenseReportContainer {
+    font-size: 20px;
+    margin-top: 20px;
+  }
+}
+
+@media (min-width: 835px) {
+  .reportCloseBtn {
+    font-size: 20px;
+  }
+
+  .reportContainerStart > h2 {
+    font-size: 30px;
+    margin-top: 120px;
+    text-align: center;
+  }
+
+  .reportMainText {
+    font-size: 25px;
+  }
+
+  .reportCategory > span {
+    font-size: 23px;
+  }
+
+  .topExpenseReportContainer {
+    font-size: 25px;
+    margin-top: 20px;
   }
 }
