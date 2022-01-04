@@ -7,11 +7,11 @@ const options = {
             clientId: process.env.GITHUB_ID,
             clientSecret: process.env.GITHUB_SECRET
         }),
-        Providers.Auth0({
-            clientId: process.env.AUTH0_CLIENTID,
-            clientSecret: process.env.AUTH0_CLIENT_SECRET,
-            issuer: process.env.AUTH0_DOMAIN
-        })
+        // Providers.Auth0({
+        //     clientId: process.env.AUTH0_CLIENTID,
+        //     clientSecret: process.env.AUTH0_CLIENT_SECRET,
+        //     issuer: process.env.AUTH0_DOMAIN
+        // })
     ]
 }
 
