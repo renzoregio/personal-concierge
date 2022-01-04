@@ -31,3 +31,9 @@
   margin-right: 40px;
   animation: fadeIn 0.8s linear forwards;
 }
+
+@media (max-width: 750px) {
+  .title {
+    font-size: 30px;
+  }
+}

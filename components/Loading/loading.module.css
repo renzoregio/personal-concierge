@@ -22,6 +22,9 @@
 
 .loadingDotContainer {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 @keyframes fadeOut {
@@ -55,6 +58,7 @@
 
 .loadingDot:last-child {
   animation-delay: 0.8s;
+  margin-right: 0px;
 }
 
 @keyframes fadeIn {

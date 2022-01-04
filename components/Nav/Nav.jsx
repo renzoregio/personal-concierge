@@ -3,6 +3,7 @@ import { getSession } from "next-auth/client"
 import { useEffect, useState } from "react"
 import { signOut } from "next-auth/client"
 import {BackToMain} from "../Home"
+import { useRouter } from 'next/router'
 import icons from "../../icons"
 
 export default function Nav({ hide = true }){
@@ -12,6 +13,7 @@ export default function Nav({ hide = true }){
     const [temperature, setTemperature] = useState(0)
     const [weatherIcon, setWeatherIcon] = useState("")
     const [weatherDescription, setWeatherDescription] = useState([])
+    const router = useRouter()
 
     const getCurrentTime = () => {
         const currentDate = new Date()
@@ -61,6 +63,13 @@ export default function Nav({ hide = true }){
         }
     }
 
+    const signOutFn = () => {
+        router.push("/route/sign-out")
+        setTimeout(() => {
+            signOut();
+        }, 2000)
+    }
+
     return (
         <div className={s.navContainer}>
             <div style={{ color: "white" }}>
@@ -75,8 +84,8 @@ export default function Nav({ hide = true }){
                 <span style={{ marginRight: "20px"}}>{weatherDescription} {temperature}&deg;C</span>
                 { getWeatherIcon() }
             </div>
-            <div className={s.signOutContainer} >
-                <button className={s.signOutBtn} onClick={signOut}></button>
+            <div onClick={() => signOutFn()} className={s.signOutContainer} >
+                <button className={s.signOutBtn}></button>
                 { icons.signOut }
             </div>
         </div>

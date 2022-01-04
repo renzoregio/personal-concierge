@@ -16,11 +16,7 @@
 
 .signOutContainer {
   color: white;
-  transition: border-bottom 0.3s ease-in-out;
-}
-
-.signOutContainer:hover {
-  border-bottom: 10px solid black;
+  cursor: pointer;
 }
 
 .signOutBtn {

@@ -39,6 +39,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
 
 .passwordField {
@@ -62,6 +63,7 @@
 
 .userSetUpFieldContainer {
   display: flex;
+  align-items: center;
 }
 .addNoteContainer {
   display: flex;
@@ -152,6 +154,15 @@
 }
 
 @media (max-width: 1500px) {
+  .userSetupForm {
+    font-size: 18px;
+  }
+
+  .passwordField,
+  .passwordError {
+    width: 40%;
+  }
+
   .notesContainer {
     flex-direction: column;
   }
@@ -209,5 +220,10 @@
   .noteContainer,
   .noteBtn {
     width: 500px;
+  }
+
+  .passwordField,
+  .passwordError {
+    width: 250px;
   }
 }

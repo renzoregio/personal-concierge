@@ -97,6 +97,8 @@ const QuickNotes = () => {
             setUserSetup(true)
         } else {
             setPasswordError(true)
+            passwordRef.current.value = "";
+            confirmPasswordRef.current.value = "";
         }
     }
 
