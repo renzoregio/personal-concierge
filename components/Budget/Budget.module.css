@@ -290,3 +290,9 @@
   text-transform: uppercase;
   font-weight: bold;
 }
+
+@media (max-width: 900px) {
+  .budgetContainer {
+    flex-direction: column;
+  }
+}

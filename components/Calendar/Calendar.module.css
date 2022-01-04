@@ -72,10 +72,12 @@
   font-size: 80px;
   letter-spacing: 10px;
   margin-bottom: 50px;
+  font-weight: bold;
 }
 
 .currentDayDate {
   font-size: 50px;
+  font-weight: bold;
   letter-spacing: 10px;
 }
 
@@ -217,4 +219,66 @@
   text-align: center;
   margin: 0px 20px;
   margin-bottom: 10px;
+}
+
+@media (max-width: 2500px) {
+  .currentDayTitle {
+    font-size: 30px;
+  }
+
+  .currentDayDate {
+    font-size: 30px;
+    margin-bottom: 30px;
+  }
+
+  .currentDayDivider {
+    display: none;
+  }
+
+  .currentDayContainer {
+    flex-direction: column;
+    margin-top: 200px;
+  }
+
+  .currentScheduleBubble {
+    padding: 10px 25px;
+    font-size: 20px;
+    margin: 0px 5px;
+  }
+
+  .calendarDaysContainer {
+    flex-direction: column;
+  }
+
+  .dayContainer {
+    width: 80%;
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+
+  .dayContainer > h2 {
+    font-size: 30px;
+  }
+
+  .scheduleContainer > span {
+    font-size: 20px;
+  }
+
+  .scheduleContainer {
+    width: 250px;
+  }
+
+  .addToDayBtn {
+    font-size: 25px;
+  }
+
+  .addToDayForm > input {
+    width: 160px;
+  }
+}
+
+@media (min-width: 900px) {
+  .dayContainer {
+    width: 700px;
+  }
 }
