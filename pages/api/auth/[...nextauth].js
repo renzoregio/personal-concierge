@@ -10,7 +10,7 @@ const options = {
         Providers.Auth0({
             clientId: process.env.AUTH0_CLIENTID,
             clientSecret: process.env.AUTH0_CLIENT_SECRET,
-            domain: process.env.AUTH0_DOMAIN
+            issuer: process.env.AUTH0_DOMAIN
         })
     ]
 }
